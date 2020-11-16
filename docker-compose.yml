@@ -1,0 +1,141 @@
+version: '3.3'
+services:
+  uniform-db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - '3306:3306'
+    volumes:
+      - ../data/mysql:/var/lib/mysql
+
+  uniform-zipkin:
+    container_name: uniform-zipkin
+    image: openzipkin/zipkin
+    restart: always
+    ports:
+      - '9411:9411'
+      
+  uniform-redis:
+    container_name: uniform-redis
+    image: redis:latest
+    volumes:
+      - ../data/redis/redis.conf:/etc/redis.conf
+      - ../data/redis/redis-sentinel.conf:/etc/redis-sentinel.conf
+    command:
+      - /bin/bash
+      - -c
+      - |
+        redis-server --appendonly yes
+        redis-server /etc/redis.conf
+    ports:
+      - '60379:6379'
+      - '26379:26379'
+
+  uniform-rabbitmq:
+    container_name: "uniform-rabbitmq"
+    image: "rabbitmq:3-management"
+    restart: on-failure
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  elastic-stack:
+    container_name: elastic-stack
+    build: ./elastic-stack
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      - "5043:5043"
+    environment:
+      - MAX_MAP_COUNT=262145
+      - ELASTICSEARCH_START=1
+      - LOGSTASH_START=1
+      - KIBANA_START=1
+
+#  zookeeper:
+#    container_name: zookeeper
+#    image: zookeeper:3.4.12
+#    ports:
+#      - "2181:2181"
+#    restart: always
+#    environment:
+#      zk_id: "1"
+#
+#  kafka-broker:
+#    container_name: kafka-broker
+#    image: wurstmeister/kafka:2.11-2.0.1
+#    restart: always
+#    depends_on:
+#      - zookeeper
+#    ports:
+#      - "9092:9092"
+#    environment:
+#      HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://_{HOSTNAME_COMMAND}:9092
+#      KAFKA_LISTENERS: PLAINTEXT://:9092
+#      KAFKA_CREATE_TOPICS: zipkin:1:1
+#      KAFKA_BROKER_ID: 1
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    restart: always
+    environment:
+      zk_id: "1"
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      #KAFKA_CREATE_TOPICS: zipkin:1:1
+      KAFKA_CREATE_TOPICS: elk:1:1
+      KAFKA_BROKER_ID: 1
+    links:
+      - zookeeper
+    depends_on:
+      - zookeeper
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9092:9092"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+    volumes:
+      - ./elastic-stack/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.5.1
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./elastic-stack/kibana/:/usr/share/kibana/config/
+    ports:
+      - "5601:5601"
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.5.1
+    depends_on:
+      - elasticsearch
+    command: logstash -f /elk-config/logstash.config
+    volumes:
+      - ./elastic-stack/logstash:/elk-config
+    ports:
+      - "25826:25826"
