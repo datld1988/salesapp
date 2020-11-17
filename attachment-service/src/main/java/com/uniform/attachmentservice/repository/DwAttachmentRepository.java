@@ -1,8 +1,7 @@
 package com.uniform.attachmentservice.repository;
 
-import com.uniform.attachmentservice.entity.DwAttachment;
+import com.uniform.attachmentservice.domain.DwAttachment;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
 
 public interface DwAttachmentRepository extends JpaRepository<DwAttachment, String> {
 

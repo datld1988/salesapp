@@ -1,10 +1,12 @@
-package com.uniform.authservice.entity;
+package com.uniform.authservice.domain;
 
 import lombok.Data;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "AD_USER")
@@ -13,22 +15,24 @@ public class AdUser implements Serializable {
 
     @Id
     @Column(name = "ID")
-    private String Id;
+    private String id;
     @Column(name = "USER_NAME")
-    private String UserName;
+    private String userName;
+    @Column(name = "PASSWORD")
+    private String password;
     @Column(name = "EMAIL")
-    private String Email;
+    private String email;
     @Column(name = "PHONE")
-    private String Phone;
+    private String phone;
     @Column(name = "STATUS_CODE")
-    private String StatusCode;
+    private String statusCode;
     @Column(name = "CREATED_DATE")
-    private Date CreatedDate;
+    private Date createdDate;
     @Column(name = "CREATED_BY")
-    private String CreatedBy;
+    private String createdBy;
     @Column(name = "MODIFIED_DATE")
-    private Date ModifiedDate;
+    private Date modifiedDate;
     @Column(name = "MODIFIED_BY")
-    private String ModifiedBy;
+    private String modifiedBy;
 
 }

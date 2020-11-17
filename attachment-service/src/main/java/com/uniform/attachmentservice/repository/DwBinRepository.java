@@ -1,8 +1,7 @@
 package com.uniform.attachmentservice.repository;
 
-import com.uniform.attachmentservice.entity.DwBin;
+import com.uniform.attachmentservice.domain.DwBin;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
 
 public interface DwBinRepository extends JpaRepository<DwBin, String> {
 

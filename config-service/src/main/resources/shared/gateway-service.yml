@@ -14,15 +14,56 @@ zuul:
       stripPrefix: false
       sensitiveHeaders:
     account-service:
-      path: /accounts/**
+      path: /account/**
       serviceId: account-service
       stripPrefix: false
       sensitiveHeaders:
-    user-service:
-      path: /users/**
-      serviceId: user-service
+    admin-service:
+      path: /admin/**
+      serviceId: admin-service
       stripPrefix: false
       sensitiveHeaders:
+    attachment-service:
+      path: /attachment/**
+      serviceId: attachment-service
+      stripPrefix: false
+      sensitiveHeaders:
+    card-service:
+      path: /card/**
+      serviceId: card-service
+      stripPrefix: false
+      sensitiveHeaders:
+    ebank-service:
+      path: /ebank/**
+      serviceId: ebank-service
+      stripPrefix: false
+      sensitiveHeaders:
+    legal-service:
+      path: /legal/**
+      serviceId: legal-service
+      stripPrefix: false
+      sensitiveHeaders:
+    log-service:
+      path: /log/**
+      serviceId: log-service
+      stripPrefix: false
+      sensitiveHeaders:
+    notification-service:
+      path: /notification/**
+      serviceId: notification-service
+      stripPrefix: false
+      sensitiveHeaders:
+    printout-service:
+      path: /printout/**
+      serviceId: printout-service
+      stripPrefix: false
+      sensitiveHeaders:
+    process-service:
+      path: /process/**
+      serviceId: process-service
+      stripPrefix: false
+      sensitiveHeaders:
+
 
 server:
   port: 8080

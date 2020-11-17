@@ -1,0 +1,77 @@
+spring:
+  profiles:
+    active: default
+  jackson:
+    serialization:
+      # Jackson PrettyPrint
+      indent-output: true
+
+#  zipkin:
+#    baseUrl: http://localhost:9411/
+#    sender:
+#      type: kafka
+#  sleuth:
+#    sampler:
+#      probability: 1.0
+
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    #url: jdbc:oracle:thin:@222.252.25.241:7521:xe
+    url: jdbc:oracle:thin:@222.252.25.241:7521:orcl
+    username: dformuat
+    password: dformuat
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  jpa:
+    show-sql: true
+    properties:
+      hibernate.jdbc.time_zone: UTC
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      #hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      # modify batch size as necessary
+      hibernate.jdbc.batch_size: 25
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      # modify fetch size as necessary
+      #hibernate.jdbc.fetch_size: 150
+      #hibernate.criteria.literal_handling_mode: BIND
+      #hibernate.query.fail_on_pagination_over_collection_fetch: true
+      #hibernate.query.in_clause_parameter_padding: true
+
+      #hibernate.hbm2ddl.auto: update
+      hibernate.format_sql: true
+      hibernate.default_schema: UNIFORM_NOTIFICATION
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+
+security:
+  oauth2:
+    client:
+      clientId: mobile
+      clientSecret: pin
+      accessTokenUri: http://localhost:8081/uaa/oauth/token
+      grant-type: client_credentials
+      #scope: server
+
+server:
+  servlet:
+    context-path: /notification
+  port: 8090
+
+feign:
+  hystrix:
+    enabled: true
+
+
+sample:
+  zipkin:
+    # When enabled=false, traces log to the console. When enabled=true traces send to zipkin
+    enabled: true

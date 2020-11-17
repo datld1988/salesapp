@@ -1,22 +1,20 @@
 version: '3.3'
 services:
-  uniform-db:
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_DATABASE: 'db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'admin'
-      MYSQL_ROOT_PASSWORD: 'admin'
-    ports:
-      - '3306:3306'
-    volumes:
-      - ../data/mysql:/var/lib/mysql
+  #  uniform-rabbitmq:
+  #    container_name: "uniform-rabbitmq"
+  #    image: "rabbitmq:3-management"
+  #    restart: on-failure
+  #    ports:
+  #      - "15672:15672"
+  #      - "5672:5672"
+
 
   uniform-zipkin:
     container_name: uniform-zipkin
     image: openzipkin/zipkin
     restart: always
+    networks:
+      - uniform-network
     ports:
       - '9411:9411'
       
@@ -26,6 +24,8 @@ services:
     volumes:
       - ../data/redis/redis.conf:/etc/redis.conf
       - ../data/redis/redis-sentinel.conf:/etc/redis-sentinel.conf
+    networks:
+      - uniform-network
     command:
       - /bin/bash
       - -c
@@ -36,60 +36,14 @@ services:
       - '60379:6379'
       - '26379:26379'
 
-  uniform-rabbitmq:
-    container_name: "uniform-rabbitmq"
-    image: "rabbitmq:3-management"
-    restart: on-failure
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-
-  elastic-stack:
-    container_name: elastic-stack
-    build: ./elastic-stack
-    ports:
-      - "5601:5601"
-      - "9200:9200"
-      - "5043:5043"
-    environment:
-      - MAX_MAP_COUNT=262145
-      - ELASTICSEARCH_START=1
-      - LOGSTASH_START=1
-      - KIBANA_START=1
-
-#  zookeeper:
-#    container_name: zookeeper
-#    image: zookeeper:3.4.12
-#    ports:
-#      - "2181:2181"
-#    restart: always
-#    environment:
-#      zk_id: "1"
-#
-#  kafka-broker:
-#    container_name: kafka-broker
-#    image: wurstmeister/kafka:2.11-2.0.1
-#    restart: always
-#    depends_on:
-#      - zookeeper
-#    ports:
-#      - "9092:9092"
-#    environment:
-#      HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
-#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://_{HOSTNAME_COMMAND}:9092
-#      KAFKA_LISTENERS: PLAINTEXT://:9092
-#      KAFKA_CREATE_TOPICS: zipkin:1:1
-#      KAFKA_BROKER_ID: 1
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
-
   zookeeper:
     image: wurstmeister/zookeeper:latest
     container_name: zookeeper
     restart: always
     environment:
       zk_id: "1"
+    networks:
+      - uniform-network
     ports:
       - "2181:2181"
 
@@ -97,9 +51,9 @@ services:
     image: wurstmeister/kafka:latest
     container_name: kafka
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      #KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.1.4
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      #KAFKA_CREATE_TOPICS: zipkin:1:1
       KAFKA_CREATE_TOPICS: elk:1:1
       KAFKA_BROKER_ID: 1
     links:
@@ -108,34 +62,210 @@ services:
       - zookeeper
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - uniform-network
     ports:
       - "9092:9092"
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
-    volumes:
-      - ./elastic-stack/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+    elasticsearch:
+      image: elasticsearch:7.7.0
+      container_name: elasticsearch
+      hostname: elasticsearch
+      environment:
+        - "discovery.type=single-node"
+      ports:
+        - 9200:9200
+        - 9300:9300
+      networks:
+        - uniform-network
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.5.1
-    depends_on:
-      - elasticsearch
-    volumes:
-      - ./elastic-stack/kibana/:/usr/share/kibana/config/
-    ports:
-      - "5601:5601"
+    kibana:
+      image: kibana:7.7.0
+      container_name: kibana
+      hostname: kibana
+      ports:
+        - 5601:5601
+      links:
+        - elasticsearch:elasticsearch
+      depends_on:
+        - elasticsearch
+      networks:
+        - uniform-network
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:7.5.1
-    depends_on:
-      - elasticsearch
-    command: logstash -f /elk-config/logstash.config
-    volumes:
-      - ./elastic-stack/logstash:/elk-config
+    logstash:
+      image: logstash:7.7.0
+      container_name: logstash
+      hostname: logstash
+      ports:
+        - 9600:9600
+        - 8089:8089
+      volumes:
+        - ./elastic-stack/logstash:/usr/share/logstash/pipeline/
+      links:
+        - elasticsearch:elasticsearch
+      depends_on:
+        - elasticsearch
+      networks:
+        - uniform-network
+
+
+
+  account-service:
+    image: uniform/account-service
+    container_name: account-service
+    build:
+      context: .
+      dockerfile: ./account-service/Dockerfile
     ports:
-      - "25826:25826"
+      - "8083:8083"
+    networks:
+      - uniform-network
+
+  admin-service:
+    image: uniform/admin-service
+    container_name: admin-service
+    build:
+      context: .
+      dockerfile: ./admin-service/Dockerfile
+    ports:
+      - "8089:8089"
+    networks:
+      - uniform-network
+
+  attachment-service:
+    image: uniform/attachment-service
+    container_name: attachment-service
+    build:
+      context: .
+      dockerfile: ./attachment-service/Dockerfile
+    ports:
+      - "8086:8086"
+    networks:
+      - uniform-network
+
+  auth-service:
+    image: uniform/auth-service
+    container_name: auth-service
+    build:
+      context: .
+      dockerfile: ./auth-service/Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - uniform-network
+
+  card-service:
+    image: uniform/card-service
+    container_name: card-service
+    build:
+      context: .
+      dockerfile: ./card-service/Dockerfile
+    ports:
+      - "8085:8085"
+    networks:
+      - uniform-network
+
+  config-service:
+    image: uniform/config-service
+    container_name: config-service
+    build:
+      context: .
+      dockerfile: ./config-service/Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - uniform-network
+
+  ebank-service:
+    image: uniform/ebank-service
+    container_name: ebank-service
+    build:
+      context: .
+      dockerfile: ./ebank-service/Dockerfile
+    ports:
+      - "8084:8084"
+    networks:
+      - uniform-network
+
+  gateway-service:
+    image: uniform/gateway-service
+    container_name: gateway-service
+    build:
+      context: .
+      dockerfile: ./gateway-service/Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - uniform-network
+
+  legal-service:
+    image: uniform/legal-service
+    container_name: legal-service
+    build:
+      context: .
+      dockerfile: ./legal-service/Dockerfile
+    ports:
+      - "8088:8088"
+    networks:
+      - uniform-network
+
+  log-service:
+    image: uniform/log-service
+    container_name: log-service
+    build:
+      context: .
+      dockerfile: ./log-service/Dockerfile
+    ports:
+      - "8091:8091"
+    networks:
+      - uniform-network
+
+  notification-service:
+    image: uniform/notification-service
+    container_name: notification-service
+    build:
+      context: .
+      dockerfile: ./notification-service/Dockerfile
+    ports:
+      - "8090:8090"
+    networks:
+      - uniform-network
+
+  printout-service:
+    image: uniform/printout-service
+    container_name: printout-service
+    build:
+      context: .
+      dockerfile: ./printout-service/Dockerfile
+    ports:
+      - "8087:8087"
+    networks:
+      - uniform-network
+
+  process-service:
+    image: uniform/process-service
+    container_name: process-service
+    build:
+      context: .
+      dockerfile: ./process-service/Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - uniform-network
+
+  registry-service:
+    image: uniform/registry-service
+    container_name: registry-service
+    build:
+      context: .
+      dockerfile: ./registry-service/Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - uniform-network
+
+
+
+networks:
+  uniform-network:
+    driver: bridge
