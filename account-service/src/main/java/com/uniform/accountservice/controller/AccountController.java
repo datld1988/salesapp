@@ -23,7 +23,7 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('create_profile')")
+//    @PreAuthorize("hasAuthority('create_profile')")
     public ResponseEntity<Object> createAccount(@RequestBody UserRegistrationDto user) {
         log.debug("REST request to create admin : {}", user);
         log.info("REST request to create admin : {}", user);

@@ -27,7 +27,7 @@ public class AccountService {
         httpHeaders.add("Authorization", AccessToken.getAccessToken());
         HttpEntity<UserDto> customerHttpEntity = new HttpEntity<>(httpHeaders);
 
-        ResponseEntity<UserDto> responseEntity = restTemplate.exchange("http://localhost:8080/users/get", HttpMethod.GET, customerHttpEntity, UserDto.class);
+        ResponseEntity<UserDto> responseEntity = restTemplate.exchange("http://localhost:8080/admin/get", HttpMethod.GET, customerHttpEntity, UserDto.class);
         log.info(responseEntity.getBody().getUsername());
         log.info(String.format("create a user %s successfully", user.getUsername()));
     }

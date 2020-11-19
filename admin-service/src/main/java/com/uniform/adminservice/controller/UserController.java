@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/get")
-    @PreAuthorize("hasAuthority('read_profile')")
+//    @PreAuthorize("hasAuthority('read_profile')")
     public ResponseEntity<Object> getUser() {
         return new ResponseEntity<>(userService.getUser(), HttpStatus.OK);
     }
