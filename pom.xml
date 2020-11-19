@@ -36,11 +36,16 @@
 		<module>registry-service</module>
 		<module>gateway-service</module>
 		<module>auth-service</module>
-		<module>account-service</module>
-		<module>user-service</module>
         <module>process-service</module>
-        <module>admin-service</module>
+		<module>account-service</module>
+        <module>ebank-service</module>
+        <module>card-service</module>
         <module>attachment-service</module>
+        <module>printout-service</module>
+        <module>notification-service</module>
+        <module>legal-service</module>
+        <module>admin-service</module>
+        <module>log-service</module>
     </modules>
 
 </project>

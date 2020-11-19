@@ -1,8 +1,7 @@
 package com.uniform.processservice.repository;
 
-import com.uniform.processservice.entity.ClCountry;
+import com.uniform.processservice.domain.ClCountry;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
 
 public interface ClCountryRepository extends JpaRepository<ClCountry, String> {
 

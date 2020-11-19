@@ -1,8 +1,7 @@
 package com.uniform.adminservice.repository;
 
-import com.uniform.adminservice.entity.AdRm;
+import com.uniform.adminservice.domain.AdRm;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
 
 public interface AdRmRepository extends JpaRepository<AdRm, String> {
 
