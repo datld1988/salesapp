@@ -43,9 +43,9 @@ stages:
 
 build-image:
   # Lightweight image with support of running docker in docker
-  image: docker:18.09
+  image: docker:stable
   services:
-    - docker:18.09-dind
+    - docker:dind
   stage: build
   before_script:
   # - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
@@ -55,9 +55,9 @@ build-image:
     - docker build -t $CI_REGISTRY/$IMAGE_NAME:latest -f Dockerfile .
 
 push-image:
-  image: docker:18.09
+  image: docker:stable
   services:
-    - docker:18.09-dind
+    - docker:dind
   stage: build
   before_script:
   # - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
