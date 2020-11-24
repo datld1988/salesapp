@@ -11,7 +11,7 @@ build:
   artifacts:
     expire_in: 10 mins
     paths:
-      - ./target
+      - ./
   only:
     - develop
 
@@ -25,6 +25,6 @@ deploy-salesapp-develop:
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   script:
     - scp -P $SSH_PORT -T ./target/* $SSH_USER@$SSH_HOST:/project/alphaway/salesapp/develop
-    - ssh -p $SSH_PORT -T $SSH_USER@$SSH_HOST 'cd /project/alphaway/salesapp/develop && docker restart salesapp-microservices-develop'
+    #- ssh -p $SSH_PORT -T $SSH_USER@$SSH_HOST 'cd /project/alphaway/salesapp/develop && docker restart salesapp-microservices-develop'
   only:
     - develop
