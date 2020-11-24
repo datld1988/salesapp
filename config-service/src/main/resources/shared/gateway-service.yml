@@ -13,9 +13,9 @@ zuul:
       url: auth-service
       stripPrefix: false
       sensitiveHeaders:
-    account-service:
-      path: /account/**
-      serviceId: account-service
+    saleskit-service:
+      path: /saleskit/**
+      serviceId: saleskit-service
       stripPrefix: false
       sensitiveHeaders:
     admin-service:
