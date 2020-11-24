@@ -15,7 +15,7 @@ build:
       - ./registry-service/target
       - ./gateway-service/target
       - ./auth-service/target
-      - ./admin-service/target
+      # - ./admin-service/target
   only:
     - develop
 
