@@ -12,6 +12,10 @@ build:
     expire_in: 10 mins
     paths:
       - ./config-service/target
+      - ./registry-service/target
+      - ./gateway-service/target
+      - ./auth-service/target
+      - ./admin-service/target
   only:
     - develop
 
