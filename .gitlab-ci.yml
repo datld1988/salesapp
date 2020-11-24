@@ -51,7 +51,7 @@ variables:
   # create them automatically on boot, and will create
   # `/certs/client` that will be shared between the service and job
   # container, thanks to volume mount from config.toml
-  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_CERTDIR: ""
 
 # One of the new trends in Continuous Integration/Deployment is to:
 # (see https://docs.gitlab.com/ee/ci/docker/using_docker_build.html)
