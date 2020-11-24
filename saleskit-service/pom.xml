@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 	
-    <artifactId>account-service</artifactId>
-    <name>account-service</name>
+    <artifactId>saleskit-service</artifactId>
+    <name>saleskit-service</name>
 	
 	<parent>
         <groupId>com.salesapp</groupId>
