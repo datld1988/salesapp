@@ -1,98 +1,35 @@
-# image: maven:3-jdk-8-alpine
-
-# stages:
-#   - build
-#   - deploy
-
-# build:
-#   stage: build
-#   script:
-#     - mvn clean install
-#   artifacts:
-#     expire_in: 10 mins
-#     paths:
-#       - ./config-service/target
-#       - ./registry-service/target
-#       - ./gateway-service/target
-#       # - ./auth-service/target
-#       # - ./admin-service/target
-#   only:
-#     - develop
-
-# deploy-salesapp-develop:
-#   stage: deploy
-#   image: kroniak/ssh-client
-#   before_script:
-#     - eval $(ssh-agent -s)
-#     - ssh-add <(echo "$SSH_PRIVATE_KEY")
-#     - mkdir -p ~/.ssh
-#     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-#   script:
-#     - scp -P $SSH_PORT -T ./config-service/target/* $SSH_USER@$SSH_HOST:/project/alphaway/salesapp/develop
-#     #- ssh -p $SSH_PORT -T $SSH_USER@$SSH_HOST 'cd /project/alphaway/salesapp/develop && docker restart salesapp-microservices-develop'
-#   only:
-#     - develop
-
-
-
+image: maven:3-jdk-8-alpine
 
 stages:
   - build
-  - push
   - deploy
 
-build-image:
-  # Lightweight image with support of running docker in docker
-  image: docker:stable
-  services:
-    - docker:dind
+build:
   stage: build
-  before_script:
-  # - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    # - docker build -t docker-registry.vanquanraf.tech/demo-ci:latest -f Dockerfile .
-    - docker build -t $CI_REGISTRY/$IMAGE_NAME:latest -f Dockerfile .
+    - mvn clean install
+  artifacts:
+    expire_in: 10 mins
+    paths:
+      - ./config-service/target
+      - ./registry-service/target
+      - ./gateway-service/target
+      # - ./auth-service/target
+      # - ./admin-service/target
+  only:
+    - develop
 
-push-image:
-  image: docker:stable
-  services:
-    - docker:dind
-  stage: build
-  before_script:
-  # - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  stage: push
-  script:
-    # - docker push docker-registry.vanquanraf.tech/demo-ci:latest
-    - docker push $CI_REGISTRY/$IMAGE_NAME:latest
-
-deploy-dev:
+deploy-salesapp-develop:
   stage: deploy
-  # Image dùng để deploy lên server deploy
   image: kroniak/ssh-client
-
   before_script:
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
     - mkdir -p ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-
   script:
-    # Login to server deploy then login to private docker registry
-    # - ssh -p 56789 -T root@222.252.25.241 "docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech"
-    - ssh -p 56789 -T $SSH_USER@$SSH_HOST "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}"
-    # Remove old containers and images if exists
-    # - ssh -p 56789 -T root@222.252.25.241 "docker rm -f demo-ci || true"
-    - ssh -p 56789 -T $SSH_USER@$SSH_HOST "docker rm -f ${IMAGE_NAME} || true"
-    # - ssh -p 56789 -T root@222.252.25.241 "docker rmi $(docker images -q docker-registry.vanquanraf.tech/demo-ci) || true"
-    - ssh -p 56789 -T $SSH_USER@$SSH_HOST "docker rmi $(docker images -q ${CI_REGISTRY}/${IMAGE_NAME}) || true"
-    # Download and run new image
-    # - ssh -p 56789 -T root@222.252.25.241 "docker run --name=test-ci --restart=always -d docker-registry.vanquanraf.tech/demo-ci:latest"
-    - ssh -p 56789 -T $SSH_USER@$SSH_HOST "docker run -p 8085:8080 --name=${IMAGE_NAME} --restart=always -d $CI_REGISTRY/${IMAGE_NAME}:latest"
-  # environment:
-  #   name: dev
-  #   url: http://222.252.25.241:50080
+    - scp -P $SSH_PORT -T ./config-service/target/* $SSH_USER@$SSH_HOST:/project/alphaway/salesapp/develop
+    #- ssh -p $SSH_PORT -T $SSH_USER@$SSH_HOST 'cd /project/alphaway/salesapp/develop && docker restart salesapp-microservices-develop'
   only:
     - develop
 
