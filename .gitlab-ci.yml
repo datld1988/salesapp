@@ -10,11 +10,15 @@ build:
     - mvn clean install
   artifacts:
     expire_in: 10 mins
+    name: config-service
     paths:
       - ./config-service/target
+    name: registry-service
+    paths:
       - ./registry-service/target
-      - ./gateway-service/target
-      - ./auth-service/target
+      # - ./registry-service/target
+      # - ./gateway-service/target
+      # - ./auth-service/target
       # - ./admin-service/target
   only:
     - develop
