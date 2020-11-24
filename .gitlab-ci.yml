@@ -47,13 +47,11 @@ build-image:
     - docker:19.03.1-dind
   stage: build
   before_script:
-  # - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
+  - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
   # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker login -u vanquanraf -p Dcoganglen@880722
   script:
-    # - docker build -t docker-registry.vanquanraf.tech/demo-ci:latest -f Dockerfile .
+    - docker build -t docker-registry.vanquanraf.tech/demo-ci:latest -f Dockerfile .
     # - docker build -t $CI_REGISTRY/$IMAGE_NAME:latest -f Dockerfile .
-    - docker build -t vanquanraf/repository:config-service -f Dockerfile ./config-service
 
 push-image:
   image: docker:19.03.1
@@ -61,14 +59,12 @@ push-image:
     - docker:19.03.1-dind
   stage: build
   before_script:
-  # - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
+  - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
   # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker login -u vanquanraf -p Dcoganglen@880722
   stage: push
   script:
-    # - docker push docker-registry.vanquanraf.tech/demo-ci:latest
+    - docker push docker-registry.vanquanraf.tech/demo-ci:latest
     # - docker push $CI_REGISTRY/$IMAGE_NAME:latest
-    - docker push vanquanraf/repository:config-service
 
 deploy-dev:
   stage: deploy
@@ -83,9 +79,8 @@ deploy-dev:
 
   script:
     # Login to server deploy then login to private docker registry
-    # - ssh -p 56789 -T root@222.252.25.241 "docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech"
+    - ssh -p 56789 -T root@222.252.25.241 "docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech"
     # - ssh -p 56789 -T $SSH_USER@$SSH_HOST "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}"
-    - ssh -p 56789 -T root@222.252.25.241 "docker login -u vanquanraf -p Dcoganglen@880722"
     # Remove old containers and images if exists
     # - ssh -p 56789 -T root@222.252.25.241 "docker rm -f demo-ci || true"
     # - ssh -p 56789 -T $SSH_USER@$SSH_HOST "docker rm -f ${IMAGE_NAME} || true"
