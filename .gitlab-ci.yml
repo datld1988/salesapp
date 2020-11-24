@@ -43,9 +43,9 @@ stages:
 
 build-image:
   # Lightweight image with support of running docker in docker
-  image: docker:19.03.1
+  image: docker:18.09
   services:
-    - docker:19.03.1-dind
+    - docker:18.09-dind
   stage: build
   before_script:
   # - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
