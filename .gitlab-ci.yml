@@ -36,52 +36,32 @@
 
 
 
-image: docker:19.03.1
-  
-services:
-  - docker:19.03.1-dind
-
-variables:
-  # see https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled for Dind configuration
-  # DOCKER_HOST: tcp://docker:2375 --> this should only be configured when using Kubernetes runners
-  # When using dind, it's wise to use the overlayfs driver for
-  # improved performance.
-  DOCKER_DRIVER: overlay2
-  # Specify to Docker where to create the certificates, Docker will
-  # create them automatically on boot, and will create
-  # `/certs/client` that will be shared between the service and job
-  # container, thanks to volume mount from config.toml
-  DOCKER_TLS_CERTDIR: ""
-
-# One of the new trends in Continuous Integration/Deployment is to:
-# (see https://docs.gitlab.com/ee/ci/docker/using_docker_build.html)
-# 1. Create an application image
-# 2. Run tests against the created image
-# 3. Push image to a remote registry
-# 4. Deploy to a server from the pushed image
-
 stages:
   - build
-  - test
   - push
   - deploy
 
-before_script:
+build-image:
+  # Lightweight image with support of running docker in docker
+  image: docker:19.03.1
+  services:
+    - docker:19.03.1-dind
+  stage: build
+  before_script:
   # - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-
-build-image:
-  stage: build
   script:
     # - docker build -t docker-registry.vanquanraf.tech/demo-ci:latest -f Dockerfile .
     - docker build -t $CI_REGISTRY/$IMAGE_NAME:latest -f Dockerfile .
 
-test-image:
-  stage: test
-  script:
-    - echo Insert fancy API test here!
-
 push-image:
+  image: docker:19.03.1
+  services:
+    - docker:19.03.1-dind
+  stage: build
+  before_script:
+  # - docker login -u vanquanraf -p 123456a@ docker-registry.vanquanraf.tech
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   stage: push
   script:
     # - docker push docker-registry.vanquanraf.tech/demo-ci:latest
@@ -93,10 +73,10 @@ deploy-dev:
   image: kroniak/ssh-client
 
   before_script:
-  - eval $(ssh-agent -s)
-  - ssh-add <(echo "$SSH_PRIVATE_KEY")
-  - mkdir -p ~/.ssh
-  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
   script:
     # Login to server deploy then login to private docker registry
@@ -115,5 +95,6 @@ deploy-dev:
   #   url: http://222.252.25.241:50080
   only:
     - develop
+
 
 
