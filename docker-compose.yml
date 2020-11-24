@@ -1,7 +1,7 @@
 version: '3.3'
 services:
-  #  uniform-rabbitmq:
-  #    container_name: "uniform-rabbitmq"
+  #  saleapp-rabbitmq:
+  #    container_name: "saleapp-rabbitmq"
   #    image: "rabbitmq:3-management"
   #    restart: on-failure
   #    ports:
@@ -9,23 +9,23 @@ services:
   #      - "5672:5672"
 
 
-  uniform-zipkin:
-    container_name: uniform-zipkin
+  saleapp-zipkin:
+    container_name: saleapp-zipkin
     image: openzipkin/zipkin
     restart: always
     networks:
-      - uniform-network
+      - saleapp-network
     ports:
       - '9411:9411'
       
-  uniform-redis:
-    container_name: uniform-redis
+  saleapp-redis:
+    container_name: saleapp-redis
     image: redis:latest
     volumes:
       - ../data/redis/redis.conf:/etc/redis.conf
       - ../data/redis/redis-sentinel.conf:/etc/redis-sentinel.conf
     networks:
-      - uniform-network
+      - saleapp-network
     command:
       - /bin/bash
       - -c
@@ -43,7 +43,7 @@ services:
     environment:
       zk_id: "1"
     networks:
-      - uniform-network
+      - saleapp-network
     ports:
       - "2181:2181"
 
@@ -63,7 +63,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - uniform-network
+      - saleapp-network
     ports:
       - "9092:9092"
 
@@ -77,7 +77,7 @@ services:
         - 9200:9200
         - 9300:9300
       networks:
-        - uniform-network
+        - saleapp-network
 
     kibana:
       image: kibana:7.7.0
@@ -90,7 +90,7 @@ services:
       depends_on:
         - elasticsearch
       networks:
-        - uniform-network
+        - saleapp-network
 
     logstash:
       image: logstash:7.7.0
@@ -106,12 +106,12 @@ services:
       depends_on:
         - elasticsearch
       networks:
-        - uniform-network
+        - saleapp-network
 
 
 
   account-service:
-    image: uniform/account-service
+    image: saleapp/account-service
     container_name: account-service
     build:
       context: .
@@ -119,10 +119,10 @@ services:
     ports:
       - "8083:8083"
     networks:
-      - uniform-network
+      - saleapp-network
 
   admin-service:
-    image: uniform/admin-service
+    image: saleapp/admin-service
     container_name: admin-service
     build:
       context: .
@@ -130,10 +130,10 @@ services:
     ports:
       - "8089:8089"
     networks:
-      - uniform-network
+      - saleapp-network
 
   attachment-service:
-    image: uniform/attachment-service
+    image: saleapp/attachment-service
     container_name: attachment-service
     build:
       context: .
@@ -141,10 +141,10 @@ services:
     ports:
       - "8086:8086"
     networks:
-      - uniform-network
+      - saleapp-network
 
   auth-service:
-    image: uniform/auth-service
+    image: saleapp/auth-service
     container_name: auth-service
     build:
       context: .
@@ -152,10 +152,10 @@ services:
     ports:
       - "8081:8081"
     networks:
-      - uniform-network
+      - saleapp-network
 
   card-service:
-    image: uniform/card-service
+    image: saleapp/card-service
     container_name: card-service
     build:
       context: .
@@ -163,10 +163,10 @@ services:
     ports:
       - "8085:8085"
     networks:
-      - uniform-network
+      - saleapp-network
 
   config-service:
-    image: uniform/config-service
+    image: saleapp/config-service
     container_name: config-service
     build:
       context: .
@@ -174,10 +174,10 @@ services:
     ports:
       - "8888:8888"
     networks:
-      - uniform-network
+      - saleapp-network
 
   ebank-service:
-    image: uniform/ebank-service
+    image: saleapp/ebank-service
     container_name: ebank-service
     build:
       context: .
@@ -185,10 +185,10 @@ services:
     ports:
       - "8084:8084"
     networks:
-      - uniform-network
+      - saleapp-network
 
   gateway-service:
-    image: uniform/gateway-service
+    image: saleapp/gateway-service
     container_name: gateway-service
     build:
       context: .
@@ -196,10 +196,10 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - uniform-network
+      - saleapp-network
 
   legal-service:
-    image: uniform/legal-service
+    image: saleapp/legal-service
     container_name: legal-service
     build:
       context: .
@@ -207,10 +207,10 @@ services:
     ports:
       - "8088:8088"
     networks:
-      - uniform-network
+      - saleapp-network
 
   log-service:
-    image: uniform/log-service
+    image: saleapp/log-service
     container_name: log-service
     build:
       context: .
@@ -218,10 +218,10 @@ services:
     ports:
       - "8091:8091"
     networks:
-      - uniform-network
+      - saleapp-network
 
   notification-service:
-    image: uniform/notification-service
+    image: saleapp/notification-service
     container_name: notification-service
     build:
       context: .
@@ -229,10 +229,10 @@ services:
     ports:
       - "8090:8090"
     networks:
-      - uniform-network
+      - saleapp-network
 
   printout-service:
-    image: uniform/printout-service
+    image: saleapp/printout-service
     container_name: printout-service
     build:
       context: .
@@ -240,10 +240,10 @@ services:
     ports:
       - "8087:8087"
     networks:
-      - uniform-network
+      - saleapp-network
 
   process-service:
-    image: uniform/process-service
+    image: saleapp/process-service
     container_name: process-service
     build:
       context: .
@@ -251,10 +251,10 @@ services:
     ports:
       - "8082:8082"
     networks:
-      - uniform-network
+      - saleapp-network
 
   registry-service:
-    image: uniform/registry-service
+    image: saleapp/registry-service
     container_name: registry-service
     build:
       context: .
@@ -262,10 +262,10 @@ services:
     ports:
       - "8761:8761"
     networks:
-      - uniform-network
+      - saleapp-network
 
 
 
 networks:
-  uniform-network:
+  saleapp-network:
     driver: bridge

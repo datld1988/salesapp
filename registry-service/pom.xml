@@ -7,8 +7,8 @@
 	<name>registry-service</name>
 
 	<parent>
-        <groupId>com.uniform</groupId>
-        <artifactId>uniform</artifactId>
+        <groupId>com.salesapp</groupId>
+        <artifactId>salesapp</artifactId>
 		<version>1.0-SNAPSHOT</version>
     </parent>
 

@@ -1,5 +1,5 @@
-# Kiến trúc microservices trong hệ thống uniform:
-1. Microservices core (các microservice nghiệp vụ của hệ thống uniform)
+# Kiến trúc microservices trong hệ thống saleapp:
+1. Microservices core (các microservice nghiệp vụ của hệ thống saleapp)
     - process service (domain hồ sơ khách hàng)
     - account service (domain tài khoản)
     - internet-banking service (domain internet banking)

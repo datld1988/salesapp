@@ -45,7 +45,7 @@ spring:
 
       #hibernate.hbm2ddl.auto: update
       hibernate.format_sql: true
-      hibernate.default_schema: UNIFORM_CORE
+      hibernate.default_schema: SALES_APP_CORE
     hibernate:
       ddl-auto: none
       naming:
