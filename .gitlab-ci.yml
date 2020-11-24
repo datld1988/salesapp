@@ -28,3 +28,4 @@ deploy-salesapp-develop:
     #- ssh -p $SSH_PORT -T $SSH_USER@$SSH_HOST 'cd /project/alphaway/salesapp/develop && docker restart salesapp-microservices-develop'
   only:
     - develop
+
