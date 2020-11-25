@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @Configuration
-@EnableJpaRepositories("com.salesapp.adminservice.repository")
+@EnableJpaRepositories("com.salesapp.saleskitservice.repository")
 @EnableTransactionManagement
 public class DatabaseConfiguration {
 
