@@ -1,8 +1,13 @@
 package com.salesapp.adminservice.controller;
 
 
+import com.salesapp.adminservice.dto.UserDto;
 import com.salesapp.adminservice.dto.UserRegistrationDto;
 import com.salesapp.adminservice.service.UserService;
+import com.uniform.common.dto.Message;
+import com.uniform.common.dto.Request;
+import com.uniform.common.dto.Response;
+import com.uniform.common.exception.SalesException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -11,6 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -24,10 +33,29 @@ public class UserController {
 
     @PostMapping("/create")
 //    @PreAuthorize("hasAuthority('create_profile')")
-    public ResponseEntity<Object> createUser(@RequestBody UserRegistrationDto user) {
-        log.debug("REST request to create admin : {}", user);
-        userService.saveUser(user);
-        return new ResponseEntity<>("OK", HttpStatus.CREATED);
+    public ResponseEntity<Response<UserDto>> createUser(@RequestBody Request<UserRegistrationDto> request) {
+        if (null == request || null == request.getE()) {
+            throw new SalesException("404", "Not found!");
+        }
+        log.debug("REST request to create admin : {}", request.getE());
+        userService.saveUser(request.getE());
+        Response<UserDto> response = new Response<>();
+        //set message
+        response.setMessage(new Message("404", "Not found!"));
+        //set data
+        List<UserDto> userDtos = new ArrayList<>();
+        UserDto userDto = new UserDto();
+        userDto.setId("1");
+        userDto.setUsername("AAA");
+        userDtos.add(userDto);
+        userDto = new UserDto();
+        userDto.setId("2");
+        userDto.setUsername("BBB");
+        userDtos.add(userDto);
+        response.setData(userDtos);
+
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/get")
