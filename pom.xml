@@ -38,7 +38,7 @@
 		<module>auth-service</module>
         <module>admin-service</module>
         <module>log-service</module>
-		<!-- <module>saleskit-service</module> -->
+		 <module>saleskit-service</module>
 		<!-- <module>kpi-service</module> -->
 		<!-- <module>customer-service</module> -->
     </modules>
