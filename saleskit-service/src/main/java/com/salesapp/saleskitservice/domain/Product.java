@@ -20,7 +20,7 @@ public class Product {
     private String maSP;
 
     @Column(name = "MA_SP_CHA")
-    private String maSPCha;
+    private Integer maSPCha;
 
     @Column(name = "TEN_SAN_PHAM")
     private String tenSP;
