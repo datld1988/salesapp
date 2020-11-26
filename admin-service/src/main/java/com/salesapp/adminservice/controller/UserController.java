@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "user")
 public class UserController {
     private final Logger log = LoggerFactory.getLogger(UserController.class);
 
