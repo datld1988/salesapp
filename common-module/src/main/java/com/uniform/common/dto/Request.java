@@ -3,15 +3,20 @@ package com.uniform.common.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Request<E> {
+
     // Search conditions
-    private E e;
+    @Valid
+    private E requestDto;
+
     // Sort conditions
+    @Valid
     private Sort  sort;
     // Filter conditions
     private List<Filter> filters = new ArrayList<>();

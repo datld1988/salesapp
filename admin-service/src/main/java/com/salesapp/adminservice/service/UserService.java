@@ -5,13 +5,13 @@ import com.salesapp.adminservice.domain.AdUser;
 import com.salesapp.adminservice.dto.UserDto;
 import com.salesapp.adminservice.dto.UserRegistrationDto;
 import com.salesapp.adminservice.repository.AdUserRepository;
+import com.uniform.common.dto.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,8 +21,12 @@ public class UserService {
     @Autowired
     private AdUserRepository adUserRepository;
 
-    public void saveUser(UserRegistrationDto user) {
-        log.info(String.format("create a user %s successfully", user.getUsername()));
+    public void saveUser(Request<UserRegistrationDto> request) {
+//        Converters.castToBoolean("db");
+//        if (null == request || null == request.getE()) {
+//            throw new SalesException("404", "Not found data!");
+//        }
+//        log.info(String.format("create a user %s successfully", request.getE().getUsername()));
     }
 
     public UserDto getUser(String userName) {
