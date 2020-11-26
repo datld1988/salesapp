@@ -13,7 +13,7 @@ build:
     paths:
       - ./config-service/target
       - ./registry-service/target
-      - ./gateway-service/target
+      # - ./gateway-service/target
       # - ./auth-service/target
       # - ./admin-service/target
   only:
