@@ -16,6 +16,9 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
+    List<Product> findByLoaiSP(String loaiSp);
+    Optional<Product> findById(Integer id);
+
     List<Product> findByMaSPChaAndLoaiSPAndTrangThai(
             Integer maSPCha,
             String loaiSP,
@@ -43,7 +46,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("toDate") Date toDate,
             @Param("menuId") Integer menuId,
             @Param("status") Integer status
-            );
+    );
 
     @Query("SELECT new com.salesapp.saleskitservice.dto.ProductMenuDto( " +
             " p.id, p.tenSP, p.icon, p.anh_1, p.tgBatDau, p.tgKetThuc) FROM Product p" +
@@ -69,5 +72,4 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("isPromotion") Boolean isPromotion,
             @Param("isMajor") Boolean isMajor
     );
-
 }

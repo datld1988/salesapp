@@ -2,6 +2,8 @@ package com.salesapp.saleskitservice.controller;
 
 import com.salesapp.saleskitservice.domain.Product;
 import com.salesapp.saleskitservice.dto.ProductMenuDto;
+import com.salesapp.saleskitservice.dto.ProductPropertiesDto;
+import com.salesapp.saleskitservice.model.ProductPropertiesModel;
 import com.salesapp.saleskitservice.model.ApiResultResponse;
 import com.salesapp.saleskitservice.model.FilterProductRequest;
 import com.salesapp.saleskitservice.model.FilterProductResponse;
@@ -71,6 +73,16 @@ public class ProductController {
         data.setProductList(pageProduct.getContent());
         data.setIsHasNextPage(pageProduct.getNumber() + 1 < pageProduct.getTotalPages());
         response.setData(data);
+        return response;
+    }
+
+    @RequestMapping(path = "info", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ApiResultResponse<List<ProductPropertiesDto>> getProductInfo(@RequestParam("product_id") Integer productId) {
+        ApiResultResponse<List<ProductPropertiesDto>> response = new ApiResultResponse<>();
+        response.setResponseCode("00");
+        response.setResponseMessage("Success");
+        response.setData(productService.getProductInfo(productId));
         return response;
     }
 }

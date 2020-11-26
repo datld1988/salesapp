@@ -24,6 +24,8 @@ public class AdUser implements Serializable {
     public static String MetaPropCreatedBy = "createdBy";
     public static String MetaPropModifiedDate = "modifiedDate";
     public static String MetaPropModifiedBy = "modifiedBy";
+    public static String MetaPropAvatar = "avatar";
+    public static String MetaPropFullName = "fullname";
 
     @Id
     @Column(name = "ID")
@@ -61,6 +63,13 @@ public class AdUser implements Serializable {
     @Column(name = "MODIFIED_BY")
     // Người cập nhật
     private String modifiedBy;
-    
+
+    @Column(name = "AVATAR")
+    // ảnh dại diện
+    private String avatar;
+
+    @Column(name = "FULLNAME")
+    // họ tên
+    private String fullName;
 
 }
