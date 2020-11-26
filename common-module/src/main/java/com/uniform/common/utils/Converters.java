@@ -72,7 +72,7 @@ public class Converters {
                 return false;
             }
             return (Boolean) input;
-        } catch (SalesException e) {
+        } catch (Exception e) {
             throw new SalesException(com.uniform.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không phải là Boolean");
         }
     }
