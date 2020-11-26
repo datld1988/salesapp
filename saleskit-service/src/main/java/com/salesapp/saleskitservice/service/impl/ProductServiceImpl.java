@@ -96,10 +96,10 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductMenuDto> search(SearchProductRequest request) {
         return productRepository.searchProduct(
                 PageRequest.of(request.getPage(), request.getPageSize()),
-                request.getKeySearch(), ProductConst.STATUS_ACTIVE,
-                request.getIsProduct(),
-                request.getIsPromotion(),
-                request.getIsMajor()
+                request.getKeySearch(), ProductConst.STATUS_ACTIVE
+//                request.getIsProduct(),
+//                request.getIsPromotion(),
+//                request.getIsMajor()
         );
     }
 
