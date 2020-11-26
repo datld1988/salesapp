@@ -3,10 +3,6 @@ package com.salesapp.saleskitservice.service;
 import com.salesapp.saleskitservice.dto.ProductMenuDto;
 import com.salesapp.saleskitservice.dto.ProductPropertiesDto;
 import com.salesapp.saleskitservice.model.FilterProductRequest;
-import com.salesapp.saleskitservice.model.ProductPropertiesModel;
-import com.salesapp.saleskitservice.model.SearchProductRequest;
-import org.springframework.data.domain.Page;
-import com.salesapp.saleskitservice.model.FilterProductRequest;
 import com.salesapp.saleskitservice.model.SearchProductRequest;
 import org.springframework.data.domain.Page;
 
