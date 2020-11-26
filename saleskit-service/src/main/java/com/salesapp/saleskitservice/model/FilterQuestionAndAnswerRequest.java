@@ -9,6 +9,7 @@ import lombok.*;
 @ToString
 public class FilterQuestionAndAnswerRequest {
     private String keyword;
+    private Integer idSP;
     private Integer page;
     private Integer perPage;
 }

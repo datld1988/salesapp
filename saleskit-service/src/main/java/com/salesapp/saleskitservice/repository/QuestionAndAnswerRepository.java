@@ -12,14 +12,18 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface QuestionAndAnswerRepository extends JpaRepository<QuestionAndAnswer, String> {
+public interface QuestionAndAnswerRepository extends JpaRepository<QuestionAndAnswer, Integer> {
     @Query("SELECT new com.salesapp.saleskitservice.dto.QuestionAndAnswerDto(" +
-            " qa.id, qa.idSP, qa.ndCauHoi, qa.ndCauTraLoi) FROM QuestionAndAnswer qa" +
-            " WHERE lower(qa.ndCauHoi)  LIKE lower(CONCAT ('%',:keyword,'%'))")
-//            " OR qa.idSP = '%:keyword%'")
+            " qa.id, qa.idSP, qa.ndCauHoi, qa.ndCauTraLoi) " +
+            " FROM QuestionAndAnswer qa" +
+            " WHERE (lower(qa.ndCauHoi)  LIKE lower(CONCAT ('%',:keyword,'%'))) " +
+            " AND (qa.idSP = :idSP)")
     Page<QuestionAndAnswerDto> filterQuestionAndAnswer(
             Pageable page,
+            @Param("idSP") Integer idSP,
             @Param("keyword") String keyword
     );
+
+
 
 }

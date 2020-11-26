@@ -18,7 +18,7 @@ public class QuestionAndAnswerServiceImpl implements QuestionAndAnswerService {
     @Override
     public Page<QuestionAndAnswerDto> filterQuestionAndAnswer(FilterQuestionAndAnswerRequest request) {
         Page<QuestionAndAnswerDto> listQuestionAndAnswer = questionAndAnswerRepository.filterQuestionAndAnswer(
-                PageRequest.of(request.getPage(), request.getPerPage()), request.getKeyword());
+                PageRequest.of(request.getPage(), request.getPerPage()), request.getIdSP(), request.getKeyword());
         return listQuestionAndAnswer;
     }
 }
