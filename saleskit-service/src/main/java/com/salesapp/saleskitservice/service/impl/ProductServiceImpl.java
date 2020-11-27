@@ -97,9 +97,6 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.searchProduct(
                 PageRequest.of(request.getPage(), request.getPageSize()),
                 request.getKeySearch(), ProductConst.STATUS_ACTIVE
-//                request.getIsProduct(),
-//                request.getIsPromotion(),
-//                request.getIsMajor()
         );
     }
 

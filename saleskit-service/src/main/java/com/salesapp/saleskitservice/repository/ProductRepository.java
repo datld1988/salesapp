@@ -68,8 +68,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             Pageable page,
             @Param("name") String name,
             @Param("status") Integer status
-//            @Param("isProduct") Boolean isProduct,
-//            @Param("isPromotion") Boolean isPromotion,
-//            @Param("isMajor") Boolean isMajor
     );
 }

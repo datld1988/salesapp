@@ -11,7 +11,7 @@ public class SearchProductRequest {
     private String keySearch;
     private Boolean isProduct;
     private Boolean isPromotion;
-    private Boolean isMajor;
+    private Boolean isBusiness;
     private Integer page;
     private Integer pageSize;
 }
