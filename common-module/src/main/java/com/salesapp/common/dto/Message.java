@@ -1,8 +1,8 @@
-package com.uniform.common.dto;
+package com.salesapp.common.dto;
 
-import lombok.Data;
+//import lombok.Data;
 
-@Data
+//@Data
 public class Message {
     private String code;
     private String message;

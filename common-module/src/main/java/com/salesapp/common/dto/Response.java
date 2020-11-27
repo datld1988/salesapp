@@ -1,8 +1,8 @@
-package com.uniform.common.dto;
+package com.salesapp.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.uniform.common.utils.ErrorCode;
-import lombok.Data;
+import com.salesapp.common.utils.ErrorCode;
+//import lombok.Data;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,13 +11,29 @@ import java.util.List;
  * 1. Sử dụng kiểu trả về là Response<E>
  * @param <E>
  */
-@Data
+//@Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Response<E> {
     private Message message;
     private List<E> data;
 
-//    private PageDTO.Response page;
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
+    public List<E> getData() {
+        return data;
+    }
+
+    public void setData(List<E> data) {
+        this.data = data;
+    }
+
+    //    private PageDTO.Response page;
 
     public static Response error(String code, String message) {
         Response response = new Response();

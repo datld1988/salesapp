@@ -32,16 +32,16 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>common-module</module>
 		<module>config-service</module>
 		<module>registry-service</module>
 		<module>gateway-service</module>
 		<module>auth-service</module>
         <module>admin-service</module>
         <module>log-service</module>
-		 <module>saleskit-service</module>
-		<!-- <module>kpi-service</module> -->
-		<!-- <module>customer-service</module> -->
+		<module>saleskit-service</module>
+<!--		 <module>kpi-service</module> -->
+<!--		 <module>customer-service</module> -->
+		<module>common-module</module>
     </modules>
 
 </project>
