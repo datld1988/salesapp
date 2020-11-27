@@ -57,17 +57,6 @@ public class UserController {
 
     @GetMapping("get")
 //    @PreAuthorize("hasAuthority('read_profile')")
-    public ApiResultResponse getUser(Principal principal) {
-
-        ApiResultResponse<UserDto> response = new ApiResultResponse<>();
-        response.setResponseCode("00");
-        response.setResponseMessage("Success");
-        response.setData(userService.getUser(principal.getName()));
-        return response;
-    }
-
-    @GetMapping("test")
-//    @PreAuthorize("hasAuthority('read_profile')")
     public ApiResultResponse testUser(Principal principal) {
 
         ApiResultResponse<UserDto> response = new ApiResultResponse<>();
@@ -76,7 +65,7 @@ public class UserController {
         try {
             UserDto result = userService.getUser(principal.getName());
             if(result != null) {
-                response.setResponseCode("00");
+                response.setResponseCode("000");
                 response.setResponseMessage("Success");
                 response.setData(result);
             }

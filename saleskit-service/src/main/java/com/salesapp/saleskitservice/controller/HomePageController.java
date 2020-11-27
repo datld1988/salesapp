@@ -36,7 +36,7 @@ public class HomePageController {
     @ResponseBody
     public ApiResultResponse getInfoHomePageMobile (Principal pri) {
         ApiResultResponse<HomePageMobileDto> response = new ApiResultResponse<>();
-        response.setResponseCode("00");
+        response.setResponseCode("000");
         response.setResponseMessage("Success");
         response.setData(homePageService.getInfoForHome(pri.getName()));
         return response;
