@@ -3,14 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>com.common</groupId>
 	<artifactId>common-module</artifactId>
-	<name>common-module</name>
-	
-	<parent>
-        <groupId>com.salesapp</groupId>
-        <artifactId>salesapp</artifactId>
-		<version>1.0-SNAPSHOT</version>
-    </parent>
+	<version>1.0-SNAPSHOT</version>
+
+<!--	<parent>-->
+<!--        <groupId>com.salesapp</groupId>-->
+<!--        <artifactId>salesapp</artifactId>-->
+<!--		<version>1.0-SNAPSHOT</version>-->
+<!--    </parent>-->
 
 	<dependencies>
 <!--		<dependency>-->
@@ -71,6 +72,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>8</source>
+					<target>8</target>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
