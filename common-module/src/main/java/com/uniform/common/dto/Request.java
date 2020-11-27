@@ -13,7 +13,7 @@ public class Request<E> {
 
     // Search conditions
     @Valid
-    private E requestDto;
+    private E requestData;
 
     // Sort conditions
     @Valid
