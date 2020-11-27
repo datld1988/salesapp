@@ -1,4 +1,4 @@
-package com.uniform.common.utils;
+package com.salesapp.common.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
