@@ -57,6 +57,13 @@ public class ProductServiceImpl implements ProductService {
         return productMenuDtoList;
     }
 
+    /**
+     * author : dungtq
+     * date : 26/11/2020
+     * lấy thông tin sản phẩm theo mã sản phẩm
+     * @param idSp
+     * @return danh sách thuộc tính sản phẩm
+     */
     @Override
     public List<ProductPropertiesDto> getProductInfo(Integer idSp) {
         List<ProductPropertiesDto> result = new ArrayList<ProductPropertiesDto>();

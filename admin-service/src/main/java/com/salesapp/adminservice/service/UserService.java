@@ -29,6 +29,13 @@ public class UserService {
 //        log.info(String.format("create a user %s successfully", request.getE().getUsername()));
     }
 
+    /**
+     * author: dungtq
+     * create date : 27/11/2020
+     * lấy thông  tin user qua username
+     * @param userName
+     * @return thông  tin user
+     */
     public UserDto getUser(String userName) {
         log.info("----> call get all users method");
         List<AdUser> lst = adUserRepository.findAdUserByUserNameAndStatusCode(userName, "1");

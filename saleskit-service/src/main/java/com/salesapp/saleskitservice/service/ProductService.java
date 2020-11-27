@@ -9,7 +9,13 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface ProductService {
-
+    /**
+     * author : dungtq
+     * date : 26/11/2020
+     * getProductInfo
+     * @param idSp
+     * @return
+     */
     List<ProductPropertiesDto> getProductInfo(Integer idSp);
     List<ProductMenuDto> getProductMenu(Integer idParent, String prodType);
 

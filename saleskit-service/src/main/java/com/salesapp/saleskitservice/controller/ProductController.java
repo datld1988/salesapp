@@ -8,11 +8,16 @@ import com.salesapp.saleskitservice.model.*;
 import com.salesapp.saleskitservice.service.BusinessService;
 import com.salesapp.saleskitservice.service.ProductService;
 import com.salesapp.saleskitservice.service.PromotionService;
+import com.uniform.common.dto.Response;
+import com.uniform.common.utils.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
 
@@ -104,13 +109,25 @@ public class ProductController {
         return response;
     }
 
+    /**
+     * author: dungtq
+     * create date : 26/11/2020
+     * lấy thông tin sản phẩm
+     * @param productId : mã sản phẩm
+     * @return danh sách các thuộc tính sản phẩm
+     */
     @RequestMapping(path = "info", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<List<ProductPropertiesDto>> getProductInfo(@RequestParam("product_id") Integer productId) {
-        ApiResultResponse<List<ProductPropertiesDto>> response = new ApiResultResponse<>();
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        response.setData(productService.getProductInfo(productId));
-        return response;
+    public Response getProductInfo(     @RequestParam("product_id")
+                                        @NotNull(message = "product_id not null")
+                                        @NotEmpty (message = "product_id not empty")
+                                        @Valid
+                                                   Integer productId) {
+
+        List<ProductPropertiesDto> result  = productService.getProductInfo(productId);
+        if (result.size() != 0)
+            return Response.success(result);
+        else
+            return Response.error(ErrorCode.NOT_FOUND_RECORDS, "Không tìm thấy bản ghi thỏa mãn");
     }
 }

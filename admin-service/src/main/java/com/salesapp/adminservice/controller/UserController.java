@@ -30,26 +30,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("get")
-    //@PreAuthorize("hasAuthority('read_profile')")
-    public ApiResultResponse getUserInfo(Principal principal) {
 
-        ApiResultResponse<UserDto> response = new ApiResultResponse<>();
-        response.setResponseCode("01");
-        response.setResponseMessage("Unsuccess");
-        try {
-            UserDto result = userService.getUser(principal.getName());
-            if (result != null) {
-                response.setResponseCode("000");
-                response.setResponseMessage("Success");
-                response.setData(result);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setResponseMessage(e.toString());
-        }
-        return response;
-    }
 
 //    /**
 //     * demo sử dụng Respone. Sử dụng kiểu trả về là ResponseEntity<Response<UserDto>>
