@@ -5,20 +5,20 @@ import com.salesapp.adminservice.dto.UserDto;
 import com.salesapp.adminservice.dto.UserRegistrationDto;
 import com.salesapp.adminservice.models.ApiResultResponse;
 import com.salesapp.adminservice.service.UserService;
-import com.uniform.common.dto.Message;
 import com.uniform.common.dto.Request;
 import com.uniform.common.dto.Response;
+import com.uniform.common.utils.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.security.Principal;
 
 @RestController
 public class UserController {
@@ -30,40 +30,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/create")
-//    @PreAuthorize("hasAuthority('create_profile')")
-    public ResponseEntity<Response<UserDto>> createUser(@Valid @RequestBody Request<UserRegistrationDto> request) {
-//        log.debug("REST request to create admin : {}", request.getE());
-        userService.saveUser(request);
-        Response<UserDto> response = new Response<>();
-        //set message
-        response.setMessage(new Message("404", "Not found!"));
-        //set data
-        List<UserDto> userDtos = new ArrayList<>();
-        UserDto userDto = new UserDto();
-        userDto.setId("1");
-        userDto.setUsername("AAA");
-        userDtos.add(userDto);
-        userDto = new UserDto();
-        userDto.setId("2");
-        userDto.setUsername("BBB");
-        userDtos.add(userDto);
-        response.setData(userDtos);
-
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
-
     @GetMapping("get")
-//    @PreAuthorize("hasAuthority('read_profile')")
-    public ApiResultResponse testUser(Principal principal) {
+    //@PreAuthorize("hasAuthority('read_profile')")
+    public ApiResultResponse getUserInfo(Principal principal) {
 
         ApiResultResponse<UserDto> response = new ApiResultResponse<>();
         response.setResponseCode("01");
         response.setResponseMessage("Unsuccess");
         try {
             UserDto result = userService.getUser(principal.getName());
-            if(result != null) {
+            if (result != null) {
                 response.setResponseCode("000");
                 response.setResponseMessage("Success");
                 response.setData(result);
@@ -73,6 +49,63 @@ public class UserController {
             response.setResponseMessage(e.toString());
         }
         return response;
+    }
+
+//    /**
+//     * demo sử dụng Respone. Sử dụng kiểu trả về là ResponseEntity<Response<UserDto>>
+//     * Uncomment class ở phần comment 2. Sử dụng cho kiểu trả về là ResponseEntity<Response<UserDto>>
+//     */
+//    @PostMapping("/create1")
+//    //@PreAuthorize("hasAuthority('create_profile')")
+//    public ResponseEntity<Response<UserDto>> create1User(@Valid @RequestBody Request<UserRegistrationDto> request) {
+//        userService.saveUser(request);
+//
+//        Response<UserDto> response = new Response<>();
+//        response.success("Thêm mới user thành công!");
+//
+//        return new ResponseEntity<>(response, HttpStatus.CREATED);
+//    }
+
+    /**
+     * demo sử dụng Respone
+     * @param request
+     * @return
+     */
+    @PostMapping("/create2")
+    //@PreAuthorize("hasAuthority('create_profile')")
+    public Response create2User(@Valid @RequestBody Request<UserRegistrationDto> request) {
+        userService.saveUser(request);
+
+        return Response.success("Thêm mới user thành công!");
+    }
+
+    /**
+     * demo sử dụng Respone
+     * @param request
+     * @return
+     */
+    @GetMapping("/get")
+    //@PreAuthorize("hasAuthority('read_profile')")
+    public Response getUser(@Valid @RequestBody Request<UserRegistrationDto> request) {
+        if (null == request || null == request.getRequestData()) {
+            return Response.error(ErrorCode.NOT_FOUND, "Request data is null!");
+        }
+        return Response.success(userService.getUser(request.getRequestData().getUsername()));
+    }
+
+    /**
+     * demo sử dụng Respone
+     * @param request
+     * @return
+     */
+    @GetMapping("test")
+    //@PreAuthorize("hasAuthority('read_profile')")
+    public Response testUser(@Valid @RequestBody Request<UserRegistrationDto> request) {
+        if (null == request || null == request.getRequestData()) {
+            return Response.error(ErrorCode.NOT_FOUND, "Request data is null!");
+        }
+        UserDto result = userService.getUser(request.getRequestData().getUsername());
+        return Response.success(result);
     }
 
 }
