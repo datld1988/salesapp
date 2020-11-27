@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PromotionServiceImpl implements PromotionService {
 
@@ -22,5 +24,10 @@ public class PromotionServiceImpl implements PromotionService {
                 PageRequest.of(request.getPage(), request.getPageSize()),
                 request.getKeySearch(), ProductConst.STATUS_ACTIVE
         );
+    }
+
+    @Override
+    public List<PromotionDto> getSuggestForSearch(String keySearch, Integer size) {
+        return promotionRepository.searchByName(PageRequest.of(0, size), keySearch, ProductConst.STATUS_ACTIVE).getContent();
     }
 }

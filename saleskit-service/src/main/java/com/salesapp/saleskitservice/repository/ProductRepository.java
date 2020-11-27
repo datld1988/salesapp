@@ -19,10 +19,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByLoaiSP(String loaiSp);
     Optional<Product> findById(Integer id);
 
-    List<Product> findByMaSPChaAndLoaiSPAndTrangThai(
+    List<Product> findByMaSPChaAndLoaiSPAndTrangThaiAndDaDuyet(
             Integer maSPCha,
             String loaiSP,
-            Integer trangthai
+            Integer trangthai,
+            Integer daDuyet
     );
 
     List<Product> findByLoaiSPAndTrangThai(
@@ -32,12 +33,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Optional<Product> findTopByMaSP(String type);
 
-    List<Product> findByMaSPCha(Integer idParent);
+    List<Product> findByMaSPChaAndTrangThaiAndDaDuyet(Integer idParent, Integer trangthai, Integer daDuyet);
+
+    Optional<Product> findFirstByMaSPChaAndTrangThaiAndDaDuyet(Integer idParent, Integer trangthai, Integer daDuyet);
 
     @Query("SELECT new com.salesapp.saleskitservice.dto.ProductMenuDto(" +
             " p.id, p.tenSP, p.icon, p.anh_1, p.tgBatDau, p.tgKetThuc) FROM Product p" +
             " WHERE (p.tgBatDau >= :fromDate OR :fromDate IS NULL)" +
-            " AND (p.tgKetThuc <= :toDate OR :toDate IS NULL)" +
+            " AND (p.tgBatDau <= :toDate OR :toDate IS NULL)" +
             " AND (p.maSPCha = :menuId OR :menuId IS NULL)" +
             " AND p.trangThai = :status")
     Page<ProductMenuDto> filterProduct(
@@ -68,5 +71,16 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             Pageable page,
             @Param("name") String name,
             @Param("status") Integer status
+    );
+
+    @Query("SELECT new com.salesapp.saleskitservice.dto.ProductMenuDto( " +
+            " p.id, p.tenSP, p.icon, p.anh_1, p.tgBatDau, p.tgKetThuc, (SELECT COUNT(pc) FROM Product pc WHERE pc.maSPCha = p.id AND pc.trangThai = :status AND pc.daDuyet = :approved)) FROM Product p" +
+            " WHERE p.maSPCha = :idParent" +
+            " AND p.trangThai = :status" +
+            " AND p.daDuyet = :approved")
+    List<ProductMenuDto> checkProductOnSearch(
+            @Param("idParent") Integer idParent,
+            @Param("status") Integer status,
+            @Param("approved") Integer approved
     );
 }
