@@ -1,4 +1,4 @@
-package com.uniform.common.utils;
+package com.salesapp.common.utils;
 
 public class ErrorCode {
     public static final String OK = "200";
