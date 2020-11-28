@@ -123,6 +123,13 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!--oracle jdbc-->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc7</artifactId>
+            <version>12.2.0.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
