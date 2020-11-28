@@ -87,10 +87,19 @@
             <groupId>com.unboundid</groupId>
             <artifactId>unboundid-ldapsdk</artifactId>
         </dependency>
+<<<<<<< HEAD
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc7</artifactId>
             <version>12.1.0</version>
+=======
+
+        <!--oracle jdbc-->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc7</artifactId>
+            <version>12.2.0.1</version>
+>>>>>>> 2d634fb... add doc guide line install jdbc
         </dependency>
     </dependencies>
 

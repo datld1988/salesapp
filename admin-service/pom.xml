@@ -122,11 +122,22 @@
             <artifactId>common-module</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+<<<<<<< HEAD
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc7</artifactId>
             <version>12.1.0</version>
         </dependency>
+=======
+
+        <!--oracle jdbc-->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc7</artifactId>
+            <version>12.2.0.1</version>
+        </dependency>
+
+>>>>>>> 2d634fb... add doc guide line install jdbc
     </dependencies>
 
     <build>
