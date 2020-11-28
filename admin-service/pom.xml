@@ -90,31 +90,46 @@
 
 
         <!--for handler exception-->
+<!--        <dependency>-->
+<!--            <groupId>com.google.code.findbugs</groupId>-->
+<!--            <artifactId>jsr305</artifactId>-->
+<!--            <version>3.0.2</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.zalando</groupId>-->
+<!--            <artifactId>problem-spring-web</artifactId>-->
+<!--            <version>0.25.2</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.passay</groupId>-->
+<!--            <artifactId>passay</artifactId>-->
+<!--            <version>1.3.1</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.commons</groupId>-->
+<!--            <artifactId>commons-lang3</artifactId>-->
+<!--            <version>3.9</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.hibernate</groupId>-->
+<!--            <artifactId>hibernate-core</artifactId>-->
+<!--            <version>5.4.12.Final</version>-->
+<!--        </dependency>-->
+
+
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
+            <groupId>com.common</groupId>
+            <artifactId>common-module</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!--oracle jdbc-->
         <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>problem-spring-web</artifactId>
-            <version>0.25.2</version>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc7</artifactId>
+            <version>12.2.0.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.passay</groupId>
-            <artifactId>passay</artifactId>
-            <version>1.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.4.12.Final</version>
-        </dependency>
+
     </dependencies>
 
     <build>
