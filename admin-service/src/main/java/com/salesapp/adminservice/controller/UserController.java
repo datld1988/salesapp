@@ -5,11 +5,13 @@ import com.salesapp.adminservice.dto.UserDto;
 import com.salesapp.adminservice.dto.UserRegistrationDto;
 import com.salesapp.adminservice.models.ApiResultResponse;
 import com.salesapp.adminservice.service.UserService;
-import com.salesapp.common.dto.Request;
-import com.salesapp.common.dto.Response;
-import com.salesapp.common.utils.ErrorCode;
+import com.uniform.common.dto.Request;
+import com.uniform.common.dto.Response;
+import com.uniform.common.utils.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,26 +30,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("get")
-    //@PreAuthorize("hasAuthority('read_profile')")
-    public ApiResultResponse getUserInfo(Principal principal) {
 
-        ApiResultResponse<UserDto> response = new ApiResultResponse<>();
-        response.setResponseCode("01");
-        response.setResponseMessage("Unsuccess");
-        try {
-            UserDto result = userService.getUser(principal.getName());
-            if (result != null) {
-                response.setResponseCode("000");
-                response.setResponseMessage("Success");
-                response.setData(result);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setResponseMessage(e.toString());
-        }
-        return response;
-    }
 
 //    /**
 //     * demo sử dụng Respone. Sử dụng kiểu trả về là ResponseEntity<Response<UserDto>>

@@ -5,7 +5,7 @@ import com.salesapp.adminservice.domain.AdUser;
 import com.salesapp.adminservice.dto.UserDto;
 import com.salesapp.adminservice.dto.UserRegistrationDto;
 import com.salesapp.adminservice.repository.AdUserRepository;
-import com.salesapp.common.dto.Request;
+import com.uniform.common.dto.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,13 @@ public class UserService {
 //        log.info(String.format("create a user %s successfully", request.getE().getUsername()));
     }
 
+    /**
+     * author: dungtq
+     * create date : 27/11/2020
+     * lấy thông  tin user qua username
+     * @param userName
+     * @return thông  tin user
+     */
     public UserDto getUser(String userName) {
         log.info("----> call get all users method");
         List<AdUser> lst = adUserRepository.findAdUserByUserNameAndStatusCode(userName, "1");

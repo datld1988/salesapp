@@ -41,18 +41,13 @@ public class ProductServiceImpl implements ProductService {
                 idParent = productOp.get().getId();
             }
         }
-        productMenuDtoList = productRepository.findByMaSPChaAndLoaiSPAndTrangThaiAndDaDuyet(
-                idParent, prodType, ProductConst.STATUS_ACTIVE, ProductConst.APPROVED)
+        productMenuDtoList = productRepository.findByMaSPChaAndLoaiSPAndTrangThai(idParent, prodType, ProductConst.STATUS_ACTIVE)
         .stream().map(product -> {
             ProductMenuDto menu = ProductMenuDto.fromRoot(product);
             if (product.getMaSPCha() != null) {
-                List<ProductMenuDto> childes = getProductChild(product.getId());
-                if (childes.size() > 0) {
-                    if (childes.get(0).getChild() > 0) {
-                        menu.setChild(1);
-                    } else {
-                        menu.setChild(0);
-                    }
+                List<Product> child = getProductChild(product.getId());
+                if (child != null && child.size() > 0) {
+                    menu.setChild(1);
                 } else {
                     menu.setChild(0);
                 }
@@ -62,6 +57,13 @@ public class ProductServiceImpl implements ProductService {
         return productMenuDtoList;
     }
 
+    /**
+     * author : dungtq
+     * date : 26/11/2020
+     * lấy thông tin sản phẩm theo mã sản phẩm
+     * @param idSp
+     * @return danh sách thuộc tính sản phẩm
+     */
     @Override
     public List<ProductPropertiesDto> getProductInfo(Integer idSp) {
         List<ProductPropertiesDto> result = new ArrayList<ProductPropertiesDto>();
@@ -93,8 +95,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductMenuDto> getSuggestForSearch(String keySearch, Integer size) {
-        return productRepository.searchByName(PageRequest.of(0, size), keySearch, ProductConst.STATUS_ACTIVE).getContent();
+    public List<ProductMenuDto> getSuggestForSearch(String keySearch) {
+        return productRepository.searchByName(PageRequest.of(0, 5), keySearch, ProductConst.STATUS_ACTIVE).getContent();
     }
 
     @Override
@@ -105,7 +107,7 @@ public class ProductServiceImpl implements ProductService {
         );
     }
 
-    private List<ProductMenuDto> getProductChild(Integer idParent) {
-        return productRepository.checkProductOnSearch(idParent, ProductConst.STATUS_ACTIVE, ProductConst.APPROVED);
+    private List<Product> getProductChild(Integer idParent) {
+        return productRepository.findByMaSPCha(idParent);
     }
 }

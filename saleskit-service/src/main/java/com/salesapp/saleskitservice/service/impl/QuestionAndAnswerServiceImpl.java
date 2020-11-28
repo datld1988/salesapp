@@ -14,7 +14,13 @@ public class QuestionAndAnswerServiceImpl implements QuestionAndAnswerService {
 
     @Autowired
         private QuestionAndAnswerRepository questionAndAnswerRepository;
-
+    /**
+     * author : anhld
+     * date : 26/11/2020
+     * lấy danh sách câu hỏi và trả lời theo từ khóa và mã sản phẩm
+     * @param
+     * @return danh sách câu hỏi và trả lời
+     */
     @Override
     public Page<QuestionAndAnswerDto> filterQuestionAndAnswer(FilterQuestionAndAnswerRequest request) {
         Page<QuestionAndAnswerDto> listQuestionAndAnswer = questionAndAnswerRepository.filterQuestionAndAnswer(

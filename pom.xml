@@ -38,16 +38,9 @@
 		<module>auth-service</module>
         <module>admin-service</module>
         <module>log-service</module>
-		<module>saleskit-service</module>
-<!--		 <module>kpi-service</module> -->
-<!--		 <module>customer-service</module> -->
+		 <module>saleskit-service</module>
+		<!-- <module>kpi-service</module> -->
+		<!-- <module>customer-service</module> -->
     </modules>
-
-	<repositories>
-		<repository>
-			<id>local-maven-repo</id>
-			<url>file:///${project.basedir}/repository</url>
-		</repository>
-	</repositories>
 
 </project>
