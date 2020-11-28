@@ -7,8 +7,3 @@ spring:
       fail-fast: true
       password: 1234
       username: user
-
-eureka:
-  client:
-    registerWithEureka: false
-    fetchRegistry: false
