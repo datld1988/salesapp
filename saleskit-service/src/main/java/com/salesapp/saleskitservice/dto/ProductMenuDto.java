@@ -43,24 +43,4 @@ public class ProductMenuDto {
         this.timeStart = StringUtil.convertDateToString(timeStart);
         this.timeEnd = StringUtil.convertDateToString(timeEnd);
     }
-
-    public ProductMenuDto(Integer id, String title, String icon, String image, Date timeStart, Date timeEnd, Long child) {
-        this.id = id;
-        this.title = title;
-        this.icon = icon;
-        this.image = image;
-        this.timeStart = StringUtil.convertDateToString(timeStart);
-        this.timeEnd = StringUtil.convertDateToString(timeEnd);
-        this.child = child.intValue();
-    }
-
-    public ProductMenuDto(Integer id, String title, String icon, String image, Date timeStart, Date timeEnd, Integer child) {
-        this.id = id;
-        this.title = title;
-        this.icon = icon;
-        this.image = image;
-        this.timeStart = StringUtil.convertDateToString(timeStart);
-        this.timeEnd = StringUtil.convertDateToString(timeEnd);
-        this.child = child.intValue();
-    }
 }

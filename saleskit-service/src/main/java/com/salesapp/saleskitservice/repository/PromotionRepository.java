@@ -22,15 +22,4 @@ public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
             @Param("name") String name,
             @Param("status") Integer status
     );
-
-    @Query("SELECT new com.salesapp.saleskitservice.dto.PromotionDto( " +
-            " p.id, p.name, p.image1, p.timeStart, p.timeEnd) FROM Promotion p" +
-            " WHERE p.name LIKE CONCAT('%',:name,'%') OR :name IS NULL" +
-            " AND p.status = :status" +
-            " ORDER BY p.createDate DESC")
-    Page<PromotionDto> searchByName(
-            Pageable page,
-            @Param("name") String name,
-            @Param("status") Integer status
-    );
 }

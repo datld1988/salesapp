@@ -22,15 +22,4 @@ public interface BusinessRepository extends JpaRepository<Business, Integer> {
             @Param("name") String name,
             @Param("status") Integer status
     );
-
-    @Query("SELECT new com.salesapp.saleskitservice.dto.BusinessDto( " +
-            " b.id, b.name, b.icon, b.image1, b.timeStart, b.timeEnd) FROM Business b" +
-            " WHERE b.name LIKE CONCAT('%',:name,'%') OR :name IS NULL" +
-            " AND b.status = :status" +
-            " ORDER BY b.createDate DESC")
-    Page<BusinessDto> searchByName(
-            Pageable page,
-            @Param("name") String name,
-            @Param("status") Integer status
-    );
 }
