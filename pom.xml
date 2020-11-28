@@ -41,7 +41,6 @@
 		<module>saleskit-service</module>
 <!--		 <module>kpi-service</module> -->
 <!--		 <module>customer-service</module> -->
-<!--		<module>common-module</module>-->
     </modules>
 
 	<repositories>
