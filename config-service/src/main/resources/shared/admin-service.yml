@@ -18,8 +18,8 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     #url: jdbc:oracle:thin:@222.252.25.241:7521:xe
     url: jdbc:oracle:thin:@222.252.25.241:7521:orcl
-    username: dformuat
-    password: dformuat
+    username: SALESAPP
+    password: SALESAPP
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -45,7 +45,7 @@ spring:
 
       #hibernate.hbm2ddl.auto: update
       hibernate.format_sql: true
-      hibernate.default_schema: UNIFORM_CORE
+      hibernate.default_schema: SALES_APP_CORE
     hibernate:
       ddl-auto: none
       naming:
