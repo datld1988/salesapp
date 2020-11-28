@@ -15,7 +15,7 @@ public interface ProductService {
 
     Page<ProductMenuDto> filterProduct(FilterProductRequest request);
 
-    List<ProductMenuDto> getSuggestForSearch(String keySearch);
+    List<ProductMenuDto> getSuggestForSearch(String keySearch, Integer size);
 
     Page<ProductMenuDto> search(SearchProductRequest request);
 

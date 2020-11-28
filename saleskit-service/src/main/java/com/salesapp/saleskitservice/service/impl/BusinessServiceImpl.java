@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BusinessServiceImpl implements BusinessService {
 
@@ -22,5 +24,10 @@ public class BusinessServiceImpl implements BusinessService {
                 PageRequest.of(request.getPage(), request.getPageSize()),
                 request.getKeySearch(), ProductConst.STATUS_ACTIVE
         );
+    }
+
+    @Override
+    public List<BusinessDto> getSuggestForSearch(String keySearch, Integer size) {
+        return businessRepository.searchByName(PageRequest.of(0, size), keySearch, ProductConst.STATUS_ACTIVE).getContent();
     }
 }

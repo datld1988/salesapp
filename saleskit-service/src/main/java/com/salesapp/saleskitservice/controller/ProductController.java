@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("product")
@@ -39,6 +43,10 @@ public class ProductController {
         return response;
     }
 
+    /**
+     * Loc danh sach san pham
+     * @param request FilterProductRequest object
+     * fromDate va toDate la tim kiem theo cot : thoi gian bat dau*/
     @RequestMapping(path = "filter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ApiResultResponse<FilterProductResponse> filterProduct(@RequestBody FilterProductRequest request) {
@@ -53,17 +61,57 @@ public class ProductController {
         return response;
     }
 
+    /**
+     * goi y tim kiem san pham
+     * @param keySearch gia tri can tim kiem
+     * theo thu uu tien: product-promotion-business
+     * so luong ban ghi goi y la : 10 ban ghi*/
     @RequestMapping(path = "suggest", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ApiResultResponse<FilterProductResponse> suggestSearch(@RequestParam String keySearch) {
         ApiResultResponse<FilterProductResponse> response = new ApiResultResponse<>();
         FilterProductResponse data = new FilterProductResponse();
-        List<ProductMenuDto> pageProduct = productService.getSuggestForSearch(keySearch);
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        data.setProductList(pageProduct);
+        List<ProductMenuDto> productList = productService.getSuggestForSearch(keySearch, 10);
+
+        if (productList.size() < 10) {
+            List<PromotionDto> promotionList = promotionService.getSuggestForSearch(keySearch, 10 - productList.size());
+            Stream<ProductMenuDto> toProduct = Optional.ofNullable(promotionList)
+                    .orElseGet(Collections::emptyList)
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .map(promotion -> new ProductMenuDto(
+                            promotion.getId(),
+                            promotion.getTitle(),
+                            null,
+                            promotion.getImage(),
+                            promotion.getTimeStart(),
+                            promotion.getTimeEnd(),
+                            null)
+                    );
+            productList = Stream.concat(productList.stream(), toProduct).collect(Collectors.toList());
+        }
+        if (productList.size() < 10) {
+            List<BusinessDto> businessList = businessService.getSuggestForSearch(keySearch, 10 - productList.size());
+            Stream<ProductMenuDto> toProduct = Optional.ofNullable(businessList)
+                    .orElseGet(Collections::emptyList)
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .map(business -> new ProductMenuDto(
+                            business.getId(),
+                            business.getTitle(),
+                            business.getIcon(),
+                            business.getImage(),
+                            business.getTimeStart(),
+                            business.getTimeEnd(),
+                            null
+                    ));
+            productList = Stream.concat(productList.stream(), toProduct).collect(Collectors.toList());
+        }
+        data.setProductList(productList);
         data.setIsHasNextPage(false);
         response.setData(data);
+        response.setResponseCode("000");
+        response.setResponseMessage("Success");
         return response;
     }
 

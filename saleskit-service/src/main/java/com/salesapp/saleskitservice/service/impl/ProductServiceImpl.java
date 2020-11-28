@@ -41,13 +41,18 @@ public class ProductServiceImpl implements ProductService {
                 idParent = productOp.get().getId();
             }
         }
-        productMenuDtoList = productRepository.findByMaSPChaAndLoaiSPAndTrangThai(idParent, prodType, ProductConst.STATUS_ACTIVE)
+        productMenuDtoList = productRepository.findByMaSPChaAndLoaiSPAndTrangThaiAndDaDuyet(
+                idParent, prodType, ProductConst.STATUS_ACTIVE, ProductConst.APPROVED)
         .stream().map(product -> {
             ProductMenuDto menu = ProductMenuDto.fromRoot(product);
             if (product.getMaSPCha() != null) {
-                List<Product> child = getProductChild(product.getId());
-                if (child != null && child.size() > 0) {
-                    menu.setChild(1);
+                List<ProductMenuDto> childes = getProductChild(product.getId());
+                if (childes.size() > 0) {
+                    if (childes.get(0).getChild() > 0) {
+                        menu.setChild(1);
+                    } else {
+                        menu.setChild(0);
+                    }
                 } else {
                     menu.setChild(0);
                 }
@@ -88,8 +93,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductMenuDto> getSuggestForSearch(String keySearch) {
-        return productRepository.searchByName(PageRequest.of(0, 5), keySearch, ProductConst.STATUS_ACTIVE).getContent();
+    public List<ProductMenuDto> getSuggestForSearch(String keySearch, Integer size) {
+        return productRepository.searchByName(PageRequest.of(0, size), keySearch, ProductConst.STATUS_ACTIVE).getContent();
     }
 
     @Override
@@ -100,7 +105,7 @@ public class ProductServiceImpl implements ProductService {
         );
     }
 
-    private List<Product> getProductChild(Integer idParent) {
-        return productRepository.findByMaSPCha(idParent);
+    private List<ProductMenuDto> getProductChild(Integer idParent) {
+        return productRepository.checkProductOnSearch(idParent, ProductConst.STATUS_ACTIVE, ProductConst.APPROVED);
     }
 }
