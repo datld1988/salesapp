@@ -1,5 +1,5 @@
 # Hướng dẫn add thư viện oracle:
-1. Vào thư mục .../salesapp/libs và chạy lệnh sau:
+1. Vào thư mục .../salesapp/libs/oracle và chạy lệnh sau:
 mvn install:install-file \
    -Dfile=ojdbc7.jar \
    -DgroupId=com.oracle \
