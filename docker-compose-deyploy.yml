@@ -222,7 +222,7 @@ services:
     container_name: gateway-service
     restart: on-failure
     ports:
-      - "10080:8080"
+      - "10030:8080"
     volumes:
       - "./gateway-service/target/gateway-service.jar:/app.jar"
     command: ['java', '-jar', '-Dspring.profiles.active=docker', '/app.jar']
