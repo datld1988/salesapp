@@ -154,12 +154,12 @@ security:
     client:
       clientId: browser
       clientSecret: 1234
-      accessTokenUri: http://gateway-service:10080/uaa/oauth/token
+      accessTokenUri: http://auth-service:8081/uaa/oauth/token
       grant-type: client_credentials
       #grant-type: password
       #scope: server
     resource:
-      userInfoUri: http://gateway-service:10080/uaa/user/current
+      userInfoUri: http://auth-service:8081/uaa/user/current
 #      jwt:
 #        keyValue: |
 #          -----BEGIN PUBLIC KEY-----
