@@ -14,15 +14,22 @@ import java.util.Date;
 public class PromotionDto {
     private Integer id;
     private String title;
+    private String shortContent;
+    private String detailContent;
     private String image;
+    private String image2;
+
     private String timeStart;
     private String timeEnd;
+    private String createdDate;
 
     public static PromotionDto fromRoot(Promotion promotion) {
         PromotionDto promotionDto = new PromotionDto();
         promotionDto.setId(promotion.getId());
         promotionDto.setTitle(promotion.getName());
+        promotionDto.setShortContent(promotion.getShortContent());
         promotionDto.setImage(promotion.getImage1());
+        promotionDto.setImage2(promotion.getImage2());
         promotionDto.setTimeStart(StringUtil.convertDateToString(promotion.getTimeStart()));
         promotionDto.setTimeEnd(StringUtil.convertDateToString(promotion.getTimeEnd()));
         return promotionDto;
@@ -35,4 +42,26 @@ public class PromotionDto {
         this.timeStart = StringUtil.convertDateToString(timeStart);
         this.timeEnd = StringUtil.convertDateToString(timeEnd);
     }
+
+    public PromotionDto(Integer id, String title, String shortContent, String image1, String image2, Date timeStart, Date timeEnd) {
+        this.id = id;
+        this.title = title;
+        this.shortContent = shortContent;
+        this.image = image1;
+        this.image2 = image2;
+        this.timeStart = StringUtil.convertDateToString(timeStart);
+        this.timeEnd = StringUtil.convertDateToString(timeEnd);
+    }
+
+    public PromotionDto(Integer id, String title, String content, String image1, String image2, Date timeStart, Date timeEnd, Date createdDate) {
+        this.id = id;
+        this.title = title;
+        this.detailContent = content;
+        this.image = image1;
+        this.image2 = image2;
+        this.timeStart = StringUtil.convertDateToString(timeStart);
+        this.timeEnd = StringUtil.convertDateToString(timeEnd);
+        this.createdDate = StringUtil.convertDateToString(createdDate);
+    }
+
 }

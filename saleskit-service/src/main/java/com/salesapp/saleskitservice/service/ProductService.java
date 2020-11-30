@@ -19,5 +19,5 @@ public interface ProductService {
 
     Page<ProductMenuDto> search(SearchProductRequest request);
 
-
+    List<ProductMenuDto> listGroupOfProduct();
 }

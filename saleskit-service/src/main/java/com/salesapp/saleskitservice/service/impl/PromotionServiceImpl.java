@@ -2,6 +2,7 @@ package com.salesapp.saleskitservice.service.impl;
 
 import com.salesapp.saleskitservice.constant.ProductConst;
 import com.salesapp.saleskitservice.dto.PromotionDto;
+import com.salesapp.saleskitservice.model.PromotionListRequest;
 import com.salesapp.saleskitservice.model.SearchProductRequest;
 import com.salesapp.saleskitservice.repository.PromotionRepository;
 import com.salesapp.saleskitservice.service.PromotionService;
@@ -29,5 +30,20 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public List<PromotionDto> getSuggestForSearch(String keySearch, Integer size) {
         return promotionRepository.searchByName(PageRequest.of(0, size), keySearch, ProductConst.STATUS_ACTIVE).getContent();
+    }
+
+    @Override
+    public Page<PromotionDto> filterPromotion(PromotionListRequest request){
+        return  promotionRepository.filterPromotion(PageRequest.of(request.getPage(), request.getPerPage()), request.getIdSP(), 1);
+    }
+
+    @Override
+    public Page<PromotionDto> listAllPromotion(PromotionListRequest request){
+        return  promotionRepository.listAllPromotion(PageRequest.of(request.getPage(), request.getPerPage()), 1);
+    }
+
+    @Override
+    public PromotionDto getPromotionByID(Integer id){
+        return  promotionRepository.getPromotionByID(id);
     }
 }

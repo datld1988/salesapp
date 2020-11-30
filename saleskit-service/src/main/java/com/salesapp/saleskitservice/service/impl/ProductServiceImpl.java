@@ -108,4 +108,9 @@ public class ProductServiceImpl implements ProductService {
     private List<ProductMenuDto> getProductChild(Integer idParent) {
         return productRepository.checkProductOnSearch(idParent, ProductConst.STATUS_ACTIVE, ProductConst.APPROVED);
     }
+
+    @Override
+    public List<ProductMenuDto> listGroupOfProduct(){
+        return productRepository.listGroupOfProduct();
+    }
 }
