@@ -2,6 +2,7 @@ package com.salesapp.saleskitservice.service;
 
 import com.salesapp.saleskitservice.dto.ProductMenuDto;
 import com.salesapp.saleskitservice.dto.ProductPropertiesDto;
+import com.salesapp.saleskitservice.model.ApiResultResponse;
 import com.salesapp.saleskitservice.model.FilterProductRequest;
 import com.salesapp.saleskitservice.model.SearchProductRequest;
 import org.springframework.data.domain.Page;
@@ -19,5 +20,11 @@ public interface ProductService {
 
     Page<ProductMenuDto> search(SearchProductRequest request);
 
-    List<ProductMenuDto> listGroupOfProduct();
+    /**
+     * author: anhld
+     * tìm kiếm các loại khách hàng
+     * @param
+     *
+     */
+    ApiResultResponse<List<ProductMenuDto>> listGroupOfProduct();
 }

@@ -1,6 +1,7 @@
 package com.salesapp.saleskitservice.service.impl;
 
 import com.salesapp.saleskitservice.constant.ProductConst;
+import com.salesapp.saleskitservice.model.ApiResultResponse;
 import com.salesapp.saleskitservice.model.SearchProductRequest;
 import com.salesapp.saleskitservice.util.StringUtil;
 import org.springframework.data.domain.Page;
@@ -109,8 +110,19 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.checkProductOnSearch(idParent, ProductConst.STATUS_ACTIVE, ProductConst.APPROVED);
     }
 
+    /**
+     * author: anhld
+     * tìm kiếm các loại khách hàng
+     * @param
+     * return: danh sách các loại khách hàng
+     */
     @Override
-    public List<ProductMenuDto> listGroupOfProduct(){
-        return productRepository.listGroupOfProduct();
+    public ApiResultResponse<List<ProductMenuDto>> listGroupOfProduct(){
+        ApiResultResponse<List<ProductMenuDto>> response = new ApiResultResponse<>();
+        response.setResponseCode("000");
+        response.setResponseMessage("Success");
+        response.setData(productRepository.listGroupOfProduct());
+
+        return response;
     }
 }

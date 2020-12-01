@@ -20,46 +20,27 @@ public class PromotionController {
     @Autowired
     private PromotionService promotionService;
 
+    /**
+     * author: anhld
+     * lấy ra danh sách chương trình khuyến mại theo yêu cầu của client
+     * @param
+     * return: danh sách các chương trình khuyến mại
+     */
     @RequestMapping(path = "list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ApiResultResponse<PromotionListResponse> getPromotionList(@RequestBody PromotionListRequest request) {
-        ApiResultResponse<PromotionListResponse> response = new ApiResultResponse<>();
-        PromotionListResponse data = new PromotionListResponse();
-        if(request.getIdSP() == -1){
-            Page<PromotionDto> pagePromotion = promotionService.listAllPromotion(request);
-            data.setPromotionList(pagePromotion.getContent());
-            data.setIsNextPage(pagePromotion.getNumber() +1 < pagePromotion.getTotalPages());
-        }
-        else{
-            Page<PromotionDto> pagePromotion = promotionService.filterPromotion(request);
-            data.setPromotionList(pagePromotion.getContent());
-            data.setIsNextPage(pagePromotion.getNumber() +1 < pagePromotion.getTotalPages());
-        }
-        if (data.getPromotionList().isEmpty()){
-            response.setResponseCode("000");
-            response.setResponseMessage("Failed");
-        }
-        else {
-            response.setResponseCode("000");
-            response.setResponseMessage("Success");
-            response.setData(data);
-        }
-        return response;
+        return promotionService.getPromotion(request);
     }
+
+    /**
+     * author: anhld
+     * lấy ra chương trình khuyến mại theo id
+     * @param
+     * return: lấy ra chương trình khuyến mại theo id
+     */
     @RequestMapping(path = "detail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ApiResultResponse<PromotionDto> getPromotionByID(@RequestParam("id") Integer promotionId) {
-        ApiResultResponse<PromotionDto> response = new ApiResultResponse<>();
-        PromotionDto promotionDetail = promotionService.getPromotionByID(promotionId);
-        if (promotionDetail == null){
-            response.setResponseCode("000");
-            response.setResponseMessage("Failed");
-        }
-        else {
-            response.setResponseCode("000");
-            response.setResponseMessage("Success");
-            response.setData(promotionDetail);
-        }
-        return response;
+        return promotionService.getPromotionByID(promotionId);
     }
 }
