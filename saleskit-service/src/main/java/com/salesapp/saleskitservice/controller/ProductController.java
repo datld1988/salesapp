@@ -37,18 +37,15 @@ public class ProductController {
     /**
      * author: truongnh
      * date: 26/11/2020
-     * @param idParent
-     * @param prodType
+     * lấy thông tin category từng cấp
+     * @param idParent : mã menu cha
+     * @param prodType : nhóm sản phẩm
      * @return
      */
     @RequestMapping(path = "menu", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<List<ProductMenuDto>> getProductMenu(@RequestParam("idParent") Integer idParent, @RequestParam("prodType") String prodType) {
-        ApiResultResponse<List<ProductMenuDto>> response = new ApiResultResponse<>();
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        response.setData(productService.getProductMenu(idParent, prodType));
-        return response;
+    public Response getProductMenu(@RequestParam("idParent") Integer idParent, @RequestParam("prodType") String prodType) {
+        return Response.success(productService.getProductMenu(idParent, prodType));
     }
 
     /**
@@ -59,16 +56,15 @@ public class ProductController {
      * fromDate va toDate la tim kiem theo cot : thoi gian bat dau*/
     @RequestMapping(path = "filter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<FilterProductResponse> filterProduct(@RequestBody FilterProductRequest request) {
+    public Response filterProduct(@RequestBody FilterProductRequest request) {
         ApiResultResponse<FilterProductResponse> response = new ApiResultResponse<>();
         FilterProductResponse data = new FilterProductResponse();
         Page<ProductMenuDto> pageProduct = productService.filterProduct(request);
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
+
         data.setProductList(pageProduct.getContent());
         data.setIsHasNextPage(pageProduct.getNumber() + 1 < pageProduct.getTotalPages());
-        response.setData(data);
-        return response;
+        return Response.success(data);
+
     }
 
     /**
@@ -80,8 +76,8 @@ public class ProductController {
      * so luong ban ghi goi y la : 10 ban ghi*/
     @RequestMapping(path = "suggest", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<FilterProductResponse> suggestSearch(@RequestParam String keySearch) {
-        ApiResultResponse<FilterProductResponse> response = new ApiResultResponse<>();
+    public Response suggestSearch(@RequestParam String keySearch) {
+
         FilterProductResponse data = new FilterProductResponse();
         List<ProductMenuDto> productList = productService.getSuggestForSearch(keySearch, 10);
 
@@ -121,22 +117,21 @@ public class ProductController {
         }
         data.setProductList(productList);
         data.setIsHasNextPage(false);
-        response.setData(data);
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        return response;
+        return Response.success(data);
     }
 
     /**
      * author : truongnh
      * date : 26/11/2020
-     * @param request
-     * @return
+     * tìm kiếm sản phẩm
+     * @param request : params tìm kiếm
+     * @return danh sách các sản phẩm theo tiêu chí tìm kiếm
+     * có phân trang
      */
     @RequestMapping(path = "search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<SearchProductResponse> searchProduct(@RequestBody SearchProductRequest request) {
-        ApiResultResponse<SearchProductResponse> response = new ApiResultResponse<>();
+    public Response searchProduct(@RequestBody SearchProductRequest request) {
+
         SearchProductResponse data = new SearchProductResponse();
         if (request.getIsProduct() == Boolean.TRUE) {
             Page<ProductMenuDto> pageProduct = productService.search(request);
@@ -164,10 +159,7 @@ public class ProductController {
             data.setPromotionList(Collections.EMPTY_LIST);
             data.setIsHasNextPromotion(Boolean.FALSE);
         }
-        response.setData(data);
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        return response;
+        return Response.success(data);
     }
 
     /**
