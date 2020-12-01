@@ -3,7 +3,7 @@ package com.salesapp.adminservice.controller;
 
 import com.salesapp.adminservice.dto.UserDto;
 import com.salesapp.adminservice.dto.UserRegistrationDto;
-import com.salesapp.adminservice.models.ApiResultResponse;
+
 import com.salesapp.adminservice.service.UserService;
 import com.salesapp.common.dto.Message;
 import com.salesapp.common.dto.Request;
@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -55,25 +55,6 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("get")
-//    @PreAuthorize("hasAuthority('read_profile')")
-    public ApiResultResponse testUser(Principal principal) {
 
-        ApiResultResponse<UserDto> response = new ApiResultResponse<>();
-        response.setResponseCode("01");
-        response.setResponseMessage("Unsuccess");
-        try {
-            UserDto result = userService.getUser(principal.getName());
-            if(result != null) {
-                response.setResponseCode("000");
-                response.setResponseMessage("Success");
-                response.setData(result);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setResponseMessage(e.toString());
-        }
-        return response;
-    }
 
 }

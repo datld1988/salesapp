@@ -1,5 +1,6 @@
 package com.salesapp.saleskitservice.controller;
 
+import com.salesapp.common.dto.Response;
 import com.salesapp.saleskitservice.dto.BusinessDto;
 import com.salesapp.saleskitservice.dto.ProductMenuDto;
 import com.salesapp.saleskitservice.dto.ProductPropertiesDto;
@@ -33,6 +34,13 @@ public class ProductController {
     @Autowired
     private BusinessService businessService;
 
+    /**
+     * author: truongnh
+     * date: 26/11/2020
+     * @param idParent
+     * @param prodType
+     * @return
+     */
     @RequestMapping(path = "menu", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ApiResultResponse<List<ProductMenuDto>> getProductMenu(@RequestParam("idParent") Integer idParent, @RequestParam("prodType") String prodType) {
@@ -44,6 +52,8 @@ public class ProductController {
     }
 
     /**
+     * author: truongnh
+     * date: 26/11/2020
      * Loc danh sach san pham
      * @param request FilterProductRequest object
      * fromDate va toDate la tim kiem theo cot : thoi gian bat dau*/
@@ -62,6 +72,8 @@ public class ProductController {
     }
 
     /**
+     * author : truongnh
+     * date : 26/11/2020
      * goi y tim kiem san pham
      * @param keySearch gia tri can tim kiem
      * theo thu uu tien: product-promotion-business
@@ -115,6 +127,12 @@ public class ProductController {
         return response;
     }
 
+    /**
+     * author : truongnh
+     * date : 26/11/2020
+     * @param request
+     * @return
+     */
     @RequestMapping(path = "search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ApiResultResponse<SearchProductResponse> searchProduct(@RequestBody SearchProductRequest request) {
@@ -152,13 +170,16 @@ public class ProductController {
         return response;
     }
 
+    /**
+     * author: dungtq
+     * date : 26/11/2020
+     * lấu thông tin sản phẩm
+     * @param productId : mã sản phẩm
+     * @return thông tin sản phẩm
+     */
     @RequestMapping(path = "info", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<List<ProductPropertiesDto>> getProductInfo(@RequestParam("product_id") Integer productId) {
-        ApiResultResponse<List<ProductPropertiesDto>> response = new ApiResultResponse<>();
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        response.setData(productService.getProductInfo(productId));
-        return response;
+    public Response getProductInfo(@RequestParam("product_id") Integer productId) {
+        return productService.getProductInfo(productId);
     }
 }

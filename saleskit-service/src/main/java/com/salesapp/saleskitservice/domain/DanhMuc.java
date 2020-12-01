@@ -6,12 +6,24 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "SAPP_DANH_MUC")
 @Data
-public class DanhMuc {
+public class DanhMuc implements Serializable {
+    public static String MetaPropId = "id";
+    public static String MetaPropType = "type";
+    public static String MetaPropName = "name";
+    public static String MetaPropValue = "value";
+    public static String MetaPropDescription = "description";
+    public static String MetaPropNguoiTao = "nguoiTao";
+    public static String MetaPropNgayTao = "ngayTao";
+    public static String MetaPropNguoiSua = "nguoiSua";
+    public static String MetaPropNgaySua = "ngaySua";
+    public static String MetaPropStatus = "status";
+
 
     @Id
     @Column(name = "ID")

@@ -4,7 +4,13 @@ import com.salesapp.adminservice.domain.AdUserApp;
 import com.salesapp.adminservice.dto.AdUserAppForm;
 import com.salesapp.adminservice.dto.DataResponse;
 import com.salesapp.adminservice.dto.ResponseStatus;
+import com.salesapp.adminservice.dto.UserDto;
+import com.salesapp.adminservice.models.ApiResultResponse;
 import com.salesapp.adminservice.repository.AdUserAppRepository;
+import com.salesapp.adminservice.service.UserService;
+import com.salesapp.common.dto.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,15 +18,24 @@ import javax.persistence.EntityManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/adUserApp")
 @Api(tags="Gắn người dùng vào ứng dụng")
 public class AdUserAppController {
+
+
     @Autowired
     private EntityManager em;
     @Autowired
     private AdUserAppRepository repository;
 
+    private final UserService userService;
+
+    public AdUserAppController(UserService userService) {
+        this.userService = userService;
+    }
     @GetMapping
     @ApiOperation(value = "Danh sách Gắn người dùng vào ứng dụng")
     public DataResponse list() {
@@ -75,5 +90,18 @@ public class AdUserAppController {
             dataModel.setResponseStatus(ResponseStatus.defaultFailed(e));
         }
         return dataModel;
+    }
+
+    /**
+     * author: dungtq
+     * create : 26/11/2020
+     * method : lấy thông tin userlogin
+     * @param principal
+     * @return
+     */
+    @GetMapping("getInfo")
+//    @PreAuthorize("hasAuthority('read_profile')")
+    public Response getUserInfo(Principal principal) {
+        return userService.getUserInfo(principal.getName());
     }
 }

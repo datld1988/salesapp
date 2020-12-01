@@ -1,8 +1,12 @@
 package com.salesapp.saleskitservice.service.impl;
 
+import com.salesapp.common.dto.Response;
+import com.salesapp.common.utils.ErrorCode;
 import com.salesapp.saleskitservice.constant.ProductConst;
 import com.salesapp.saleskitservice.model.SearchProductRequest;
 import com.salesapp.saleskitservice.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -27,6 +31,7 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -62,24 +67,34 @@ public class ProductServiceImpl implements ProductService {
         return productMenuDtoList;
     }
 
+    /**
+     * author: dungtq
+     * date : 26/11/2020
+     * @param idSp : mã sản phẩm
+     * @return thông tin sản phẩm
+     */
     @Override
-    public List<ProductPropertiesDto> getProductInfo(Integer idSp) {
+    public Response getProductInfo(Integer idSp) {
         List<ProductPropertiesDto> result = new ArrayList<ProductPropertiesDto>();
+        try {
+            Optional<Product> pro = productRepository.findById(idSp);
+            if(pro.isPresent()) {
+                ProductPropertiesDto dto = new ProductPropertiesDto();
+                dto.setProductId(pro.get().getId());
+                dto.setProductName(pro.get().getTenSP());
+                dto.setImage1(pro.get().getAnh_1());
+                dto.setImage2(pro.get().getAnh_2());
+                List<ProductPropertiesModel> lstProp =  propertiesRepository.getProductInfo(idSp, 1);
+                dto.setLstProp(lstProp);
+                result.add(dto);
+            }
 
-
-        Optional<Product> pro = productRepository.findById(idSp);
-        if(pro.isPresent()) {
-            ProductPropertiesDto dto = new ProductPropertiesDto();
-            dto.setProductId(pro.get().getId());
-            dto.setProductName(pro.get().getTenSP());
-            dto.setImage1(pro.get().getAnh_1());
-            dto.setImage2(pro.get().getAnh_2());
-            List<ProductPropertiesModel> lstProp =  propertiesRepository.getProductInfo(idSp, 1);
-            dto.setLstProp(lstProp);
-            result.add(dto);
+            return Response.success(result);
+        } catch (Exception e) {
+            log.error("getProductInfo Exception : "+e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
         }
 
-        return result;
     }
 
     @Override
