@@ -83,4 +83,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("status") Integer status,
             @Param("approved") Integer approved
     );
+
+    @Query ("SELECT new com.salesapp.saleskitservice.dto.ProductMenuDto( " +
+            " p.id, p.tenSP) " +
+            " FROM Product p" +
+            " WHERE p.maSPCha IS NULL")
+    List<ProductMenuDto> listGroupOfProduct(
+
+    );
 }

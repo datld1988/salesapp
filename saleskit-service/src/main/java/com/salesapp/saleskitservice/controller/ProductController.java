@@ -173,7 +173,7 @@ public class ProductController {
     /**
      * author: dungtq
      * date : 26/11/2020
-     * lấu thông tin sản phẩm
+     * lấy thông tin sản phẩm
      * @param productId : mã sản phẩm
      * @return thông tin sản phẩm
      */
@@ -181,5 +181,19 @@ public class ProductController {
     @ResponseBody
     public Response getProductInfo(@RequestParam("product_id") Integer productId) {
         return productService.getProductInfo(productId);
+    }
+
+    /**
+     * author: anhld
+     * date : 26/11/2020
+     * lấy ra danh sách các loại khách hàng
+     * @param
+     * @return: danh sách tất cả các loại khách hàng
+     */
+    @RequestMapping(path = "group", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ApiResultResponse<List<ProductMenuDto>> getGroupOfProduct() {
+
+        return productService.listGroupOfProduct();
     }
 }
