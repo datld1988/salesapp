@@ -1,0 +1,271 @@
+version: '3.3'
+services:
+  #  saleapp-rabbitmq:
+  #    container_name: "saleapp-rabbitmq"
+  #    image: "rabbitmq:3-management"
+  #    restart: on-failure
+  #    ports:
+  #      - "15672:15672"
+  #      - "5672:5672"
+
+
+  saleapp-zipkin:
+    container_name: saleapp-zipkin
+    image: openzipkin/zipkin
+    restart: always
+    networks:
+      - saleapp-network
+    ports:
+      - '9411:9411'
+      
+  saleapp-redis:
+    container_name: saleapp-redis
+    image: redis:latest
+    volumes:
+      - ../data/redis/redis.conf:/etc/redis.conf
+      - ../data/redis/redis-sentinel.conf:/etc/redis-sentinel.conf
+    networks:
+      - saleapp-network
+    command:
+      - /bin/bash
+      - -c
+      - |
+        redis-server --appendonly yes
+        redis-server /etc/redis.conf
+    ports:
+      - '60379:6379'
+      - '26379:26379'
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    restart: always
+    environment:
+      zk_id: "1"
+    networks:
+      - saleapp-network
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    environment:
+      #KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.1.4
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: elk:1:1
+      KAFKA_BROKER_ID: 1
+    links:
+      - zookeeper
+    depends_on:
+      - zookeeper
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - saleapp-network
+    ports:
+      - "9092:9092"
+
+    elasticsearch:
+      image: elasticsearch:7.7.0
+      container_name: elasticsearch
+      hostname: elasticsearch
+      environment:
+        - "discovery.type=single-node"
+      ports:
+        - 9200:9200
+        - 9300:9300
+      networks:
+        - saleapp-network
+
+    kibana:
+      image: kibana:7.7.0
+      container_name: kibana
+      hostname: kibana
+      ports:
+        - 5601:5601
+      links:
+        - elasticsearch:elasticsearch
+      depends_on:
+        - elasticsearch
+      networks:
+        - saleapp-network
+
+    logstash:
+      image: logstash:7.7.0
+      container_name: logstash
+      hostname: logstash
+      ports:
+        - 9600:9600
+        - 8089:8089
+      volumes:
+        - ./elastic-stack/logstash:/usr/share/logstash/pipeline/
+      links:
+        - elasticsearch:elasticsearch
+      depends_on:
+        - elasticsearch
+      networks:
+        - saleapp-network
+
+
+
+  account-service:
+    image: saleapp/account-service
+    container_name: account-service
+    build:
+      context: .
+      dockerfile: ./account-service/Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      - saleapp-network
+
+  admin-service:
+    image: saleapp/admin-service
+    container_name: admin-service
+    build:
+      context: .
+      dockerfile: ./admin-service/Dockerfile
+    ports:
+      - "8089:8089"
+    networks:
+      - saleapp-network
+
+  attachment-service:
+    image: saleapp/attachment-service
+    container_name: attachment-service
+    build:
+      context: .
+      dockerfile: ./attachment-service/Dockerfile
+    ports:
+      - "8086:8086"
+    networks:
+      - saleapp-network
+
+  auth-service:
+    image: saleapp/auth-service
+    container_name: auth-service
+    build:
+      context: .
+      dockerfile: ./auth-service/Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - saleapp-network
+
+  card-service:
+    image: saleapp/card-service
+    container_name: card-service
+    build:
+      context: .
+      dockerfile: ./card-service/Dockerfile
+    ports:
+      - "8085:8085"
+    networks:
+      - saleapp-network
+
+  config-service:
+    image: saleapp/config-service
+    container_name: config-service
+    build:
+      context: .
+      dockerfile: ./config-service/Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - saleapp-network
+
+  ebank-service:
+    image: saleapp/ebank-service
+    container_name: ebank-service
+    build:
+      context: .
+      dockerfile: ./ebank-service/Dockerfile
+    ports:
+      - "8084:8084"
+    networks:
+      - saleapp-network
+
+  gateway-service:
+    image: saleapp/gateway-service
+    container_name: gateway-service
+    build:
+      context: .
+      dockerfile: ./gateway-service/Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - saleapp-network
+
+  legal-service:
+    image: saleapp/legal-service
+    container_name: legal-service
+    build:
+      context: .
+      dockerfile: ./legal-service/Dockerfile
+    ports:
+      - "8088:8088"
+    networks:
+      - saleapp-network
+
+  log-service:
+    image: saleapp/log-service
+    container_name: log-service
+    build:
+      context: .
+      dockerfile: ./log-service/Dockerfile
+    ports:
+      - "8091:8091"
+    networks:
+      - saleapp-network
+
+  notification-service:
+    image: saleapp/notification-service
+    container_name: notification-service
+    build:
+      context: .
+      dockerfile: ./notification-service/Dockerfile
+    ports:
+      - "8090:8090"
+    networks:
+      - saleapp-network
+
+  printout-service:
+    image: saleapp/printout-service
+    container_name: printout-service
+    build:
+      context: .
+      dockerfile: ./printout-service/Dockerfile
+    ports:
+      - "8087:8087"
+    networks:
+      - saleapp-network
+
+  process-service:
+    image: saleapp/process-service
+    container_name: process-service
+    build:
+      context: .
+      dockerfile: ./process-service/Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - saleapp-network
+
+  registry-service:
+    image: saleapp/registry-service
+    container_name: registry-service
+    build:
+      context: .
+      dockerfile: ./registry-service/Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - saleapp-network
+
+
+
+networks:
+  saleapp-network:
+    driver: bridge

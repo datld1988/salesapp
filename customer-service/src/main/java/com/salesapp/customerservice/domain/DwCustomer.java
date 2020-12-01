@@ -1,0 +1,51 @@
+package com.salesapp.customerservice.domain;
+
+import lombok.Data;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
+@Entity
+@Table(name = "DW_CUSTOMER")
+@Data
+public class DwCustomer implements Serializable {
+
+    @Id
+    @Column(name = "ID")
+    private String id;
+    @Column(name = "PROCESS_ID")
+    private String processId;
+    @Column(name = "PARENT_ID")
+    private String parentId;
+    @Column(name = "PERSON_ID")
+    private String personId;
+    @Column(name = "ORGANIZATION_ID")
+    private String organizationId;
+    @Column(name = "CUSTOMER_TYPE_CODE")
+    private String customerTypeCode;
+    @Column(name = "SECTOR")
+    private String sector;
+    @Column(name = "RM_PRIMARY_CODE")
+    private String rmPrimaryCode;
+    @Column(name = "RM_SECONDARY_CODE")
+    private String rmSecondaryCode;
+    @Column(name = "BRANCH_CODE")
+    private String branchCode;
+    @Column(name = "CURRENT_STATE")
+    private String currentState;
+    @Column(name = "CHANGE_STATE")
+    private String changeState;
+    @Column(name = "ACTION")
+    private String action;
+    @Column(name = "REQUEST_ID")
+    private String requestId;
+    @Column(name = "CREATED_BY")
+    private String createdBy;
+    @Column(name = "CREATED_DATE")
+    private Date createdDate;
+    @Column(name = "MODIFIED_BY")
+    private String modifiedBy;
+    @Column(name = "MODIFIED_DATE")
+    private Date modifiedDate;
+
+}
