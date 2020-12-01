@@ -1,4 +1,4 @@
-package com.salesapp.adminservice.exception;
+package com.salesapp.kpiservice.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

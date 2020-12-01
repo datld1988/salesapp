@@ -1,6 +1,6 @@
-package com.uniform.common.utils;
+package com.salesapp.common.utils;
 
-import com.uniform.common.exception.PasswordConstraintValidator;
+import com.salesapp.common.exception.PasswordConstraintValidator;
 import org.passay.CharacterData;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;

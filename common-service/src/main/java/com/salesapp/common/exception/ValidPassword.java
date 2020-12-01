@@ -1,4 +1,4 @@
-package com.uniform.common.exception;
+package com.salesapp.common.exception;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -10,7 +10,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = com.uniform.common.exception.PasswordConstraintValidator.class)
+@Constraint(validatedBy = com.salesapp.common.exception.PasswordConstraintValidator.class)
 @Target({ TYPE, FIELD, ANNOTATION_TYPE, METHOD })
 @Retention(RUNTIME)
 public @interface ValidPassword {

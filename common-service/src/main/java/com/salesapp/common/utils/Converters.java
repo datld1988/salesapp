@@ -1,7 +1,7 @@
-package com.uniform.common.utils;
+package com.salesapp.common.utils;
 
 
-import com.uniform.common.exception.SalesException;
+import com.salesapp.common.exception.SalesException;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -28,7 +28,7 @@ public class Converters {
 
             return 0;
         } catch (SalesException e) {
-            throw new SalesException(com.uniform.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không thể cast sang Integer");
+            throw new SalesException(com.salesapp.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không thể cast sang Integer");
         }
     }
 
@@ -43,7 +43,7 @@ public class Converters {
 
             return 0D;
         } catch (SalesException e) {
-            throw new SalesException(com.uniform.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không thể cast sang Double");
+            throw new SalesException(com.salesapp.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không thể cast sang Double");
         }
     }
 
@@ -62,7 +62,7 @@ public class Converters {
 
             return 0F;
         } catch (SalesException e) {
-            throw new SalesException(com.uniform.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không thể cast sang Float");
+            throw new SalesException(com.salesapp.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không thể cast sang Float");
         }
     }
 
@@ -73,7 +73,7 @@ public class Converters {
             }
             return (Boolean) input;
         } catch (Exception e) {
-            throw new SalesException(com.uniform.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không phải là Boolean");
+            throw new SalesException(com.salesapp.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không phải là Boolean");
         }
     }
 
@@ -92,16 +92,16 @@ public class Converters {
         try {
             if (input instanceof String) {
                 if (((String) input).contains("Z")) {
-                    return com.uniform.common.utils.Utils.DateTimeUtils.convertToTimestampWithTimeZone((String) input);
+                    return com.salesapp.common.utils.Utils.DateTimeUtils.convertToTimestampWithTimeZone((String) input);
                 } else {
-                    return com.uniform.common.utils.Utils.DateTimeUtils.convertToTimestampWithLocalDate((String) input);
+                    return com.salesapp.common.utils.Utils.DateTimeUtils.convertToTimestampWithLocalDate((String) input);
                 }
             } else if (input instanceof Long) {
-                return com.uniform.common.utils.Utils.DateTimeUtils.convertToTimestampWithTimeZone((Long) input);
+                return com.salesapp.common.utils.Utils.DateTimeUtils.convertToTimestampWithTimeZone((Long) input);
             }
             return (Timestamp) input;
         } catch (SalesException e) {
-            throw new SalesException(com.uniform.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không phải là Timestamp");
+            throw new SalesException(com.salesapp.common.utils.ErrorCode.BAD_REQUEST, "Kiểu dữ liệu không phải là Timestamp");
         }
     }
 

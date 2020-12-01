@@ -1,7 +1,7 @@
-package com.uniform.common.dto;
+package com.salesapp.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.uniform.common.utils.ErrorCode;
+import com.salesapp.common.utils.ErrorCode;
 import lombok.Data;
 
 import java.util.Collections;

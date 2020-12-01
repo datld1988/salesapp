@@ -1,4 +1,4 @@
-package com.uniform.common.dto;
+package com.salesapp.common.dto;
 
 import lombok.Data;
 

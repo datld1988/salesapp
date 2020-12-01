@@ -1,4 +1,4 @@
-package com.salesapp.adminservice.exception;
+package com.salesapp.customerservice.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

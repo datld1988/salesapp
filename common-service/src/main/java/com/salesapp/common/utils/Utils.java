@@ -1,7 +1,7 @@
-package com.uniform.common.utils;
+package com.salesapp.common.utils;
 
 
-import com.uniform.common.exception.SalesException;
+import com.salesapp.common.exception.SalesException;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Utils {
-    private static final Logger log = LoggerFactory.getLogger(com.uniform.common.utils.Utils.class);
+    private static final Logger log = LoggerFactory.getLogger(com.salesapp.common.utils.Utils.class);
 
     private static final String VIETNAMESE_D = "đ";
     private static final String ENGLISH_D = "d";
@@ -57,12 +57,12 @@ public class Utils {
 
     public static String generateCode(String prefix, String maxCode) {
         if (null == maxCode) {
-            return com.uniform.common.utils.Utils.genCodeTypeCard(prefix, 1);
+            return com.salesapp.common.utils.Utils.genCodeTypeCard(prefix, 1);
         }
 
         maxCode = maxCode.replace(prefix, "");
         int val = Converters.castToInterger(maxCode) + 1;
-        return com.uniform.common.utils.Utils.genCodeTypeCard(prefix, val);
+        return com.salesapp.common.utils.Utils.genCodeTypeCard(prefix, val);
     }
 
     /**
@@ -171,7 +171,7 @@ public class Utils {
                 dateFormat.setTimeZone(TimeZone.getTimeZone(UTC_TIMEZONE_NAME));
                 timestamp = new Timestamp(dateFormat.parse(dateStrTimestamp).getTime());
             } catch (ParseException e) {
-                throw new SalesException(com.uniform.common.utils.ErrorCode.SERVICE_ERROR, "Dữ liệu không đúng");
+                throw new SalesException(com.salesapp.common.utils.ErrorCode.SERVICE_ERROR, "Dữ liệu không đúng");
             }
 
             return timestamp;
@@ -189,7 +189,7 @@ public class Utils {
                 DateFormat simpleDateFormat = new SimpleDateFormat(ISO_DATE_FORMAT);
                 timestamp = new Timestamp(simpleDateFormat.parse(dateStrTimestamp).getTime());
             } catch (ParseException e) {
-                throw new SalesException(com.uniform.common.utils.ErrorCode.SERVICE_ERROR, "Dữ liệu không đúng");
+                throw new SalesException(com.salesapp.common.utils.ErrorCode.SERVICE_ERROR, "Dữ liệu không đúng");
             }
 
             return timestamp;
@@ -410,7 +410,7 @@ public class Utils {
         if (endExpression && paramName.length() != 0) {
             return paramName.toString();
         } else {
-            throw new SalesException(com.uniform.common.utils.ErrorCode.SERVICE_ERROR, "wrong expression syntax");
+            throw new SalesException(com.salesapp.common.utils.ErrorCode.SERVICE_ERROR, "wrong expression syntax");
         }
     }
 

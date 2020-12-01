@@ -1,7 +1,7 @@
-package com.uniform.common.exception;
+package com.salesapp.common.exception;
 
-import com.uniform.common.dto.Message;
-import com.uniform.common.utils.ErrorCode;
+import com.salesapp.common.dto.Message;
+import com.salesapp.common.utils.ErrorCode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
