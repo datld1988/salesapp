@@ -1,0 +1,250 @@
+version: '3.6'
+services:
+  #  sales-app-rabbitmq:
+  #    container_name: "sales-app-rabbitmq"
+  #    image: "rabbitmq:3-management"
+  #    restart: on-failure
+  #    ports:
+  #      - "15672:15672"
+  #      - "5672:5672"
+
+
+  # sales-app-zipkin:
+  #   container_name: sales-app-zipkin
+  #   image: openzipkin/zipkin
+  #   restart: always
+  #   networks:
+  #     - sales-app-network
+  #   ports:
+  #     - '9411:9411'
+      
+  # sales-app-redis:
+  #   container_name: sales-app-redis
+  #   image: redis:latest
+  #   volumes:
+  #     - ../data/redis/redis.conf:/etc/redis.conf
+  #     - ../data/redis/redis-sentinel.conf:/etc/redis-sentinel.conf
+  #   networks:
+  #     - sales-app-network
+  #   command:
+  #     - /bin/bash
+  #     - -c
+  #     - |
+  #       redis-server --appendonly yes
+  #       redis-server /etc/redis.conf
+  #   ports:
+  #     - '60379:6379'
+  #     - '26379:26379'
+
+  # zookeeper:
+  #   image: wurstmeister/zookeeper:latest
+  #   container_name: zookeeper
+  #   restart: always
+  #   environment:
+  #     zk_id: "1"
+  #   networks:
+  #     - sales-app-network
+  #   ports:
+  #     - "2181:2181"
+
+  # kafka:
+  #   image: wurstmeister/kafka:latest
+  #   container_name: kafka
+  #   environment:
+  #     KAFKA_ADVERTISED_HOST_NAME: localhost
+  #     #KAFKA_ADVERTISED_HOST_NAME: 192.168.1.4
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_CREATE_TOPICS: zipkin:1:1
+  #     #KAFKA_CREATE_TOPICS: elk:1:1
+  #     KAFKA_BROKER_ID: 1
+  #   links:
+  #     - zookeeper
+  #   depends_on:
+  #     - zookeeper
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   networks:
+  #     - sales-app-network
+  #   ports:
+  #     - "9092:9092"
+
+  # elasticsearch:
+  #   image: elasticsearch:7.7.0
+  #   container_name: elasticsearch
+  #   hostname: elasticsearch
+  #   environment:
+  #     - "discovery.type=single-node"
+  #   ports:
+  #     - 9200:9200
+  #     - 9300:9300
+  #   networks:
+  #     - sales-app-network
+
+  # kibana:
+  #   image: kibana:7.7.0
+  #   container_name: kibana
+  #   hostname: kibana
+  #   ports:
+  #     - 5601:5601
+  #   links:
+  #     - elasticsearch:elasticsearch
+  #   depends_on:
+  #     - elasticsearch
+  #   networks:
+  #     - sales-app-network
+
+  # logstash:
+  #   image: logstash:7.7.0
+  #   container_name: logstash
+  #   hostname: logstash
+  #   ports:
+  #     - 9600:9600
+  #     - 8089:8089
+  #   volumes:
+  #     - ./elastic-stack/logstash:/usr/share/logstash/pipeline/
+  #   links:
+  #     - elasticsearch:elasticsearch
+  #   depends_on:
+  #     - elasticsearch
+  #   networks:
+  #     - sales-app-network
+
+
+  config-service:
+    image: openjdk:8
+    container_name: config-service
+    restart: on-failure
+    # ports:
+    #   - "8888:8888"
+    volumes:
+      - "./config-service/target/config-service.jar:/app.jar"
+    command: ['java', '-jar', '/app.jar']
+    networks:
+      - sales-app-network
+
+  registry-service:
+    image: openjdk:8
+    container_name: registry-service
+    restart: on-failure
+    # ports:
+    #   - "8761:8761"
+    volumes:
+      - "./registry-service/target/registry-service.jar:/app.jar"
+    command: ['java', '-jar', '-Dspring.profiles.active=docker', '/app.jar']
+    depends_on:
+      - config-service          
+    networks:
+      - sales-app-network
+
+  # log-service:
+  #   image: openjdk:8
+  #   container_name: log-service
+  #   restart: on-failure
+  #   ports:
+  #     - "8091:8091"
+  #   volumes:
+  #     - "./sales-app/log-service.jar:/app.jar"
+  #   command: ['java', '-jar', '-Dspring.profiles.active=docker', '/app.jar']     
+  #   networks:
+  #     - sales-app-network      
+
+  auth-service:
+    image: openjdk:8
+    container_name: auth-service
+    restart: on-failure
+    # ports:
+    #   - "8081:8081"
+    volumes:
+      - "./auth-service/target/auth-service.jar:/app.jar"
+    command: ['java', '-jar', '-Dspring.profiles.active=docker', '/app.jar'] 
+    depends_on:
+      - config-service 
+      - registry-service            
+    networks:
+      - sales-app-network
+
+  admin-service:
+    image: openjdk:8
+    container_name: admin-service
+    restart: on-failure
+    # ports:
+    #   - "8089:8089"
+    volumes:
+      - "./admin-service/target/admin-service.jar:/app.jar"
+    command: ['java', '-jar', '-Dspring.profiles.active=docker', '/app.jar']
+    depends_on:
+      - config-service      
+      - registry-service      
+    networks:
+      - sales-app-network
+
+  saleskit-service:
+    image: openjdk:8
+    container_name: saleskit-service
+    restart: on-failure
+    # ports:
+    #   - "8087:8087"
+    volumes:
+      - "./saleskit-service/target/saleskit-service.jar:/app.jar"
+    command: ['java', '-jar', '-Dspring.profiles.active=docker', '/app.jar']
+    depends_on:
+      - config-service      
+      - registry-service            
+    networks:
+      - sales-app-network
+
+  # customer-service:
+  #   image: openjdk:8
+  #   container_name: customer-service
+  #   restart: on-failure
+  #   ports:
+  #     - "8082:8082"
+  #   volumes:
+  #     - "./sales-app/customer-service.jar:/app.jar"    
+  #   command: ['java', '-jar', '-Dspring.profiles.active=docker', '/app.jar']
+  #   networks:
+  #     - sales-app-network                  
+
+  # kpi-service:
+  #   image: openjdk:8
+  #   container_name: kpi-service
+  #   restart: on-failure
+  #   ports:
+  #     - "8084:8084"
+  #   volumes:
+  #     - "./sales-app/kpi-service.jar:/app.jar"     
+  #   command: ['java', '-jar', '/app.jar'] 
+  #   networks:
+  #     - sales-app-network
+
+  gateway-service:
+    image: openjdk:8
+    container_name: gateway-service
+    restart: on-failure
+    ports:
+      - "10030:8080"
+    volumes:
+      - "./gateway-service/target/gateway-service.jar:/app.jar"
+    command: ['java', '-jar', '-Dspring.profiles.active=docker', '/app.jar']
+    depends_on:
+      - config-service      
+      - registry-service            
+    networks:
+      - sales-app-network
+
+  # notification-service:
+  #   image: openjdk:8
+  #   container_name: notification-service
+  #   restart: on-failure
+  #   ports:
+  #     - "8090:8090"
+  #   volumes:
+  #     - "./sales-app/notification-service.jar:/app.jar"  
+  #   command: ['java', '-jar', '-Dspring.profiles.active=docker', '/app.jar']
+  #   networks:
+  #     - sales-app-network
+
+
+networks:
+  sales-app-network:
+    name: sales-app-network

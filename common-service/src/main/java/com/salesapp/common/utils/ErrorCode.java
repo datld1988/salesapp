@@ -9,4 +9,11 @@ public class ErrorCode {
     public static final String REQUIRED = "101";
     public static final String MAX_LENGTH = "102";
     public static final String ERROR_STATUS = "103";
+
+    /**
+     * author : dungtq
+     * date : 27/11/2020
+     */
+    public static final String NOT_FOUND_RECORDS = "201";
+
 }

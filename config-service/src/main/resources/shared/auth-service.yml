@@ -9,9 +9,10 @@ spring:
       poolName: Hikari
       auto-commit: false
   jpa:
+    database-platform: org.hibernate.dialect.Oracle12cDialect
     show-sql: true
     properties:
-      hibernate.jdbc.time_zone: UTC
+      #hibernate.jdbc.time_zone: UTC
       hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true
       #hibernate.cache.use_second_level_cache: true
@@ -41,3 +42,68 @@ server:
   servlet:
     context-path: /uaa
   port: 8081
+
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
+
+---
+spring:
+  profiles: docker
+
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    #url: jdbc:oracle:thin:@222.252.25.241:7521:xe
+    url: jdbc:oracle:thin:@222.252.25.241:7521:orcl
+    username: SALESAPP
+    password: SALESAPP
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+    jpa:
+      database-platform: org.hibernate.dialect.Oracle12cDialect
+      show-sql: true
+      properties:
+        #hibernate.jdbc.time_zone: UTC
+        hibernate.id.new_generator_mappings: true
+        hibernate.connection.provider_disables_autocommit: true
+        #hibernate.cache.use_second_level_cache: true
+        hibernate.cache.use_second_level_cache: false
+        hibernate.cache.use_query_cache: false
+        hibernate.generate_statistics: false
+        # modify batch size as necessary
+        hibernate.jdbc.batch_size: 25
+        hibernate.order_inserts: true
+        hibernate.order_updates: true
+        # modify fetch size as necessary
+        #hibernate.jdbc.fetch_size: 150
+        #hibernate.criteria.literal_handling_mode: BIND
+        #hibernate.query.fail_on_pagination_over_collection_fetch: true
+        #hibernate.query.in_clause_parameter_padding: true
+
+        #hibernate.hbm2ddl.auto: update
+        hibernate.format_sql: true
+        hibernate.default_schema: SALES_APP_CORE
+      hibernate:
+        ddl-auto: none
+        naming:
+          physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+          implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+
+  server:
+    servlet:
+      context-path: /uaa
+    port: 8081
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://registry-service:8761/eureka
+  instance:
+    preferIpAddress: true

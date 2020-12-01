@@ -7,8 +7,12 @@ spring:
       fail-fast: true
       password: 1234
       username: user
-
-eureka:
-  client:
-    registerWithEureka: false
-    fetchRegistry: false
+---
+spring:
+  profiles: docker
+  cloud:
+    config:
+      uri: http://config-service:8888
+      fail-fast: true
+      password: 1234
+      username: user
