@@ -19,10 +19,10 @@ public class Business implements Serializable {
     private Integer id;
 
     @Column(name = "MA_NV")
-    private String employeeCode;
+    private String businessCode;
 
     @Column(name = "MA_NV_CHA")
-    private Integer employeeParent;
+    private Integer businessParent;
 
     @Column(name = "TEN_NGHIEP_VU")
     private String name;
@@ -73,7 +73,7 @@ public class Business implements Serializable {
     private Integer isApproved;
 
     @Column(name = "ID_NV_PARENT")
-    private Integer employeeParentId;
+    private Integer businessParentId;
 
     @Column(name = "VERSION")
     private Integer version;

@@ -187,4 +187,47 @@ public class ProductController {
     public Response<List<ProductMenuDto>> getGroupOfProduct() {
         return productService.listGroupOfProduct();
     }
+
+    /**
+     * author: truongnh
+     * date: 02/12/2020
+     * @param idParent Ma nghiep vu cha
+     * @return danh sach nghiep vu
+     */
+    @RequestMapping(path = "business-menu", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response getBusinessMenu(@RequestParam("idParent") Integer idParent) {
+        return Response.success(businessService.getBusinessMenu(idParent));
+    }
+
+    /**
+     * author: truongnh
+     * date: 02/12/2020
+     * Loc danh sach san pham
+     * @param request FilterProductRequest object
+     * fromDate va toDate la tim kiem theo cot : thoi gian bat dau*/
+    @RequestMapping(path = "business-filter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response filterBusiness(@RequestBody FilterProductRequest request) {
+        FilterProductResponse data = new FilterProductResponse();
+        Page<BusinessDto> pageBusiness = businessService.filterBusiness(request);
+
+        data.setBusinessList(pageBusiness.getContent());
+        data.setIsHasNextPage(pageBusiness.getNumber() + 1 < pageBusiness.getTotalPages());
+        return Response.success(data);
+
+    }
+
+    /**
+     * author: truongnh
+     * date : 02/12/2020
+     * lấy thông tin nghiep vu
+     * @param businessId : mã nghiep vu
+     * @return thông tin nghiep vu
+     */
+    @RequestMapping(path = "business-info", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response getusinessInfo(@RequestParam("product_id") Integer businessId) {
+        return businessService.getBusinessInfo(businessId);
+    }
 }
