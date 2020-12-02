@@ -1,4 +1,4 @@
-package com.uniform.common.exception;
+package com.salesapp.common.exception;
 
 import org.passay.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
                 new CharacterRule(EnglishCharacterData.LowerCase, NUM),
                 new CharacterRule(EnglishCharacterData.UpperCase, NUM),
                 new CharacterRule(EnglishCharacterData.Digit, NUM),
-                new CharacterRule(com.uniform.common.utils.PasswordUtils.CustomCharacterData.Special, NUM),
+                new CharacterRule(com.salesapp.common.utils.PasswordUtils.CustomCharacterData.Special, NUM),
                 new WhitespaceRule()));
 
         RuleResult result = validator.validate(new PasswordData(password));

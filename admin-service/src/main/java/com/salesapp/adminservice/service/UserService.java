@@ -5,7 +5,7 @@ import com.salesapp.adminservice.domain.AdUser;
 import com.salesapp.adminservice.dto.UserDto;
 import com.salesapp.adminservice.dto.UserRegistrationDto;
 import com.salesapp.adminservice.repository.AdUserRepository;
-import com.uniform.common.dto.Request;
+import com.salesapp.common.dto.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

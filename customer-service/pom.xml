@@ -106,7 +106,7 @@
         <!--common module-->
         <dependency>
             <groupId>com.common</groupId>
-            <artifactId>common-module</artifactId>
+            <artifactId>common-service</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

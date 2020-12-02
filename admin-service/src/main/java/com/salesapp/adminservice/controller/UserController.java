@@ -3,22 +3,18 @@ package com.salesapp.adminservice.controller;
 
 import com.salesapp.adminservice.dto.UserDto;
 import com.salesapp.adminservice.dto.UserRegistrationDto;
-import com.salesapp.adminservice.models.ApiResultResponse;
 import com.salesapp.adminservice.service.UserService;
-import com.uniform.common.dto.Request;
-import com.uniform.common.dto.Response;
-import com.uniform.common.utils.ErrorCode;
+import com.salesapp.common.dto.Request;
+import com.salesapp.common.dto.Response;
+import com.salesapp.common.utils.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @RestController
 public class UserController {

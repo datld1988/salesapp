@@ -1,4 +1,4 @@
-package com.uniform.common.utils;
+package com.salesapp.common.utils;
 
 import lombok.Data;
 import org.hibernate.SQLQuery;

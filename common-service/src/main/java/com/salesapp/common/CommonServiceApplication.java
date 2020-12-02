@@ -1,13 +1,13 @@
-package com.uniform.common;
+package com.salesapp.common;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CommonModuleApplication {
+public class CommonServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CommonModuleApplication.class, args);
+        SpringApplication.run(CommonServiceApplication.class, args);
     }
 
 }
