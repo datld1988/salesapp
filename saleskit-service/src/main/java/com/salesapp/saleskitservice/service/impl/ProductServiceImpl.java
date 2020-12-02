@@ -3,7 +3,6 @@ package com.salesapp.saleskitservice.service.impl;
 import com.salesapp.common.dto.Response;
 import com.salesapp.common.utils.ErrorCode;
 import com.salesapp.saleskitservice.constant.ProductConst;
-import com.salesapp.saleskitservice.model.ApiResultResponse;
 import com.salesapp.saleskitservice.model.SearchProductRequest;
 import com.salesapp.saleskitservice.util.StringUtil;
 import org.slf4j.Logger;
@@ -132,12 +131,14 @@ public class ProductServiceImpl implements ProductService {
      * @return danh sách loại khách hàng
      */
     @Override
-    public ApiResultResponse<List<ProductMenuDto>> listGroupOfProduct(){
-        ApiResultResponse<List<ProductMenuDto>> response = new ApiResultResponse<>();
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        response.setData(productRepository.listGroupOfProduct());
-
-        return response;
+    public Response<List<ProductMenuDto>> listGroupOfProduct(){
+        try{
+            List<ProductMenuDto> result = productRepository.listGroupOfProduct();
+            return Response.success(result);
+        }
+        catch (Exception e){
+            log.error("listGroupOfProduct Exception : "+e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
     }
 }

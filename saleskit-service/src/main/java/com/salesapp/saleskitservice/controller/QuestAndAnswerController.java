@@ -1,5 +1,6 @@
 package com.salesapp.saleskitservice.controller;
 
+import com.salesapp.common.dto.Response;
 import com.salesapp.saleskitservice.dto.QuestionAndAnswerDto;
 import com.salesapp.saleskitservice.model.*;
 
@@ -17,18 +18,16 @@ public class QuestAndAnswerController {
 
     @Autowired
     private QuestionAndAnswerService questionAndAnswerService;
-
+    /**
+     * author: anhld
+     * date : 26/11/2020
+     * lấy danh sách QnA của sản phẩm đã chọn, bao gồm cả tìm kiếm
+     * @param :
+     * @return : danh sách QnA
+     */
     @RequestMapping(path = "qna", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<FilterQuestionAndAnswerResponse> filterQuestionAndAnswer(@RequestBody FilterQuestionAndAnswerRequest request) {
-        ApiResultResponse<FilterQuestionAndAnswerResponse> response = new ApiResultResponse<>();
-        FilterQuestionAndAnswerResponse data = new FilterQuestionAndAnswerResponse();
-        Page<QuestionAndAnswerDto> pageQuestionAndAnswer = questionAndAnswerService.filterQuestionAndAnswer(request);
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        data.setQaList(pageQuestionAndAnswer.getContent());
-        data.setIsNextPage(pageQuestionAndAnswer.getNumber() + 1 < pageQuestionAndAnswer.getTotalPages());
-        response.setData(data);
-        return response;
+    public Response<FilterQuestionAndAnswerResponse> filterQuestionAndAnswer(@RequestBody FilterQuestionAndAnswerRequest request) {
+        return questionAndAnswerService.filterQuestionAndAnswer(request);
     }
 }

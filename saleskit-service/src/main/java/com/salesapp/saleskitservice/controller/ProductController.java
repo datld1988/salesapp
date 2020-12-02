@@ -185,15 +185,14 @@ public class ProductController {
 
     /**
      * author: anhld
-     * date : 26/11/2020
+     * date : 28/11/2020
      * lấy ra danh sách các loại khách hàng
-     * @param
-     * @return: danh sách tất cả các loại khách hàng
+     * @param :
+     * @return : danh sách tất cả các loại khách hàng
      */
     @RequestMapping(path = "group", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<List<ProductMenuDto>> getGroupOfProduct() {
-
+    public Response<List<ProductMenuDto>> getGroupOfProduct() {
         return productService.listGroupOfProduct();
     }
 }

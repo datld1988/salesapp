@@ -1,5 +1,6 @@
 package com.salesapp.saleskitservice.controller;
 
+import com.salesapp.common.dto.Response;
 import com.salesapp.saleskitservice.dto.ProductMenuDto;
 import com.salesapp.saleskitservice.dto.PromotionDto;
 import com.salesapp.saleskitservice.dto.QuestionAndAnswerDto;
@@ -24,13 +25,13 @@ public class PromotionController {
      * author: anhld
      * date : 28/11/2020
      * lấy danh sách khuyến mãi
-     * @param
+     * @param :
      * @return danh sách khuyến mãi
      */
     @RequestMapping(path = "list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<PromotionListResponse> getPromotionList(@RequestBody PromotionListRequest request) {
-        return promotionService.getPromotion(request);
+    public Response<PromotionListResponse> getPromotionList(@RequestBody PromotionListRequest request) {
+        return promotionService.filterPromotion(request);
     }
 
     /**
@@ -42,7 +43,7 @@ public class PromotionController {
      */
     @RequestMapping(path = "detail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<PromotionDto> getPromotionByID(@RequestParam("id") Integer promotionId) {
+    public Response<PromotionDto> getPromotionByID(@RequestParam("id") Integer promotionId) {
         return promotionService.getPromotionByID(promotionId);
     }
 }
