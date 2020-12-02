@@ -1,5 +1,6 @@
 package com.salesapp.saleskitservice.controller;
 
+import com.salesapp.common.dto.Response;
 import com.salesapp.saleskitservice.dto.BusinessDto;
 import com.salesapp.saleskitservice.dto.ProductMenuDto;
 import com.salesapp.saleskitservice.dto.ProductPropertiesDto;
@@ -33,43 +34,50 @@ public class ProductController {
     @Autowired
     private BusinessService businessService;
 
+    /**
+     * author: truongnh
+     * date: 26/11/2020
+     * lấy thông tin category từng cấp
+     * @param idParent : mã menu cha
+     * @param prodType : nhóm sản phẩm
+     * @return
+     */
     @RequestMapping(path = "menu", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<List<ProductMenuDto>> getProductMenu(@RequestParam("idParent") Integer idParent, @RequestParam("prodType") String prodType) {
-        ApiResultResponse<List<ProductMenuDto>> response = new ApiResultResponse<>();
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        response.setData(productService.getProductMenu(idParent, prodType));
-        return response;
+    public Response getProductMenu(@RequestParam("idParent") Integer idParent, @RequestParam("prodType") String prodType) {
+        return Response.success(productService.getProductMenu(idParent, prodType));
     }
 
     /**
+     * author: truongnh
+     * date: 26/11/2020
      * Loc danh sach san pham
      * @param request FilterProductRequest object
      * fromDate va toDate la tim kiem theo cot : thoi gian bat dau*/
     @RequestMapping(path = "filter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<FilterProductResponse> filterProduct(@RequestBody FilterProductRequest request) {
+    public Response filterProduct(@RequestBody FilterProductRequest request) {
         ApiResultResponse<FilterProductResponse> response = new ApiResultResponse<>();
         FilterProductResponse data = new FilterProductResponse();
         Page<ProductMenuDto> pageProduct = productService.filterProduct(request);
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
+
         data.setProductList(pageProduct.getContent());
         data.setIsHasNextPage(pageProduct.getNumber() + 1 < pageProduct.getTotalPages());
-        response.setData(data);
-        return response;
+        return Response.success(data);
+
     }
 
     /**
+     * author : truongnh
+     * date : 26/11/2020
      * goi y tim kiem san pham
      * @param keySearch gia tri can tim kiem
      * theo thu uu tien: product-promotion-business
      * so luong ban ghi goi y la : 10 ban ghi*/
     @RequestMapping(path = "suggest", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<FilterProductResponse> suggestSearch(@RequestParam String keySearch) {
-        ApiResultResponse<FilterProductResponse> response = new ApiResultResponse<>();
+    public Response suggestSearch(@RequestParam String keySearch) {
+
         FilterProductResponse data = new FilterProductResponse();
         List<ProductMenuDto> productList = productService.getSuggestForSearch(keySearch, 10);
 
@@ -109,16 +117,21 @@ public class ProductController {
         }
         data.setProductList(productList);
         data.setIsHasNextPage(false);
-        response.setData(data);
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        return response;
+        return Response.success(data);
     }
 
+    /**
+     * author : truongnh
+     * date : 26/11/2020
+     * tìm kiếm sản phẩm
+     * @param request : params tìm kiếm
+     * @return danh sách các sản phẩm theo tiêu chí tìm kiếm
+     * có phân trang
+     */
     @RequestMapping(path = "search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<SearchProductResponse> searchProduct(@RequestBody SearchProductRequest request) {
-        ApiResultResponse<SearchProductResponse> response = new ApiResultResponse<>();
+    public Response searchProduct(@RequestBody SearchProductRequest request) {
+
         SearchProductResponse data = new SearchProductResponse();
         if (request.getIsProduct() == Boolean.TRUE) {
             Page<ProductMenuDto> pageProduct = productService.search(request);
@@ -146,19 +159,32 @@ public class ProductController {
             data.setPromotionList(Collections.EMPTY_LIST);
             data.setIsHasNextPromotion(Boolean.FALSE);
         }
-        response.setData(data);
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        return response;
+        return Response.success(data);
     }
 
+    /**
+     * author: dungtq
+     * date : 26/11/2020
+     * lấy thông tin sản phẩm
+     * @param productId : mã sản phẩm
+     * @return thông tin sản phẩm
+     */
     @RequestMapping(path = "info", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ApiResultResponse<List<ProductPropertiesDto>> getProductInfo(@RequestParam("product_id") Integer productId) {
-        ApiResultResponse<List<ProductPropertiesDto>> response = new ApiResultResponse<>();
-        response.setResponseCode("000");
-        response.setResponseMessage("Success");
-        response.setData(productService.getProductInfo(productId));
-        return response;
+    public Response getProductInfo(@RequestParam("product_id") Integer productId) {
+        return productService.getProductInfo(productId);
+    }
+
+    /**
+     * author: anhld
+     * date : 28/11/2020
+     * lấy ra danh sách các loại khách hàng
+     * @param :
+     * @return : danh sách tất cả các loại khách hàng
+     */
+    @RequestMapping(path = "group", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response<List<ProductMenuDto>> getGroupOfProduct() {
+        return productService.listGroupOfProduct();
     }
 }

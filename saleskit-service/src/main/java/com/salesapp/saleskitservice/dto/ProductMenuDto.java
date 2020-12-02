@@ -63,4 +63,9 @@ public class ProductMenuDto {
         this.timeEnd = StringUtil.convertDateToString(timeEnd);
         this.child = child.intValue();
     }
+
+    public ProductMenuDto(Integer id, String title){
+        this.id = id;
+        this.title = title;
+    }
 }
