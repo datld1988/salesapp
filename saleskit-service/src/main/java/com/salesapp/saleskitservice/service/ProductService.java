@@ -37,5 +37,5 @@ public interface ProductService {
      * @param
      * @return danh sách loại khách hàng
      */
-    ApiResultResponse<List<ProductMenuDto>> listGroupOfProduct();
+    Response<List<ProductMenuDto>> listGroupOfProduct();
 }

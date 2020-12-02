@@ -1,5 +1,7 @@
 package com.salesapp.saleskitservice.service.impl;
 
+import com.salesapp.common.dto.Response;
+import com.salesapp.common.utils.ErrorCode;
 import com.salesapp.saleskitservice.constant.ProductConst;
 import com.salesapp.saleskitservice.dto.PromotionDto;
 import com.salesapp.saleskitservice.model.ApiResultResponse;
@@ -7,7 +9,10 @@ import com.salesapp.saleskitservice.model.PromotionListRequest;
 import com.salesapp.saleskitservice.model.PromotionListResponse;
 import com.salesapp.saleskitservice.model.SearchProductRequest;
 import com.salesapp.saleskitservice.repository.PromotionRepository;
+import com.salesapp.saleskitservice.repository.QuestionAndAnswerRepository;
 import com.salesapp.saleskitservice.service.PromotionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +22,7 @@ import java.util.List;
 
 @Service
 public class PromotionServiceImpl implements PromotionService {
-
+    private final Logger log = LoggerFactory.getLogger(PromotionServiceImpl.class);
     @Autowired
     PromotionRepository promotionRepository;
 
@@ -36,74 +41,55 @@ public class PromotionServiceImpl implements PromotionService {
     /**
      * author: anhld
      * lấy ra danh sách các chương trình khuyến mại của loại khách hàng đã chọn
-     * @param
-     * return: danh sách các chương trình khuyến mại của loại khách hàng đã chọn
+     * @param :
+     * @return : danh sách các chương trình khuyến mại
      */
     @Override
-    public Page<PromotionDto> filterPromotion(PromotionListRequest request){
-        return  promotionRepository.filterPromotion(PageRequest.of(request.getPage(), request.getPerPage()), request.getIdSP(), 1);
-    }
-    /**
-     * author: anhld
-     * lấy ra danh sách tất cả chương trình khuyến mại
-     * @param
-     * return: danh sách tất cả các chương trình khuyến mại
-     */
-    @Override
-    public Page<PromotionDto> listAllPromotion(PromotionListRequest request){
-        return  promotionRepository.listAllPromotion(PageRequest.of(request.getPage(), request.getPerPage()), 1);
-    }
-    /**
-     * author: anhld
-     * tìm kiếm chương trình khuyến mại theo id
-     * @param
-     * return: chương trình khuyến mại
-     */
-    @Override
-    public ApiResultResponse<PromotionDto> getPromotionByID(Integer id){
-        ApiResultResponse<PromotionDto> response = new ApiResultResponse<>();
-        PromotionDto promotionDetail = promotionRepository.getPromotionByID(id);
-        if (promotionDetail == null){
-            response.setResponseCode("000");
-            response.setResponseMessage("Failed");
+    public Response<PromotionListResponse> filterPromotion(PromotionListRequest request){
+        PromotionListResponse data = new PromotionListResponse();
+        Page<PromotionDto> pagePromotion;
+        try{
+            if(request.getIdSP() == -1){
+                pagePromotion = promotionRepository.listAllPromotion(PageRequest.of(request.getPage(),
+                        request.getPerPage()), 1);
+            }
+            else{
+                pagePromotion = promotionRepository.filterPromotion(PageRequest.of(request.getPage(),
+                        request.getPerPage()), request.getIdSP(), 1);
+            }
+            data.setPromotionList(pagePromotion.getContent());
+            data.setIsNextPage(pagePromotion.getNumber() +1 < pagePromotion.getTotalPages());
+            if (data.getPromotionList().isEmpty()){
+                return Response.error(ErrorCode.NOT_FOUND_RECORDS, "No record was found");
+            }
+            else {
+                return  Response.success(data);
+            }
+
         }
-        else {
-            response.setResponseCode("000");
-            response.setResponseMessage("Success");
-            response.setData(promotionDetail);
+        catch (Exception e){
+            log.error("filterPromotion Exception : "+e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
         }
 
-        return  response;
     }
     /**
      * author: anhld
-     * phân luồng cho controller
-     * @param
-     * return: khối data tùy theo yêu cầu của client
+     * chi tiết chương trình khuyến mại theo id
+     * @param id : id của chương trình khuyến mại
+     * @return : chương trình khuyến mại
      */
     @Override
-    public ApiResultResponse<PromotionListResponse> getPromotion(PromotionListRequest request){
-        ApiResultResponse<PromotionListResponse> response = new ApiResultResponse<>();
-        PromotionListResponse data = new PromotionListResponse();
-        if(request.getIdSP() == -1){
-            Page<PromotionDto> pagePromotion = listAllPromotion(request);
-            data.setPromotionList(pagePromotion.getContent());
-            data.setIsNextPage(pagePromotion.getNumber() +1 < pagePromotion.getTotalPages());
+    public Response<PromotionDto> getPromotionByID(Integer id){
+        try{
+            PromotionDto promotionDetail = promotionRepository.getPromotionByID(id);
+            return  Response.success(promotionDetail);
         }
-        else{
-            Page<PromotionDto> pagePromotion = filterPromotion(request);
-            data.setPromotionList(pagePromotion.getContent());
-            data.setIsNextPage(pagePromotion.getNumber() +1 < pagePromotion.getTotalPages());
+        catch (Exception e){
+            log.error("getPromotionByID Exception : "+e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
         }
-        if (data.getPromotionList().isEmpty()){
-            response.setResponseCode("000");
-            response.setResponseMessage("Failed");
-        }
-        else {
-            response.setResponseCode("000");
-            response.setResponseMessage("Success");
-            response.setData(data);
-        }
-        return response;
+
     }
+
 }
