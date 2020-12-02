@@ -19,6 +19,7 @@ public class BusinessDto {
     private String image;
     private String timeStart;
     private String timeEnd;
+    private Integer child;
 
     public static BusinessDto fromRoot(Business business) {
         BusinessDto businessDto = new BusinessDto();
@@ -38,5 +39,25 @@ public class BusinessDto {
         this.image = image;
         this.timeStart = StringUtil.convertDateToString(timeStart);
         this.timeEnd = StringUtil.convertDateToString(timeEnd);
+    }
+
+    public BusinessDto(Integer id, String title, String icon, String image, Date timeStart, Date timeEnd, Long child) {
+        this.id = id;
+        this.title = title;
+        this.icon = icon;
+        this.image = image;
+        this.timeStart = StringUtil.convertDateToString(timeStart);
+        this.timeEnd = StringUtil.convertDateToString(timeEnd);
+        this.child = child.intValue();
+    }
+
+    public BusinessDto(Integer id, String title, String icon, String image, Date timeStart, Date timeEnd, Integer child) {
+        this.id = id;
+        this.title = title;
+        this.icon = icon;
+        this.image = image;
+        this.timeStart = StringUtil.convertDateToString(timeStart);
+        this.timeEnd = StringUtil.convertDateToString(timeEnd);
+        this.child = child.intValue();
     }
 }
