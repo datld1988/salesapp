@@ -7,6 +7,7 @@ import com.salesapp.saleskitservice.domain.Business;
 import com.salesapp.saleskitservice.dto.BusinessDto;
 import com.salesapp.saleskitservice.dto.ProductPropertiesDto;
 import com.salesapp.saleskitservice.model.FilterProductRequest;
+import com.salesapp.saleskitservice.model.FilterProductResponse;
 import com.salesapp.saleskitservice.model.ProductPropertiesModel;
 import com.salesapp.saleskitservice.model.SearchProductRequest;
 import com.salesapp.saleskitservice.repository.BusinessPropertiesRepository;
@@ -54,28 +55,22 @@ public class BusinessServiceImpl implements BusinessService {
         if (idParent == null || idParent <= 0) {
             idParent = null;
         }
-        List<BusinessDto> businessList = businessRepository.findByBusinessParentAndStatusAndIsApprove(
+        return businessRepository.findByBusinessParentAndStatusAndIsApprove(
                 idParent, ProductConst.STATUS_ACTIVE, ProductConst.APPROVED
         ).stream().map(business -> {
             BusinessDto menu = BusinessDto.fromRoot(business);
-            // if (business.getBusinessParent() != null) {
-                List<BusinessDto> childes = getBusinessChild(business.getId());
-                if (childes.size() > 0) {
-                    if (childes.get(0).getChild() > 0) {
-                        menu.setChild(1);
-                    } else {
-                        menu.setChild(0);
-                    }
+            List<BusinessDto> childes = getBusinessChild(business.getId());
+            if (childes.size() > 0) {
+                if (childes.get(0).getChild() > 0) {
+                    menu.setChild(1);
                 } else {
                     menu.setChild(0);
                 }
-//            } else {
-//                menu.setChild(1);
-//            }
-            return menu;
+            } else {
+                menu.setChild(0);
+            }
+        return menu;
         }).collect(Collectors.toList());
-
-        return businessList;
     }
 
     @Override
@@ -102,13 +97,16 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public Page<BusinessDto> filterBusiness(FilterProductRequest request) {
+    public Response filterBusiness(FilterProductRequest request) {
+        FilterProductResponse data = new FilterProductResponse();
         Date fromParse = StringUtil.convertStringToDate(request.getFromDate());
         Date toDate = StringUtil.convertStringToDate(request.getToDate());
         Page<BusinessDto> listBusinessPage = businessRepository.filterBusiness(
                 PageRequest.of(request.getPage(), request.getPageSize())
                 , fromParse, toDate, request.getMenuId(), ProductConst.STATUS_ACTIVE);
-        return listBusinessPage;
+        data.setBusinessList(listBusinessPage.getContent());
+        data.setIsHasNextPage(listBusinessPage.getNumber() + 1 < listBusinessPage.getTotalPages());
+        return Response.success(data);
     }
 
     private List<BusinessDto> getBusinessChild(Integer id) {

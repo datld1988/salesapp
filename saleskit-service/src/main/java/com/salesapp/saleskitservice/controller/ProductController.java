@@ -209,13 +209,7 @@ public class ProductController {
     @RequestMapping(path = "business-filter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response filterBusiness(@RequestBody FilterProductRequest request) {
-        FilterProductResponse data = new FilterProductResponse();
-        Page<BusinessDto> pageBusiness = businessService.filterBusiness(request);
-
-        data.setBusinessList(pageBusiness.getContent());
-        data.setIsHasNextPage(pageBusiness.getNumber() + 1 < pageBusiness.getTotalPages());
-        return Response.success(data);
-
+        return businessService.filterBusiness(request);
     }
 
     /**

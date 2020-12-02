@@ -17,5 +17,5 @@ public interface BusinessService {
 
     Response getBusinessInfo(Integer id);
 
-    Page<BusinessDto> filterBusiness(FilterProductRequest request);
+    Response filterBusiness(FilterProductRequest request);
 }
