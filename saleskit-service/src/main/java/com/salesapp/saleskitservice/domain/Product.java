@@ -6,12 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "SAPP_SAN_PHAM")
 @Data
-public class Product {
+public class Product implements Serializable {
     @Id
     @Column(name = "ID")
     private Integer id;
