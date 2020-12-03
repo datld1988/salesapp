@@ -12,16 +12,14 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "AD_USER_ROLE")
+@IdClass(AdUserRoleId.class)
 public class AdUserRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_ROLE_SEQ")
-    @SequenceGenerator(sequenceName = "AD_USER_ROLE_SEQ", allocationSize = 1, name = "USER_ROLE_SEQ")
-    private String id;
-
     @Column(name = "USER_ID")
     private String userId;
 
+    @Id
     @Column(name = "ROLE_ID")
     private String roleId;
 

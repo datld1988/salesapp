@@ -8,7 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class AdRoleRightDto {
-    private String id;
 
     private String roleId;
 

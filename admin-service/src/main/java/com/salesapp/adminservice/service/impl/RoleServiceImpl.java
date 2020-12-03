@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,9 +63,10 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public Response insertRole(SaveRoleRequest request) {
         AdRole role = new AdRole();
-        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        String user = "henry";// SecurityContextHolder.getContext().getAuthentication().getName();
         try {
 //            Optional<AdRole> checkRole = adRoleRepository.findById(request.getRoleInfo().getId());
 //            if (!checkRole.isPresent()) {
@@ -112,6 +114,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public Response updateRole(SaveRoleRequest request) {
         AdRole role = new AdRole();
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -133,13 +136,13 @@ public class RoleServiceImpl implements RoleService {
                         adRoleMenu.setMenuId(menu.getMenuId());
                         adRoleMenu.setRoleId(addedRole.getId());
                         adRoleMenu.setStatus(menu.getStatus());
-                        if (menu.getId() == null) {
-                            adRoleMenu.setCreateDate(new Date());
-                            adRoleMenu.setCreateBy(user);
-                        } else {
+//                        if (menu.getId() == null) {
+//                            adRoleMenu.setCreateDate(new Date());
+//                            adRoleMenu.setCreateBy(user);
+//                        } else {
                             adRoleMenu.setModifyDate(new Date());
                             adRoleMenu.setModifyBy(user);
-                        }
+//                        }
 
                         adRoleMenuList.add(adRoleMenu);
                     }
@@ -152,13 +155,13 @@ public class RoleServiceImpl implements RoleService {
                         AdRoleRight adRoleRight = new AdRoleRight();
                         adRoleRight.setRightId(right.getRightId());
                         adRoleRight.setRoleId(addedRole.getId());
-                        if (right.getId() == null) {
-                            adRoleRight.setCreatedBy(user);
-                            adRoleRight.setCreatedDate(new Date());
-                        } else {
+//                        if (right.getId() == null) {
+//                            adRoleRight.setCreatedBy(user);
+//                            adRoleRight.setCreatedDate(new Date());
+//                        } else {
                             adRoleRight.setModifiedBy(user);
                             adRoleRight.setModifiedDate(new Date());
-                        }
+//                        }
 
                         adRoleRightList.add(adRoleRight);
                     }
@@ -177,6 +180,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public Response deleteRole(String id) {
         try {
             Optional<AdRole> role = adRoleRepository.findById(id);
@@ -196,6 +200,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public Response assignUserRole(AssignUserRoleRequest request) {
         try {
             if (!request.getRoleList().isEmpty()) {

@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "AD_ROLE_RIGHT")
+@IdClass(AdRoleRightId.class)
 public class AdRoleRight implements Serializable {
     
     public static String MetaPropId = "id";
@@ -24,14 +25,11 @@ public class AdRoleRight implements Serializable {
     public static String MetaPropModifiedBy = "modifiedBy";
 
     @Id
-    @Column(name = "ID")
-    // Mã PK
-    private String id;
-    
     @Column(name = "ROLE_ID")
     // Mã PK Quyền
     private String roleId;
-    
+
+    @Id
     @Column(name = "RIGHT_ID")
     // Mã PK Chức năng
     private String rightId;

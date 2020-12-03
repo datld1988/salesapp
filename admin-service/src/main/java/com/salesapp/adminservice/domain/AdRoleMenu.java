@@ -13,16 +13,14 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "AD_ROLE_MENU")
+@IdClass(AdRoleMenuId.class)
 public class AdRoleMenu implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ROLE_MENU_SEQ")
-    @SequenceGenerator(sequenceName = "AD_ROLE_MENU_SEQ", allocationSize = 1, name = "ROLE_MENU_SEQ")
-    private String id;
-
     @Column(name = "ROLE_ID")
     private String roleId;
 
+    @Id
     @Column(name = "MENU_ID")
     private String menuId;
 
