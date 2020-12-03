@@ -16,6 +16,6 @@ import java.util.List;
 public interface NewsRepository extends JpaRepository<News, Integer> {
     News findNewsById(Integer id);
 
-    @Query(value = "SELECT SCHEMA.SAPP_NEWS_SEQ.nextval FROM dual", nativeQuery = true)
-    public Integer getNextNewsID();
+//    @Query(value = "SELECT SCHEMA.SAPP_NEWS_SEQ.nextval FROM dual", nativeQuery = true)
+//    public Long getNextNewsID();
 }

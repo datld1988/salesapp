@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,7 +23,7 @@ public class NewsController {
 
     @RequestMapping(path = "detail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response<NewsDetailRequest> getGroupOfProduct(@RequestBody NewsDetailRequest newsDetailRequest) {
-        return newsService.addNews(newsDetailRequest);
+    public Response<NewsDetailRequest> getGroupOfProduct(@RequestBody NewsDetailRequest newsDetailRequest, Principal principal) {
+        return newsService.addNews(newsDetailRequest, principal.getName());
     }
 }

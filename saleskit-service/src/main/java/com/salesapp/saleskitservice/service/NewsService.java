@@ -5,5 +5,5 @@ import com.salesapp.saleskitservice.dto.NewsDto;
 import com.salesapp.saleskitservice.model.NewsDetailRequest;
 
 public interface NewsService {
-    Response<NewsDetailRequest> addNews(NewsDetailRequest newsDetailRequest);
+    Response<NewsDetailRequest> addNews(NewsDetailRequest newsDetailRequest, String user);
 }

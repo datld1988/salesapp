@@ -15,7 +15,7 @@ import java.util.List;
 @ToString
 public class NewsDetailRequest {
     private Integer id;
-    @NotNull(message = "Title {not.empty}")
+  //  @NotNull(message = "Title {not.empty}")
     private String title;
     @NotNull(message = "Priority {not.empty}")
     private Integer priority;
