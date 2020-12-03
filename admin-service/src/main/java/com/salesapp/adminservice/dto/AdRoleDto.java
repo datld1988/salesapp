@@ -16,4 +16,9 @@ public class AdRoleDto {
     private String description;
 
     private String statusCode;
+
+    public AdRoleDto(String id)
+    {
+
+    }
 }

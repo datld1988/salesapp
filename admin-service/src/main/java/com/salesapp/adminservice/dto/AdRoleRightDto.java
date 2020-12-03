@@ -14,4 +14,6 @@ public class AdRoleRightDto {
 
     private String rightId;
 
+
+
 }

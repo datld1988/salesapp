@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
@@ -18,6 +15,8 @@ import java.util.Date;
 public class AdUserRole {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_ROLE_SEQ")
+    @SequenceGenerator(sequenceName = "AD_USER_ROLE_SEQ", allocationSize = 1, name = "USER_ROLE_SEQ")
     private String id;
 
     @Column(name = "USER_ID")

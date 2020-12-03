@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -19,6 +16,8 @@ import java.util.Date;
 public class AdRoleMenu implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ROLE_MENU_SEQ")
+    @SequenceGenerator(sequenceName = "AD_ROLE_MENU_SEQ", allocationSize = 1, name = "ROLE_MENU_SEQ")
     private String id;
 
     @Column(name = "ROLE_ID")
