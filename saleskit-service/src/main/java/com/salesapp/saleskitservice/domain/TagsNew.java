@@ -2,20 +2,19 @@ package com.salesapp.saleskitservice.domain;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "TAGS_NEW")
+@Table(name = "SAPP_TAGS_NEW")
 @Data
 public class TagsNew implements Serializable {
 
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TAGS_NEW_SEQ")
+    @SequenceGenerator(sequenceName = "SAPP_TAGS_NEW_SEQ", allocationSize = 1, name = "TAGS_NEW_SEQ")
     private Integer id;
 
     @Column(name = "ID_TAG")

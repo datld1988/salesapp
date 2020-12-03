@@ -2,10 +2,7 @@ package com.salesapp.saleskitservice.domain;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,6 +13,8 @@ public class UserNewsView implements Serializable {
 
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_NEWS_SEQ")
+    @SequenceGenerator(sequenceName = "SAPP_USER_NEWS_VIEW_SEQ", allocationSize = 1, name = "USER_NEWS_SEQ")
     private Integer id;
 
     @Column(name = "ID_USER")
