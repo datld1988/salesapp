@@ -132,13 +132,8 @@ public class RoleServiceImpl implements RoleService {
                         adRoleMenu.setMenuId(menu.getMenuId());
                         adRoleMenu.setRoleId(addedRole.getId());
                         adRoleMenu.setStatus(menu.getStatus());
-                        AdRoleMenuId adRoleMenuId = new AdRoleMenuId();
-                        adRoleMenuId.setRoleId(menu.getRoleId());
-                        adRoleMenuId.setMenuId(menu.getMenuId());
-                        Optional<AdRoleMenu> checkRoleMenu = adRoleMenuRepository.findById(adRoleMenuId);
-
-                            adRoleMenu.setModifyDate(new Date());
-                            adRoleMenu.setModifyBy(user);
+                        adRoleMenu.setModifyBy(user);
+                        adRoleMenu.setModifyDate(new Date());
 
                         adRoleMenuList.add(adRoleMenu);
                     }

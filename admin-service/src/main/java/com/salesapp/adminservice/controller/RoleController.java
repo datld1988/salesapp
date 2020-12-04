@@ -20,18 +20,35 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    /**
+     * authen: AnhLD
+     * date: 3/12/2020
+     * @param keySearch : tìm kiếm role theo description, roleName, id
+     * @return
+     */
     @RequestMapping(path = "search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response searchRole(@RequestParam String keySearch) {
         return roleService.searchRole(keySearch);
     }
 
+    /**
+     * authen: Anhld
+     * date: 3/12/2020
+     * @param request thông tin insert role (roleInfo, list AdRoleMenuDto, list AdRoleRightDto)
+     * @return success / fail
+     */
     @RequestMapping(path = "insert", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response insertRole(@RequestBody SaveRoleRequest request) {
         return roleService.insertRole(request);
     }
 
+    /**
+     * authen :Anhld
+     * @param request thông tin update role
+     * @return
+     */
     @RequestMapping(path = "update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response updateRole(@RequestBody SaveRoleRequest request) {
