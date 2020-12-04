@@ -7,5 +7,5 @@ import com.salesapp.saleskitservice.model.AssignTagRequest;
 public interface TagsService {
     Response insertTags(TagsDto tagsDto);
     Response insertTagsAny(AssignTagRequest request);
-    Response findAnyByTags(String tag);
+    Response findAnyByTags(String type);
 }

@@ -61,24 +61,36 @@ public class TagsServiceImpl implements TagsService {
         List<TagsAny> tagsAnyList = new ArrayList<>();
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
         try{
-
+            boolean ableToAdd = true;
             if (request.getTagsAnyId().size() >=1){
                 for (TagsAnyId tagsAnyId: request.getTagsAnyId()){
-                    TagsDto tagExisted = tagsAnyRepository.checkTags(tagsAnyId.getIdTag(), tagsAnyId.getIdAny(), tagsAnyId.getTypeAny());
-
-                    TagsAny tagsAny = new TagsAny();
-                    tagsAny.setIdAny(tagsAnyId.getIdAny());
-                    tagsAny.setIdTag(tagsAnyId.getIdTag());
-                    tagsAny.setTypeAny(tagsAnyId.getTypeAny());
-                    tagsAny.setStatus(1);
-                    tagsAny.setCreateBy(user);
-                    tagsAny.setCreateDate(new Date());
-                    tagsAnyList.add(tagsAny);
+                    TagsAnyDto tagExisted = tagsAnyRepository.checkTags(tagsAnyId.getIdTag(), tagsAnyId.getIdAny(), tagsAnyId.getTypeAny());
+                    if (tagExisted == null && ableToAdd){
+                        TagsAny tagsAny = new TagsAny();
+                        tagsAny.setIdAny(tagsAnyId.getIdAny());
+                        tagsAny.setIdTag(tagsAnyId.getIdTag());
+                        tagsAny.setTypeAny(tagsAnyId.getTypeAny());
+                        tagsAny.setStatus(1);
+                        tagsAny.setCreateBy(user);
+                        tagsAny.setCreateDate(new Date());
+                        tagsAnyList.add(tagsAny);
+                        ableToAdd = true;
+                    }
+                    else {
+                        ableToAdd = false;
+                    }
                 }
-                tagsAnyRepository.saveAll(tagsAnyList);
-
             }
-            return Response.success("tag successful");
+            else {
+                ableToAdd = false;
+            }
+            if (ableToAdd){
+                tagsAnyRepository.saveAll(tagsAnyList);
+                return Response.success("tag successful");
+            }
+            else {
+                return Response.error("408","tag failed");
+            }
         }
         catch (Exception e){
             log.error("insertTagsAny Exception : " + e.toString(), e);
@@ -87,8 +99,20 @@ public class TagsServiceImpl implements TagsService {
     }
 
     @Override
-    public Response findAnyByTags(String tag) {
-        return null;
+    public Response findAnyByTags(String type) {
+        try {
+            List<TagsAnyDto> tagsAnyDtoList = tagsAnyRepository.searchByTypeAny(type);
+            if (tagsAnyDtoList.isEmpty()){
+                return Response.error(ErrorCode.NOT_FOUND_RECORDS, "No record was found");
+            }
+            else{
+                return Response.success(tagsAnyDtoList);
+            }
+        }
+        catch (Exception e){
+            log.error("findAnyByTags Exception : " + e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
     }
 
 

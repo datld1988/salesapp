@@ -27,4 +27,10 @@ public class TagsController {
     public Response<FilterQuestionAndAnswerResponse> filterQuestionAndAnswer(@RequestBody AssignTagRequest assignTagRequest) {
         return tagsService.insertTagsAny(assignTagRequest);
     }
+
+    @RequestMapping(path = "searchType", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response<FilterQuestionAndAnswerResponse> filterQuestionAndAnswer(@RequestParam("type") String typeKey) {
+        return tagsService.findAnyByTags(typeKey);
+    }
 }
