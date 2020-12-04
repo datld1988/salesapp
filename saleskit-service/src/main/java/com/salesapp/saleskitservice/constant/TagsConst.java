@@ -10,4 +10,7 @@ public class TagsConst {
     public static final String PriorityHigh = "CAO";
     public static final String PriorityMedium = "TRUNGBINH";
     public static final String PriorityLow = "THAP";
+
+    public static final int StatusActive = 1;
+    public static final int StatusInactive = 0;
 }
