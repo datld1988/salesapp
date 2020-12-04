@@ -7,21 +7,22 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "SAPP_TAGS_NEW")
+@Table(name = "SAPP_TAGS_ANY")
 @Data
-public class TagsNew implements Serializable {
+@IdClass(TagsAnyId.class)
+public class TagsAny implements Serializable {
 
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TAGS_NEW_SEQ")
-    @SequenceGenerator(sequenceName = "SAPP_TAGS_NEW_SEQ", allocationSize = 1, name = "TAGS_NEW_SEQ")
-    private Integer id;
-
     @Column(name = "ID_TAG")
     private Integer idTag;
 
-    @Column(name = "ID_NEW")
-    private Integer idNew;
+    @Id
+    @Column(name = "ID_ANY")
+    private String idAny;
+
+    @Id
+    @Column(name = "TYPE_ANY")
+    private String typeAny;
 
     @Column(name = "STATUS")
     private Integer status;

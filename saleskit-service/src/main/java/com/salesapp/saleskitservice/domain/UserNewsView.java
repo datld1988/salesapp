@@ -7,19 +7,21 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "USER_NEWS_VIEW")
+@Table(name = "SAPP_USER_NEWS_VIEW")
 @Data
+@IdClass(UserNewsViewId.class)
 public class UserNewsView implements Serializable {
 
+//    @Id
+//    @Column(name = "ID")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_NEWS_SEQ")
+//    @SequenceGenerator(sequenceName = "SAPP_USER_NEWS_VIEW_SEQ", allocationSize = 1, name = "USER_NEWS_SEQ")
+//    private Integer id;
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_NEWS_SEQ")
-    @SequenceGenerator(sequenceName = "SAPP_USER_NEWS_VIEW_SEQ", allocationSize = 1, name = "USER_NEWS_SEQ")
-    private Integer id;
-
     @Column(name = "ID_USER")
     private String idUser;
 
+    @Id
     @Column(name = "ID_NEWS")
     private Integer idNews;
 

@@ -23,12 +23,6 @@ public class News implements Serializable {
     @Column(name = "STATUS")
     private Integer status;
 
-    @Column(name = "ID_GROUP_PRODUCT")
-    private Integer idGroupProduct;
-
-    @Column(name = "ID_GROUP_CUSTOMER")
-    private Integer idGroupCustomer;
-
     @Column(name = "PUBLISHER")
     private String publisher;
 
@@ -42,13 +36,10 @@ public class News implements Serializable {
     private String image;
 
     @Column(name = "PRIORITY")
-    private Integer priority;
+    private String priority;
 
-    @Column(name = "START_DATE")
-    private Date startDate;
-
-    @Column(name = "END_DATE")
-    private Date endDate;
+    @Column(name = "FILE_PATH")
+    private  String filePath;
 
     @Column(name = "CREATE_DATE")
     private Date createDate;

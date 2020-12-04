@@ -18,14 +18,14 @@ public class NewsDetailRequest {
   //  @NotNull(message = "Title {not.empty}")
     private String title;
     @NotNull(message = "Priority {not.empty}")
-    private Integer priority;
+    private String priority;
     @NotNull(message = "PublishTime {not.empty}")
     private Date publishTime;
     @NotNull(message = "Content {not.empty}")
     private String content;
-    @NotNull(message = "IDGroupProduct {not.empty}")
-    private Integer idGroupProduct;
-    @NotNull(message = "IDGroupCustomer {not.empty}")
-    private Integer idGroupCustomer;
+//    @NotNull(message = "IDGroupProduct {not.empty}")
+//    private Integer idGroupProduct;
+//    @NotNull(message = "IDGroupCustomer {not.empty}")
+//    private Integer idGroupCustomer;
     private List<UserNewsViewDto> listViewer;
 }

@@ -47,8 +47,7 @@ public class NewsServiceImpl implements NewsService {
                 news.setModifyDate(new Date());
                 news.setModifyBy(user);
             }
-            news.setIdGroupCustomer(newsDetailRequest.getIdGroupCustomer());
-            news.setIdGroupProduct(newsDetailRequest.getIdGroupProduct());
+
             News ns =  newsRepository.save(news);
             if (newsDetailRequest.getListViewer().size() >= 1){
                 for (UserNewsViewDto item: newsDetailRequest.getListViewer()) {
