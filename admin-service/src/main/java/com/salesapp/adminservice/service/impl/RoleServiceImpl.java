@@ -1,10 +1,7 @@
 package com.salesapp.adminservice.service.impl;
 
 import com.salesapp.adminservice.constant.RoleConstant;
-import com.salesapp.adminservice.domain.AdRole;
-import com.salesapp.adminservice.domain.AdRoleMenu;
-import com.salesapp.adminservice.domain.AdRoleRight;
-import com.salesapp.adminservice.domain.AdUserRole;
+import com.salesapp.adminservice.domain.*;
 import com.salesapp.adminservice.dto.AdRoleDto;
 import com.salesapp.adminservice.dto.AdRoleMenuDto;
 import com.salesapp.adminservice.dto.AdRoleRightDto;
@@ -66,10 +63,10 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     public Response insertRole(SaveRoleRequest request) {
         AdRole role = new AdRole();
-        String user = "henry";// SecurityContextHolder.getContext().getAuthentication().getName();
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
-//            Optional<AdRole> checkRole = adRoleRepository.findById(request.getRoleInfo().getId());
-//            if (!checkRole.isPresent()) {
+            Optional<AdRole> checkRole = adRoleRepository.findById(request.getRoleInfo().getId());
+            if (!checkRole.isPresent()) {
             role.setRoleName(request.getRoleInfo().getName());
             role.setDescription(request.getRoleInfo().getDescription());
             role.setId(request.getRoleInfo().getId());
@@ -103,10 +100,10 @@ public class RoleServiceImpl implements RoleService {
                 adRoleRightRepository.saveAll(adRoleRightList);
             }
             return Response.success("Add successful");
-//            }
-//            else {
-//                return Response.error("408", "Record existed");
-//            }
+            }
+            else {
+                return Response.error("408", "Record existed");
+            }
         } catch (Exception e) {
             log.error("insertRole Exception : " + e.toString(), e);
             return Response.error(ErrorCode.ERROR_STATUS, e.toString());
@@ -121,10 +118,9 @@ public class RoleServiceImpl implements RoleService {
         try {
             Optional<AdRole> checkRole = adRoleRepository.findById(request.getRoleInfo().getId());
             if (checkRole.isPresent()) {
-
-
                 role.setRoleName(request.getRoleInfo().getName());
                 role.setDescription(request.getRoleInfo().getDescription());
+                role.setId(request.getRoleInfo().getId());
                 role.setStatusCode(RoleConstant.STRING_STATUS_ACTIVE);
                 role.setModifiedDate(new Date());
                 role.setModifiedBy(user);
@@ -136,13 +132,13 @@ public class RoleServiceImpl implements RoleService {
                         adRoleMenu.setMenuId(menu.getMenuId());
                         adRoleMenu.setRoleId(addedRole.getId());
                         adRoleMenu.setStatus(menu.getStatus());
-//                        if (menu.getId() == null) {
-//                            adRoleMenu.setCreateDate(new Date());
-//                            adRoleMenu.setCreateBy(user);
-//                        } else {
+                        AdRoleMenuId adRoleMenuId = new AdRoleMenuId();
+                        adRoleMenuId.setRoleId(menu.getRoleId());
+                        adRoleMenuId.setMenuId(menu.getMenuId());
+                        Optional<AdRoleMenu> checkRoleMenu = adRoleMenuRepository.findById(adRoleMenuId);
+
                             adRoleMenu.setModifyDate(new Date());
                             adRoleMenu.setModifyBy(user);
-//                        }
 
                         adRoleMenuList.add(adRoleMenu);
                     }
@@ -155,13 +151,14 @@ public class RoleServiceImpl implements RoleService {
                         AdRoleRight adRoleRight = new AdRoleRight();
                         adRoleRight.setRightId(right.getRightId());
                         adRoleRight.setRoleId(addedRole.getId());
-//                        if (right.getId() == null) {
-//                            adRoleRight.setCreatedBy(user);
-//                            adRoleRight.setCreatedDate(new Date());
-//                        } else {
+                        AdRoleRightId adRoleRightId = new AdRoleRightId();
+                        adRoleRightId.setRightId(right.getRightId());
+                        adRoleRightId.setRoleId(right.getRoleId());
+                        Optional<AdRoleRight> checkRoleRight = adRoleRightRepository.findById(adRoleRightId);
+
                             adRoleRight.setModifiedBy(user);
                             adRoleRight.setModifiedDate(new Date());
-//                        }
+
 
                         adRoleRightList.add(adRoleRight);
                     }
@@ -203,6 +200,7 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     public Response assignUserRole(AssignUserRoleRequest request) {
         try {
+            String user = SecurityContextHolder.getContext().getAuthentication().getName();
             if (!request.getRoleList().isEmpty()) {
                 List<AdUserRole> adUserRoleList = new ArrayList<>();
                 for (AdRoleDto adRoleDto : request.getRoleList()) {
@@ -210,10 +208,9 @@ public class RoleServiceImpl implements RoleService {
                     adUserRole.setUserId(request.getUserInfo().getId());
                     adUserRole.setStatus(RoleConstant.INT_STATUS_ACTIVE);
                     adUserRole.setCreateDate(new Date());
-                    adUserRole.setCreateBy(request.getUserInfo().getId());
+                    adUserRole.setCreateBy(user);
                     adUserRole.setRoleId(adRoleDto.getId());
                     adUserRoleList.add(adUserRole);
-
                 }
                 adUserRoleRepository.deleteByUserId(request.getUserInfo().getId());
                 adUserRoleRepository.saveAll(adUserRoleList);
