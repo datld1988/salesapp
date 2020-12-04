@@ -30,6 +30,13 @@ public class TagsServiceImpl implements TagsService {
     private TagsRepository tagsRepository;
     @Autowired
     private TagsAnyRepository tagsAnyRepository;
+
+    /**
+     * author: anhld
+     * date : 4/12/2020
+     * @param
+     * @return kết quả việc thêm tag
+     */
     @Override
     public Response insertTags(TagsDto tagsDto) {
         Tags tags = new Tags();
@@ -56,6 +63,12 @@ public class TagsServiceImpl implements TagsService {
 
     }
 
+    /**
+     * author: anhld
+     * date : 4/12/2020
+     * @param
+     * @return kết quả việc gắn tag
+     */
     @Override
     public Response insertTagsAny(AssignTagRequest request) {
         List<TagsAny> tagsAnyList = new ArrayList<>();
@@ -98,8 +111,14 @@ public class TagsServiceImpl implements TagsService {
         }
     }
 
+    /**
+     * author: anhld
+     * date : 4/12/2020
+     * @param type: loại
+     * @return danh sách những thứ có chứa type
+     */
     @Override
-    public Response findAnyByTags(String type) {
+    public Response findAnyTagsByType(String type) {
         try {
             List<TagsAnyDto> tagsAnyDtoList = tagsAnyRepository.searchByTypeAny(type);
             if (tagsAnyDtoList.isEmpty()){
