@@ -37,7 +37,7 @@ deploy-salesapp-develop:
     - mkdir -p ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   script:
-    - scp -P $SSH_PORT -T ./config-service/target/* $SSH_USER@$SSH_HOST:/project/alphaway/salesapp/develop
+    - scp -P $SSH_PORT -T ./config-service/target/config-service.jar $SSH_USER@$SSH_HOST:/project/alphaway/sales-app/dev/target
     #- ssh -p $SSH_PORT -T $SSH_USER@$SSH_HOST 'cd /project/alphaway/salesapp/develop && docker restart salesapp-microservices-develop'
   only:
     - develop
