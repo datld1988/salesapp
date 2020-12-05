@@ -12,7 +12,7 @@ build:
     - cd ./target
     - mvn install:install-file -Dfile=common-service.jar -DgroupId=com.common -DartifactId=common-service -Dversion=1.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
 
-    - cd ../../lib/oracle
+    - cd ../../libs/oracle
     - mvn install:install-file -Dfile=ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.2.0.1 -Dpackaging=jar -DgeneratePom=true
 
     - cd ../../
