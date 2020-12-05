@@ -24,6 +24,7 @@ build:
       - ./registry-service/target
       - ./auth-service/target
       - ./admin-service/target
+      - ./saleskit-service/target
       - ./gateway-service/target
   only:
     - develop
@@ -37,7 +38,7 @@ deploy-salesapp-develop:
     - mkdir -p ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   script:
-    - scp -P $SSH_PORT -T ./config-service/target/config-service.jar ./registry-service/target/registry-service.jar ./auth-service/target/auth-service.jar ./admin-service/target/admin-service.jar ./gateway-service/target/gateway-service.jar $SSH_USER@$SSH_HOST:/project/alphaway/sales-app/dev/target
+    - scp -P $SSH_PORT -T ./config-service/target/config-service.jar ./registry-service/target/registry-service.jar ./auth-service/target/auth-service.jar ./admin-service/target/admin-service.jar ./saleskit-service/target/saleskit-service.jar ./gateway-service/target/gateway-service.jar $SSH_USER@$SSH_HOST:/project/alphaway/sales-app/dev/target
     #- ssh -p $SSH_PORT -T $SSH_USER@$SSH_HOST 'cd /project/alphaway/salesapp/develop && docker restart salesapp-microservices-develop'
   only:
     - develop
