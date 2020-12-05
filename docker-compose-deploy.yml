@@ -56,7 +56,7 @@ services:
      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
      KAFKA_LISTENERS: PLAINTEXT://:9092
      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://:9092
-     KAFKA_CREATE_TOPICS: zipkin:1:1
+     #KAFKA_CREATE_TOPICS: zipkin:1:1
      KAFKA_BROKER_ID: 1
 #   environment:
 #     KAFKA_ADVERTISED_HOST_NAME: localhost
@@ -76,46 +76,46 @@ services:
    ports:
      - "9092:9092"
 
-  # elasticsearch:
-  #   image: elasticsearch:7.7.0
-  #   container_name: elasticsearch
-  #   hostname: elasticsearch
-  #   environment:
-  #     - "discovery.type=single-node"
-  #   ports:
-  #     - 9200:9200
-  #     - 9300:9300
-  #   networks:
-  #     - sales-app-network
+  elasticsearch:
+   image: elasticsearch:7.7.0
+   container_name: elasticsearch
+   hostname: elasticsearch
+   environment:
+     - "discovery.type=single-node"
+   ports:
+     - 9200:9200
+     - 9300:9300
+   networks:
+     - sales-app-network
 
-  # kibana:
-  #   image: kibana:7.7.0
-  #   container_name: kibana
-  #   hostname: kibana
-  #   ports:
-  #     - 5601:5601
-  #   links:
-  #     - elasticsearch:elasticsearch
-  #   depends_on:
-  #     - elasticsearch
-  #   networks:
-  #     - sales-app-network
+  kibana:
+   image: kibana:7.7.0
+   container_name: kibana
+   hostname: kibana
+   ports:
+     - 5601:5601
+   links:
+     - elasticsearch:elasticsearch
+   depends_on:
+     - elasticsearch
+   networks:
+     - sales-app-network
 
-  # logstash:
-  #   image: logstash:7.7.0
-  #   container_name: logstash
-  #   hostname: logstash
-  #   ports:
-  #     - 9600:9600
-  #     - 8089:8089
-  #   volumes:
-  #     - ./elastic-stack/logstash:/usr/share/logstash/pipeline/
-  #   links:
-  #     - elasticsearch:elasticsearch
-  #   depends_on:
-  #     - elasticsearch
-  #   networks:
-  #     - sales-app-network
+  logstash:
+   image: logstash:7.7.0
+   container_name: logstash
+   hostname: logstash
+   ports:
+     - 9600:9600
+     - 8089:8089
+   volumes:
+     - ./elastic-stack/logstash:/usr/share/logstash/pipeline/
+   links:
+     - elasticsearch:elasticsearch
+   depends_on:
+     - elasticsearch
+   networks:
+     - sales-app-network
 
 
   config-service:
