@@ -22,9 +22,9 @@ build:
     paths:
       - ./config-service/target
       - ./registry-service/target
-      # - ./gateway-service/target
-      # - ./auth-service/target
-      # - ./admin-service/target
+      - ./auth-service/target
+      - ./admin-service/target
+      - ./gateway-service/target
   only:
     - develop
 
