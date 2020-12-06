@@ -7,15 +7,25 @@ stages:
 build:
   stage: build
   script:
+    - cd ./common-service
+    - mvn clean install
+    - cd ./target
+    - mvn install:install-file -Dfile=common-service.jar -DgroupId=com.common -DartifactId=common-service -Dversion=1.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
+
+    - cd ../../libs/oracle
+    - mvn install:install-file -Dfile=ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.2.0.1 -Dpackaging=jar -DgeneratePom=true
+
+    - cd ../../
     - mvn clean install
   artifacts:
     expire_in: 10 mins
     paths:
       - ./config-service/target
       - ./registry-service/target
-      # - ./gateway-service/target
-      # - ./auth-service/target
-      # - ./admin-service/target
+      - ./auth-service/target
+      - ./admin-service/target
+      - ./saleskit-service/target
+      - ./gateway-service/target
   only:
     - develop
 
@@ -28,10 +38,11 @@ deploy-salesapp-develop:
     - mkdir -p ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   script:
-    - scp -P $SSH_PORT -T ./config-service/target/* $SSH_USER@$SSH_HOST:/project/alphaway/salesapp/develop
+    - scp -P $SSH_PORT -T ./config-service/target/config-service.jar ./registry-service/target/registry-service.jar ./auth-service/target/auth-service.jar ./admin-service/target/admin-service.jar ./saleskit-service/target/saleskit-service.jar ./gateway-service/target/gateway-service.jar $SSH_USER@$SSH_HOST:/project/alphaway/sales-app/dev/target
     #- ssh -p $SSH_PORT -T $SSH_USER@$SSH_HOST 'cd /project/alphaway/salesapp/develop && docker restart salesapp-microservices-develop'
   only:
     - develop
+
 
 
 

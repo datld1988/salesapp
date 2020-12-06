@@ -9,14 +9,14 @@ services:
   #      - "5672:5672"
 
 
-  # sales-app-zipkin:
-  #   container_name: sales-app-zipkin
-  #   image: openzipkin/zipkin
-  #   restart: always
-  #   networks:
-  #     - sales-app-network
-  #   ports:
-  #     - '9411:9411'
+  sales-app-zipkin:
+   container_name: sales-app-zipkin
+   image: openzipkin/zipkin
+   restart: always
+   networks:
+     - sales-app-network
+   ports:
+     - '9411:9411'
       
   # sales-app-redis:
   #   container_name: sales-app-redis
@@ -36,78 +36,86 @@ services:
   #     - '60379:6379'
   #     - '26379:26379'
 
-  # zookeeper:
-  #   image: wurstmeister/zookeeper:latest
-  #   container_name: zookeeper
-  #   restart: always
-  #   environment:
-  #     zk_id: "1"
-  #   networks:
-  #     - sales-app-network
-  #   ports:
-  #     - "2181:2181"
+  zookeeper:
+   image: wurstmeister/zookeeper:latest
+   container_name: zookeeper
+   restart: always
+   environment:
+     zk_id: "1"
+   networks:
+     - sales-app-network
+   ports:
+     - "2181:2181"
 
-  # kafka:
-  #   image: wurstmeister/kafka:latest
-  #   container_name: kafka
-  #   environment:
-  #     KAFKA_ADVERTISED_HOST_NAME: localhost
-  #     #KAFKA_ADVERTISED_HOST_NAME: 192.168.1.4
-  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-  #     KAFKA_CREATE_TOPICS: zipkin:1:1
-  #     #KAFKA_CREATE_TOPICS: elk:1:1
-  #     KAFKA_BROKER_ID: 1
-  #   links:
-  #     - zookeeper
-  #   depends_on:
-  #     - zookeeper
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   networks:
-  #     - sales-app-network
-  #   ports:
-  #     - "9092:9092"
+  kafka:
+   image: wurstmeister/kafka:latest
+   container_name: kafka
+   environment:
+     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+     KAFKA_ADVERTISED_HOST_NAME: localhost
+     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+     KAFKA_LISTENERS: PLAINTEXT://:9092
+     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://:9092
+     #KAFKA_CREATE_TOPICS: zipkin:1:1
+     KAFKA_BROKER_ID: 1
+#   environment:
+#     KAFKA_ADVERTISED_HOST_NAME: localhost
+#     #KAFKA_ADVERTISED_HOST_NAME: 192.168.1.4
+#     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#     #KAFKA_CREATE_TOPICS: zipkin:1:1
+#     #KAFKA_CREATE_TOPICS: elk:1:1
+#     KAFKA_BROKER_ID: 1
+   links:
+     - zookeeper
+   depends_on:
+     - zookeeper
+   volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+   networks:
+     - sales-app-network
+   ports:
+     - "9092:9092"
 
-  # elasticsearch:
-  #   image: elasticsearch:7.7.0
-  #   container_name: elasticsearch
-  #   hostname: elasticsearch
-  #   environment:
-  #     - "discovery.type=single-node"
-  #   ports:
-  #     - 9200:9200
-  #     - 9300:9300
-  #   networks:
-  #     - sales-app-network
+  elasticsearch:
+   image: elasticsearch:7.7.0
+   container_name: elasticsearch
+   hostname: elasticsearch
+   environment:
+     - "discovery.type=single-node"
+   ports:
+     - 9200:9200
+     - 9300:9300
+   networks:
+     - sales-app-network
 
-  # kibana:
-  #   image: kibana:7.7.0
-  #   container_name: kibana
-  #   hostname: kibana
-  #   ports:
-  #     - 5601:5601
-  #   links:
-  #     - elasticsearch:elasticsearch
-  #   depends_on:
-  #     - elasticsearch
-  #   networks:
-  #     - sales-app-network
+  kibana:
+   image: kibana:7.7.0
+   container_name: kibana
+   hostname: kibana
+   ports:
+     - 5601:5601
+   links:
+     - elasticsearch:elasticsearch
+   depends_on:
+     - elasticsearch
+   networks:
+     - sales-app-network
 
-  # logstash:
-  #   image: logstash:7.7.0
-  #   container_name: logstash
-  #   hostname: logstash
-  #   ports:
-  #     - 9600:9600
-  #     - 8089:8089
-  #   volumes:
-  #     - ./elastic-stack/logstash:/usr/share/logstash/pipeline/
-  #   links:
-  #     - elasticsearch:elasticsearch
-  #   depends_on:
-  #     - elasticsearch
-  #   networks:
-  #     - sales-app-network
+  logstash:
+   image: logstash:7.7.0
+   container_name: logstash
+   hostname: logstash
+   ports:
+     - 9600:9600
+     - 8089:8089
+   volumes:
+     - ./elastic-stack/logstash:/usr/share/logstash/pipeline/
+   links:
+     - elasticsearch:elasticsearch
+   depends_on:
+     - elasticsearch
+   networks:
+     - sales-app-network
 
 
   config-service:

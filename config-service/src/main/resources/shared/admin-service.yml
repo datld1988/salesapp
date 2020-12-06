@@ -103,13 +103,17 @@ spring:
       # Jackson PrettyPrint
       indent-output: true
 
-  #  zipkin:
-  #    baseUrl: http://saleapp-zipkin:9411/
-  #    sender:
-  #      type: kafka
-  #  sleuth:
-  #    sampler:
-  #      probability: 1.0
+  zipkin:
+    baseUrl: http://saleapp-zipkin:9411/
+    sender:
+      type: kafka
+
+  sleuth:
+    sampler:
+      probability: 1.0
+
+  kafka:
+    bootstrap-servers: http://kafka:9092
 
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -178,10 +182,10 @@ server:
 #    enabled: true
 
 
-#sample:
-#  zipkin:
-#    # When enabled=false, traces log to the console. When enabled=true traces send to zipkin
-#    enabled: true
+sample:
+  zipkin:
+    # When enabled=false, traces log to the console. When enabled=true traces send to zipkin
+    enabled: true
 
 eureka:
   client:
