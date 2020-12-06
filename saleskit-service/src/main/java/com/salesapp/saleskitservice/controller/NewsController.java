@@ -2,15 +2,19 @@ package com.salesapp.saleskitservice.controller;
 
 import com.salesapp.common.dto.Response;
 import com.salesapp.saleskitservice.dto.NewsDto;
+import com.salesapp.saleskitservice.dto.NewsTagDto;
 import com.salesapp.saleskitservice.dto.ProductMenuDto;
 import com.salesapp.saleskitservice.model.FilterQuestionAndAnswerRequest;
 import com.salesapp.saleskitservice.model.NewsDetailRequest;
+import com.salesapp.saleskitservice.model.SearchNewsRequest;
 import com.salesapp.saleskitservice.service.NewsService;
 import com.salesapp.saleskitservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -23,7 +27,20 @@ public class NewsController {
 
     @RequestMapping(path = "detail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response<NewsDetailRequest> getGroupOfProduct(@RequestBody NewsDetailRequest newsDetailRequest, Principal principal) {
-        return newsService.addNews(newsDetailRequest, principal.getName());
+    public Response<NewsDetailRequest> getGroupOfProduct(@RequestBody NewsDetailRequest newsDetailRequest) {
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        return newsService.addNews(newsDetailRequest, user);
+    }
+
+    /**
+     * auth: truongnh
+     * date: 04/10/2020
+     * Tim kiem ban tin tren mobile
+     * @param request gia tri tim kiem
+     * */
+    @RequestMapping(path = "search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response searchNews(@RequestBody @Valid SearchNewsRequest request) {
+        return newsService.searchNews(request);
     }
 }
