@@ -24,7 +24,7 @@ public class TagsController {
      */
     @RequestMapping(path = "insert", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response<FilterQuestionAndAnswerResponse> insertTag(@RequestBody TagsDto tagsDto) {
+    public Response insertTag(@RequestBody TagsDto tagsDto) {
         return tagsService.insertTags(tagsDto);
     }
     /**
@@ -36,7 +36,7 @@ public class TagsController {
      */
     @RequestMapping(path = "tagAny", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response<FilterQuestionAndAnswerResponse> insertTagsAny(@RequestBody AssignTagRequest assignTagRequest) {
+    public Response insertTagsAny(@RequestBody AssignTagRequest assignTagRequest) {
         return tagsService.insertTagsAny(assignTagRequest);
     }
     /**
@@ -48,7 +48,7 @@ public class TagsController {
      */
     @RequestMapping(path = "searchType", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response<FilterQuestionAndAnswerResponse> findAnyTagsByType(@RequestParam("type") String typeKey) {
+    public Response findAnyTagsByType(@RequestParam("type") String typeKey) {
         return tagsService.findAnyTagsByType(typeKey);
     }
 }

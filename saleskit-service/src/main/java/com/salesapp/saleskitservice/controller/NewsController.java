@@ -25,7 +25,7 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    @RequestMapping(path = "detail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response<NewsDetailRequest> getGroupOfProduct(@RequestBody NewsDetailRequest newsDetailRequest) {
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -42,5 +42,16 @@ public class NewsController {
     @ResponseBody
     public Response searchNews(@RequestBody @Valid SearchNewsRequest request) {
         return newsService.searchNews(request);
+    }
+    /**
+     * auth: anhld
+     * date: 7/12/2020
+     * lấy thông tin chi tiết của bảng tin
+     * @param newsId: id của bảng tin
+     * */
+    @RequestMapping(path = "detail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response searchNews(@RequestParam("newsId") Integer newsId) {
+        return newsService.newsDetail(newsId);
     }
 }
