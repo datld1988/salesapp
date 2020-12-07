@@ -12,6 +12,6 @@ public class TagsAnyDto {
     private String valueTag;
     private String idAny;
     private String typeAny;
-    private String assgnee;
+    private String assignee;
 
 }

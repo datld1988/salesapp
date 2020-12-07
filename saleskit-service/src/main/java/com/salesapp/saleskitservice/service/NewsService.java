@@ -15,5 +15,5 @@ public interface NewsService {
      * lấy thông tin chi tiết của bảng tin
      * @param id: id của bảng tin
      * */
-    Response newsDetail(Integer id);
+    Response getNewsDetail(Integer id);
 }

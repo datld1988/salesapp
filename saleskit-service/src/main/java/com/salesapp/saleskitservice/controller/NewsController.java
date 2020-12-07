@@ -52,6 +52,6 @@ public class NewsController {
     @RequestMapping(path = "detail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response searchNews(@RequestParam("newsId") Integer newsId) {
-        return newsService.newsDetail(newsId);
+        return newsService.getNewsDetail(newsId);
     }
 }
