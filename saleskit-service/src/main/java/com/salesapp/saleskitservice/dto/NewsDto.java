@@ -2,7 +2,9 @@ package com.salesapp.saleskitservice.dto;
 
 import lombok.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Getter
@@ -15,7 +17,7 @@ public class NewsDto {
     @NotNull(message = "Title {not.empty}")
     private String title;
     @NotNull(message = "Priority {not.empty}")
-    private Integer priority;
+    private String priority;
     @NotNull(message = "PublishTime {not.empty}")
     private Date publishTime;
     @NotNull(message = "Content {not.empty}")
@@ -33,10 +35,11 @@ public class NewsDto {
     private String filePath;
     private Date modifyDate;
 
-    public NewsDto(Integer id, String title,  Date publishTime, String publisher,  String content,String image,
+    public NewsDto(Integer id, String title, String priority,  Date publishTime, String publisher,  String content,String image,
                    String filePath, Date createDate, String createBy, String modifyBy, Date modifyDate) {
         this.title = title;
         this.publishTime = publishTime;
+        this.priority = priority;
         this.content = content;
         this.publisher = publisher;
         this.createDate = createDate;

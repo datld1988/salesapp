@@ -133,7 +133,12 @@ public class TagsServiceImpl implements TagsService {
             return Response.error(ErrorCode.ERROR_STATUS, e.toString());
         }
     }
-
+    /**
+     * author: anhld
+     * date : 7/12/2020
+     * @param
+     * @return danh sách các tag
+     */
     @Override
     public Response getAllTag() {
         try{

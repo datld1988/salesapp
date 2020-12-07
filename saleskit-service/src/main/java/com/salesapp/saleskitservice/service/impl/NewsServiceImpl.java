@@ -10,8 +10,10 @@ import com.salesapp.saleskitservice.dto.NewsDto;
 import com.salesapp.saleskitservice.dto.NewsTagDto;
 import com.salesapp.saleskitservice.dto.UserNewsViewDto;
 import com.salesapp.saleskitservice.model.NewsDetailRequest;
+import com.salesapp.saleskitservice.model.NewsDetailResponse;
 import com.salesapp.saleskitservice.model.SearchNewsRequest;
 import com.salesapp.saleskitservice.repository.NewsRepository;
+import com.salesapp.saleskitservice.repository.TagsAnyRepository;
 import com.salesapp.saleskitservice.repository.UserNewsViewRepository;
 import com.salesapp.saleskitservice.service.NewsService;
 import com.salesapp.saleskitservice.util.StringUtil;
@@ -35,6 +37,8 @@ public class NewsServiceImpl implements NewsService {
     private NewsRepository newsRepository;
     @Autowired
     private UserNewsViewRepository userNewsViewRepository;
+    @Autowired
+    private TagsAnyRepository tagsAnyRepository;
 
     @Transactional
     @Override
@@ -114,11 +118,14 @@ public class NewsServiceImpl implements NewsService {
      * @return : thông tin chi tiết tồn tại của bảng tin nếu tồn tại
      * */
     @Override
-    public Response newsDetail(Integer id) {
+    public Response getNewsDetail(Integer id) {
         try{
             NewsDto newsDto =newsRepository.getNewsDetail(id, NewsConst.StatusActive);
             if (newsDto != null){
-                return Response.success(newsDto);
+                NewsDetailResponse newsDetailResponse = new NewsDetailResponse();
+                newsDetailResponse.setNewsDto(newsDto);
+                newsDetailResponse.setTagOfNews(tagsAnyRepository.getTagOfNews("NEWS", id,TagsConst.StatusActive));
+                return Response.success(newsDetailResponse);
             }
             else{
                 return Response.error(ErrorCode.NOT_FOUND_RECORDS, "record is not existed");

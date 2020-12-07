@@ -28,4 +28,19 @@ public interface TagsAnyRepository extends JpaRepository<TagsAny, String> {
     List<TagsAnyDto> searchByTypeAny(
             @Param("typeAny") String typeAny
     );
+
+    @Query("SELECT new com.salesapp.saleskitservice.dto.TagsAnyDto( " +
+            " ta.idTag, ta.idAny, ta.typeAny, t.value) FROM TagsAny ta" +
+            " INNER JOIN News n ON CONCAT(n.id,'')  = ta.idAny" +
+            " INNER JOIN Tags t ON t.id = ta.idTag" +
+            " WHERE lower(ta.typeAny)  LIKE lower(CONCAT('%',:typeAny,'%'))" +
+            " AND n.id= :newsID" +
+            " AND ta.status = :status" +
+            " AND t.status = :status")
+    List<TagsAnyDto> getTagOfNews(
+            @Param("typeAny") String typeAny,
+            @Param("newsID") Integer newsID,
+            @Param("status") Integer status
+    );
+
 }
