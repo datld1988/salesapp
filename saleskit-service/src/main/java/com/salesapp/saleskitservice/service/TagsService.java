@@ -29,4 +29,6 @@ public interface TagsService {
      * @return danh sách của type
      */
     Response findAnyTagsByType(String type);
+
+    Response getAllTag();
 }

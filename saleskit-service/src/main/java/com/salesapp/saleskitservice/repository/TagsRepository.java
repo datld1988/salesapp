@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TagsRepository extends JpaRepository<Tags, Integer> {
     @Query("SELECT new com.salesapp.saleskitservice.dto.TagsDto( " +
@@ -18,5 +20,9 @@ public interface TagsRepository extends JpaRepository<Tags, Integer> {
             " WHERE lower(t.value)  LIKE lower(CONCAT('%',:value,'%'))")
     TagsDto checkTags(
             @Param("value") String value
+    );
+    @Query("SELECT new com.salesapp.saleskitservice.dto.TagsDto( " +
+            " t.id, t.value) FROM Tags t" )
+    List<TagsDto> getAllTag(
     );
 }

@@ -51,4 +51,10 @@ public class TagsController {
     public Response findAnyTagsByType(@RequestParam("type") String typeKey) {
         return tagsService.findAnyTagsByType(typeKey);
     }
+
+    @RequestMapping(path = "all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response getAllTag() {
+        return tagsService.getAllTag();
+    }
 }
