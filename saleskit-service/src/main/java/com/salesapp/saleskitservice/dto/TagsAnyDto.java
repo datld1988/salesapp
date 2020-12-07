@@ -9,13 +9,9 @@ import lombok.*;
 @ToString
 public class TagsAnyDto {
     private Integer idTag;
+    private String valueTag;
     private String idAny;
     private String typeAny;
-    private String tagValue;
+    private String assgnee;
 
-    public TagsAnyDto(Integer idTag, String idAny, String typeAny) {
-        this.idTag = idTag;
-        this.idAny = idAny;
-        this.typeAny = typeAny;
-    }
 }

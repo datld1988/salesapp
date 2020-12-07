@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface TagsAnyRepository extends JpaRepository<TagsAny, String> {
     @Query("SELECT new com.salesapp.saleskitservice.dto.TagsAnyDto( " +
-            " ta.idTag, ta.idAny, ta.typeAny) FROM TagsAny ta" +
+            " ta.idTag, '',ta.idAny, ta.typeAny, '') FROM TagsAny ta" +
             " WHERE lower(ta.idTag)  LIKE lower(CONCAT('%',:idTag,'%'))" +
             " AND lower(ta.idAny)  LIKE lower(CONCAT('%',:idAny,'%'))" +
             " AND lower(ta.typeAny)  LIKE lower(CONCAT('%',:typeAny,'%'))")
@@ -23,7 +23,17 @@ public interface TagsAnyRepository extends JpaRepository<TagsAny, String> {
     );
 
     @Query("SELECT new com.salesapp.saleskitservice.dto.TagsAnyDto( " +
-            " ta.idTag, ta.idAny, ta.typeAny) FROM TagsAny ta" +
+            " ta.idTag, t.value , ta.idAny, ta.typeAny," +
+            " CASE ta.typeAny " +
+                    " WHEN com.salesapp.saleskitservice.constant.TagsConst.TagsNews" +
+                        " THEN (SELECT  n.title FROM News n WHERE CONCAT(n.id,'') = ta.idAny)" +
+                    " WHEN com.salesapp.saleskitservice.constant.TagsConst.TagsUser" +
+                        " THEN (SELECT adu.userName FROM AdUser adu  WHERE CONCAT(adu.id,'') = ta.idAny)"+
+                    // TODO : NEU CAN BO SUNG LOAI TAG
+                    " ELSE '' " +
+            " END" +
+            ")" +
+            " FROM Tags t JOIN TagsAny ta ON t.id = ta.idTag" +
             " WHERE lower(ta.typeAny)  LIKE lower(CONCAT('%',:typeAny,'%'))")
     List<TagsAnyDto> searchByTypeAny(
             @Param("typeAny") String typeAny
