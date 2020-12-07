@@ -134,5 +134,22 @@ public class TagsServiceImpl implements TagsService {
         }
     }
 
+    @Override
+    public Response getAllTag() {
+        try{
+            List<TagsDto> tagsDtoList = tagsRepository.getAllTag();
+                if (tagsDtoList.size() >=1){
+                    return Response.success(tagsDtoList);
+                }
+                else {
+                    return Response.error(ErrorCode.NOT_FOUND_RECORDS,"No record found");
+                }
+        }
+        catch (Exception e){
+            log.error("getAllTag Exception : " + e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
+    }
+
 
 }
