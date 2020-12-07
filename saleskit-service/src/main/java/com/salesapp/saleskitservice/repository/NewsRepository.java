@@ -1,6 +1,7 @@
 package com.salesapp.saleskitservice.repository;
 
 import com.salesapp.saleskitservice.domain.News;
+import com.salesapp.saleskitservice.dto.NewsDto;
 import com.salesapp.saleskitservice.dto.NewsTagDto;
 import com.salesapp.saleskitservice.dto.TagsDto;
 import org.springframework.data.domain.Pageable;
@@ -43,5 +44,15 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
             @Param("newsId") Integer newsId,
             @Param("status") Integer status,
             @Param("tagNews") String tagNews
+    );
+
+    @Query("SELECT new com.salesapp.saleskitservice.dto.NewsDto" +
+            "(n.id, n.title, n.pubDate, n.publisher, n.content, n.image, n.filePath, n.createDate, n.createdBy, n.modifyBy, n.modifyDate)" +
+            " FROM News n" +
+            " WHERE n.id = :id" +
+            " AND n.status = :status")
+    NewsDto getNewsDetail(
+            @Param("id") Integer newsId,
+            @Param("status") Integer status
     );
 }
