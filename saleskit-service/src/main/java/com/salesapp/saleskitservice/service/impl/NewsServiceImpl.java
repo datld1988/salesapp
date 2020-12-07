@@ -90,7 +90,7 @@ public class NewsServiceImpl implements NewsService {
                 request.getTagsList()
         ).stream().map(news -> {
             news.setTagList(newsRepository.getTagsOfNews(
-                    news.getId(),
+                    news.getId().toString(),
                     TagsConst.StatusActive,
                     TagsConst.TagsNews
             ));

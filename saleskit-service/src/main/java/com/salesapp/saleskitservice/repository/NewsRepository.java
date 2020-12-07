@@ -34,13 +34,15 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
             @Param("status") Integer status,
             @Param("tagList") List<String> tagList);
 
-    @Query("SELECT t FROM Tags t" +
+    @Query("SELECT new com.salesapp.saleskitservice.dto.TagsDto(" +
+            "t.id, t.value, t.status) " +
+            "FROM Tags t" +
             " JOIN TagsAny ta ON t.id = ta.idTag" +
             " WHERE ta.idAny = :newsId" +
             " AND t.status = :status" +
             " AND ta.typeAny = :tagNews")
     List<TagsDto> getTagsOfNews(
-            @Param("newsId") Integer newsId,
+            @Param("newsId") String newsId,
             @Param("status") Integer status,
             @Param("tagNews") String tagNews
     );
