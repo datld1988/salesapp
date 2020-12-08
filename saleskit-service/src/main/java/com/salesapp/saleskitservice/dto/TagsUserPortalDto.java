@@ -14,7 +14,7 @@ public class TagsUserPortalDto {
     private  String  tagValue;
     private String tagKey;
     private List<String> tagType;
-    private List<String> assignee;
+    private List<UserPortalDto> assignee;
 
     public TagsUserPortalDto(Integer tagId, String tagValue, String tagKey) {
         this.tagId = tagId;

@@ -3,6 +3,7 @@ package com.salesapp.saleskitservice.service;
 import com.salesapp.common.dto.Response;
 import com.salesapp.saleskitservice.dto.TagsDto;
 import com.salesapp.saleskitservice.model.InsertTagRequest;
+import com.salesapp.saleskitservice.model.SearchTagRequest;
 import com.salesapp.saleskitservice.model.UpdateTagRequest;
 
 public interface TagsService {
@@ -46,4 +47,6 @@ public interface TagsService {
     Response getAllTags();
 
     Response getInfoTag(Integer tagId);
+
+    Response searchTags(SearchTagRequest request);
 }

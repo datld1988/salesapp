@@ -4,6 +4,7 @@ import com.salesapp.common.dto.Response;
 import com.salesapp.saleskitservice.constant.TagsConst;
 import com.salesapp.saleskitservice.dto.TagsDto;
 import com.salesapp.saleskitservice.model.InsertTagRequest;
+import com.salesapp.saleskitservice.model.SearchTagRequest;
 import com.salesapp.saleskitservice.model.UpdateTagRequest;
 import com.salesapp.saleskitservice.service.TagsService;
 import org.bouncycastle.pqc.crypto.newhope.NHOtherInfoGenerator;
@@ -101,6 +102,12 @@ public class TagsController {
                                     @NotNull(message = "tag id is not null")
                                     @Valid       Integer tagId) {
         return tagsService.getInfoTag(tagId);
+    }
+
+    @RequestMapping(path = "search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response searchTag(@RequestBody SearchTagRequest request) {
+        return tagsService.searchTags(request);
     }
 
 }

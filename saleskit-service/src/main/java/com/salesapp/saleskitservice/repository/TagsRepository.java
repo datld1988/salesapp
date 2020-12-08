@@ -47,4 +47,14 @@ public interface TagsRepository extends JpaRepository<Tags, Integer> {
     List<TagsUserPortalDto> getAllTags();
 
     Tags getTagsById(Integer tagId);
+
+    @Query("SELECT new com.salesapp.saleskitservice.dto.TagsUserPortalDto(" +
+            " t.id, t.value, t.keyTag)" +
+            " FROM Tags t" +
+            " WHERE t.status = com.salesapp.saleskitservice.constant.TagsConst.StatusActive" +
+            " AND (t.value LIKE CONCAT('%', :valueSearch, '%') OR :valueSearch IS NULL)")
+    Page<TagsUserPortalDto> searchTags(
+            Pageable pageable,
+            @Param("valueSearch") String valueSearch
+    );
 }

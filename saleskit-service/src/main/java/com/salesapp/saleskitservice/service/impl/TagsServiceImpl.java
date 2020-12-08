@@ -8,6 +8,8 @@ import com.salesapp.saleskitservice.dto.TagsAnyDto;
 import com.salesapp.saleskitservice.dto.TagsDto;
 import com.salesapp.saleskitservice.dto.TagsUserPortalDto;
 import com.salesapp.saleskitservice.model.InsertTagRequest;
+import com.salesapp.saleskitservice.model.SearchTagRequest;
+import com.salesapp.saleskitservice.model.SearchTagResponse;
 import com.salesapp.saleskitservice.model.UpdateTagRequest;
 import com.salesapp.saleskitservice.repository.TagsAnyRepository;
 import com.salesapp.saleskitservice.repository.TagsRepository;
@@ -16,6 +18,9 @@ import com.salesapp.saleskitservice.service.TagsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TagsServiceImpl implements TagsService {
@@ -254,12 +260,38 @@ public class TagsServiceImpl implements TagsService {
             dto.setTagValue(tags.getValue());
             dto.setTagKey(tags.getKeyTag());
             dto.setTagType(tagsUserPortalRepository.getAllTypeOfTag(tagId));
-            dto.setAssignee(tagsUserPortalRepository.getAllUserAssignTags(tagId));
+            dto.setAssignee(tagsUserPortalRepository.getUserByTags(tagId));
             return Response.success(dto);
         } catch (Exception e) {
             log.error("getAllTag Exception : " + e.toString(), e);
             return Response.error(ErrorCode.ERROR_STATUS, e.toString());
         }
+    }
+
+    @Override
+    public Response searchTags(SearchTagRequest request) {
+        SearchTagResponse response = new SearchTagResponse();
+        Page<TagsUserPortalDto> tagsPage = tagsRepository.searchTags(
+                PageRequest.of(request.getPage(), request.getPageSize(), constructSort(request.getSortBy(), request.getSortOrder())),
+                request.getSearchValue()
+        );
+        List<TagsUserPortalDto> tagsList = tagsPage.getContent().stream().map(tags -> {
+            TagsUserPortalDto data = tags;
+            data.setAssignee(tagsUserPortalRepository.getUserByTags(tags.getTagId()));
+            data.setTagType(tagsUserPortalRepository.getTypeByTags(tags.getTagId()));
+            return data;
+        }).collect(Collectors.toList());
+        response.setTagsList(tagsList);
+        response.setTotalItem(tagsPage.getTotalElements());
+        return Response.success(response);
+    }
+
+    private final Sort constructSort(final String sortBy, final String sortOrder) {
+        Sort sortInfo = Sort.unsorted();
+        if (sortBy != null) {
+            sortInfo = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+        }
+        return sortInfo;
     }
 
 
