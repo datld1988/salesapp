@@ -45,7 +45,7 @@ public class AdUserPortal implements Serializable {
 
     @Column(name = "STATUS")
     // trạng thái user
-    private String status;
+    private Integer status;
 
     @Column(name = "POSITION")
     // chức vụ
