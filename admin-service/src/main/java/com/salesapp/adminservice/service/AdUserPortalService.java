@@ -1,7 +1,6 @@
 package com.salesapp.adminservice.service;
 
-import com.salesapp.adminservice.models.CreateAdUserPortalRequest;
-import com.salesapp.adminservice.models.FilterUserRequest;
+import com.salesapp.adminservice.models.SavevUserPortalRequest;
 import com.salesapp.common.dto.Response;
 
 public interface AdUserPortalService {
@@ -12,7 +11,7 @@ public interface AdUserPortalService {
      * @param
      * @return: kết quả của việc thêm mới
      */
-    Response createAdUserPortal(CreateAdUserPortalRequest request);
+    Response createAdUserPortal(SavevUserPortalRequest request);
     /**
      * author: anhld
      * date: 8/12/2020
@@ -36,5 +35,5 @@ public interface AdUserPortalService {
      * @param
      * @return: kết quả của việc cập nhật
      */
-    Response updateUserPortal(CreateAdUserPortalRequest request);
+    Response updateUserPortal(SavevUserPortalRequest request);
 }

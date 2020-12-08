@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class CreateAdUserPortalRequest implements Serializable {
+public class SavevUserPortalRequest implements Serializable {
     @Valid
     private AdUserPortalDto userPortal;
     @Valid

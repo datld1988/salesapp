@@ -39,6 +39,6 @@ public class SAppTagsUserPortal implements Serializable {
     private String modifyBy;
 
     @Id
-    @Column(name = "TAG_TYPE")
+    @Column(name = "TAGS_TYPE")
     private String tagType;
 }

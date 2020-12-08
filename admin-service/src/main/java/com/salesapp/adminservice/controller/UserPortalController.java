@@ -1,6 +1,6 @@
 package com.salesapp.adminservice.controller;
 
-import com.salesapp.adminservice.models.CreateAdUserPortalRequest;
+import com.salesapp.adminservice.models.SavevUserPortalRequest;
 import com.salesapp.adminservice.service.AdUserPortalService;
 import com.salesapp.common.dto.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class UserPortalController {
      */
     @RequestMapping(path = "add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response insertUserPortal(@Valid @RequestBody  CreateAdUserPortalRequest request) {
+    public Response insertUserPortal(@Valid @RequestBody SavevUserPortalRequest request) {
         return adUserPortalService.createAdUserPortal(request);
     }
     /**
@@ -62,7 +62,7 @@ public class UserPortalController {
 
     @RequestMapping(path = "update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response updateUserPortal(@Valid @RequestBody  CreateAdUserPortalRequest request) {
+    public Response updateUserPortal(@Valid @RequestBody SavevUserPortalRequest request) {
         return adUserPortalService.updateUserPortal(request);
     }
 }

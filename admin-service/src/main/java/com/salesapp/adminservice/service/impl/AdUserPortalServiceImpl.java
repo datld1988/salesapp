@@ -7,8 +7,7 @@ import com.salesapp.adminservice.domain.SAppTagsUserPortal;
 import com.salesapp.adminservice.dto.AdBranchUserDto;
 import com.salesapp.adminservice.dto.AdUserPortalDto;
 import com.salesapp.adminservice.dto.SAppTagsUserPortalDto;
-import com.salesapp.adminservice.models.CreateAdUserPortalRequest;
-import com.salesapp.adminservice.models.FilterUserRequest;
+import com.salesapp.adminservice.models.SavevUserPortalRequest;
 import com.salesapp.adminservice.models.GetAllUserResponse;
 import com.salesapp.adminservice.repository.AdBranchUserRepository;
 import com.salesapp.adminservice.repository.AdUserPortalRepository;
@@ -44,8 +43,9 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
      * thêm mới user portal
      * @return: kết quả của việc thêm mới
      */
+    @Transactional
     @Override
-    public Response createAdUserPortal(CreateAdUserPortalRequest request) {
+    public Response createAdUserPortal(SavevUserPortalRequest request) {
         AdUserPortal adUserPortal = new AdUserPortal();
 
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -217,7 +217,7 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
      */
     @Transactional
     @Override
-    public Response updateUserPortal(CreateAdUserPortalRequest request) {
+    public Response updateUserPortal(SavevUserPortalRequest request) {
         AdUserPortal adUserPortal = new AdUserPortal();
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
@@ -253,7 +253,7 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
                         adBranchUser.setBranchId(adBranchUserDto.getBranchId());
                         adBranchUser.setUserId(addedUser.getUserId());
                         adBranchUser.setModifiedDate(new Date());
-                        adBranchUser.setCreatedBy(user);
+                        adBranchUser.setModifiedBy(user);
                         adBranchUserList.add(adBranchUser);
                     }
                     adBranchUserRepository.deleteByUserId(request.getUserPortal().getUserId());
@@ -266,8 +266,8 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
 
                         appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
                         appTagsUserPortal.setUserPortalId(addedUser.getUserId());
-                        appTagsUserPortal.setCreateBy(user);
-                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setModifyBy(user);
+                        appTagsUserPortal.setModifyDate(new Date());
                         appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_QNA);
                         appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
 
@@ -280,8 +280,8 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
 
                         appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
                         appTagsUserPortal.setUserPortalId(addedUser.getUserId());
-                        appTagsUserPortal.setCreateBy(user);
-                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setModifyBy(user);
+                        appTagsUserPortal.setModifyDate(new Date());
                         appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_NEWS);
                         appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
 
@@ -294,8 +294,8 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
 
                         appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
                         appTagsUserPortal.setUserPortalId(addedUser.getUserId());
-                        appTagsUserPortal.setCreateBy(user);
-                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setModifyBy(user);
+                        appTagsUserPortal.setModifyDate(new Date());
                         appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_KPI);
                         appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
 
@@ -308,8 +308,8 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
 
                         appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
                         appTagsUserPortal.setUserPortalId(addedUser.getUserId());
-                        appTagsUserPortal.setCreateBy(user);
-                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setModifyBy(user);
+                        appTagsUserPortal.setModifyDate(new Date());
                         appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_TOOL);
                         appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
 
