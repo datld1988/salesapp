@@ -15,5 +15,5 @@ public class ErrorCode {
      * date : 27/11/2020
      */
     public static final String NOT_FOUND_RECORDS = "201";
-
+    public static final String OBJECT_EXISTED  = "202";
 }

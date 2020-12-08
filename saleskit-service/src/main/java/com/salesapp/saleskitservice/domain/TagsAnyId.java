@@ -13,4 +13,5 @@ public class TagsAnyId implements Serializable {
     private Integer idTag;
     private String idAny;
     private String typeAny;
+
 }

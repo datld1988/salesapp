@@ -9,4 +9,11 @@ public interface NewsService {
     Response<NewsDetailRequest> addNews(NewsDetailRequest newsDetailRequest, String user);
 
     Response searchNews(SearchNewsRequest request);
+    /**
+     * auth: anhld
+     * date: 7/12/2020
+     * lấy thông tin chi tiết của bảng tin
+     * @param id: id của bảng tin
+     * */
+    Response getNewsDetail(Integer id);
 }
