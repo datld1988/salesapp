@@ -23,7 +23,7 @@ public class UploadFileServiceImpl  implements UploadFileService {
     private final Logger log = LoggerFactory.getLogger(UploadFileServiceImpl.class);
 
     //Save the uploaded file to this folder
-    private static String UPLOADED_FOLDER = "src/main/resources/";
+    private static String UPLOADED_FOLDER = "saleskit-service/src/main/resources/";
 
     //Save the uploaded file to this folder
     private static String HOST_NAME = "222.252.25.241";
@@ -77,7 +77,7 @@ public class UploadFileServiceImpl  implements UploadFileService {
             return Response.error(ErrorCode.NOT_FOUND, mess);
         }
 
-        String mess = messageSource.getMessage("upload_file_error", null,
+        String mess = messageSource.getMessage("upload_file_success", null,
                 new Locale("en_US"));
         return Response.success(mess);
     }
