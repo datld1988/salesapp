@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TagsDto {
+public class SAppTagsUserPortalDto {
     private Integer tagId;
     private String tagValue;
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value = "userPortal")
 public class UserPortalController {
@@ -34,7 +36,7 @@ public class UserPortalController {
      */
     @RequestMapping(path = "add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response insertUserPortal(@RequestBody CreateAdUserPortalRequest request) {
+    public Response insertUserPortal(@Valid @RequestBody  CreateAdUserPortalRequest request) {
         return adUserPortalService.createAdUserPortal(request);
     }
     /**
@@ -60,7 +62,7 @@ public class UserPortalController {
 
     @RequestMapping(path = "update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response updateUserPortal(@RequestBody CreateAdUserPortalRequest request) {
+    public Response updateUserPortal(@Valid @RequestBody  CreateAdUserPortalRequest request) {
         return adUserPortalService.updateUserPortal(request);
     }
 }

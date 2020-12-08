@@ -3,13 +3,16 @@ package com.salesapp.adminservice.service.impl;
 import com.salesapp.adminservice.constant.UserPortalConstant;
 import com.salesapp.adminservice.domain.AdBranchUser;
 import com.salesapp.adminservice.domain.AdUserPortal;
+import com.salesapp.adminservice.domain.SAppTagsUserPortal;
 import com.salesapp.adminservice.dto.AdBranchUserDto;
 import com.salesapp.adminservice.dto.AdUserPortalDto;
+import com.salesapp.adminservice.dto.SAppTagsUserPortalDto;
 import com.salesapp.adminservice.models.CreateAdUserPortalRequest;
 import com.salesapp.adminservice.models.FilterUserRequest;
 import com.salesapp.adminservice.models.GetAllUserResponse;
 import com.salesapp.adminservice.repository.AdBranchUserRepository;
 import com.salesapp.adminservice.repository.AdUserPortalRepository;
+import com.salesapp.adminservice.repository.SAppTagsUserPortalRepository;
 import com.salesapp.adminservice.service.AdUserPortalService;
 import com.salesapp.common.dto.Response;
 import com.salesapp.common.utils.ErrorCode;
@@ -32,6 +35,8 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
     private AdUserPortalRepository adUserPortalRepository;
     @Autowired
     private AdBranchUserRepository adBranchUserRepository;
+    @Autowired
+    private SAppTagsUserPortalRepository sAppTagsUserPortalRepository;
 
     /**
      * author: anhld
@@ -61,7 +66,7 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
                 adUserPortal.setPhone(request.getUserPortal().getPhone());
                 adUserPortal.setEmail(request.getUserPortal().getEmail());
                 adUserPortal.setRole(request.getUserPortal().getRole());
-                adUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+                adUserPortal.setStatus(request.getUserPortal().getStatus());
                 adUserPortal.setPosition(request.getUserPortal().getPosition());
                 adUserPortal.setCreateBy(user);
                 adUserPortal.setCreateDate(new Date());
@@ -79,18 +84,64 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
                     }
                     adBranchUserRepository.saveAll(adBranchUserList);
                 }
+                List<SAppTagsUserPortal> sAppTagsUserPortalList = new ArrayList<>();
                 if (request.getListTagQnA().size() >=1){
+                    for (SAppTagsUserPortalDto sAppTagsUserPortalDto :request.getListTagQnA()){
+                        SAppTagsUserPortal appTagsUserPortal = new SAppTagsUserPortal();
 
+                        appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
+                        appTagsUserPortal.setUserPortalId(addedUser.getUserId());
+                        appTagsUserPortal.setCreateBy(user);
+                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_QNA);
+                        appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+
+                        sAppTagsUserPortalList.add(appTagsUserPortal);
+                    }
                 }
                 if (request.getListTagNews().size() >=1){
+                    for (SAppTagsUserPortalDto sAppTagsUserPortalDto :request.getListTagNews()){
+                        SAppTagsUserPortal appTagsUserPortal = new SAppTagsUserPortal();
 
+                        appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
+                        appTagsUserPortal.setUserPortalId(addedUser.getUserId());
+                        appTagsUserPortal.setCreateBy(user);
+                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_NEWS);
+                        appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+
+                        sAppTagsUserPortalList.add(appTagsUserPortal);
+                    }
                 }
                 if (request.getListTagKPI().size() >=1){
+                    for (SAppTagsUserPortalDto sAppTagsUserPortalDto :request.getListTagKPI()){
+                        SAppTagsUserPortal appTagsUserPortal = new SAppTagsUserPortal();
 
+                        appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
+                        appTagsUserPortal.setUserPortalId(addedUser.getUserId());
+                        appTagsUserPortal.setCreateBy(user);
+                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_KPI);
+                        appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+
+                        sAppTagsUserPortalList.add(appTagsUserPortal);
+                    }
                 }
                 if (request.getListTagTool().size() >=1){
+                    for (SAppTagsUserPortalDto sAppTagsUserPortalDto :request.getListTagTool()){
+                        SAppTagsUserPortal appTagsUserPortal = new SAppTagsUserPortal();
 
+                        appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
+                        appTagsUserPortal.setUserPortalId(addedUser.getUserId());
+                        appTagsUserPortal.setCreateBy(user);
+                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_TOOL);
+                        appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+
+                        sAppTagsUserPortalList.add(appTagsUserPortal);
+                    }
                 }
+                sAppTagsUserPortalRepository.saveAll(sAppTagsUserPortalList);
                 return Response.success("Add successful");
             }
             else {
@@ -189,7 +240,7 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
                 adUserPortal.setPhone(request.getUserPortal().getPhone());
                 adUserPortal.setEmail(request.getUserPortal().getEmail());
                 adUserPortal.setRole(request.getUserPortal().getRole());
-                adUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+                adUserPortal.setStatus(request.getUserPortal().getStatus());
                 adUserPortal.setPosition(request.getUserPortal().getPosition());
                 adUserPortal.setModifyBy(user);
                 adUserPortal.setModifyDate(new Date());
@@ -208,18 +259,65 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
                     adBranchUserRepository.deleteByUserId(request.getUserPortal().getUserId());
                     adBranchUserRepository.saveAll(adBranchUserList);
                 }
+                List<SAppTagsUserPortal> sAppTagsUserPortalList = new ArrayList<>();
                 if (request.getListTagQnA().size() >=1){
+                    for (SAppTagsUserPortalDto sAppTagsUserPortalDto :request.getListTagQnA()){
+                        SAppTagsUserPortal appTagsUserPortal = new SAppTagsUserPortal();
 
+                        appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
+                        appTagsUserPortal.setUserPortalId(addedUser.getUserId());
+                        appTagsUserPortal.setCreateBy(user);
+                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_QNA);
+                        appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+
+                        sAppTagsUserPortalList.add(appTagsUserPortal);
+                    }
                 }
                 if (request.getListTagNews().size() >=1){
+                    for (SAppTagsUserPortalDto sAppTagsUserPortalDto :request.getListTagNews()){
+                        SAppTagsUserPortal appTagsUserPortal = new SAppTagsUserPortal();
 
+                        appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
+                        appTagsUserPortal.setUserPortalId(addedUser.getUserId());
+                        appTagsUserPortal.setCreateBy(user);
+                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_NEWS);
+                        appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+
+                        sAppTagsUserPortalList.add(appTagsUserPortal);
+                    }
                 }
                 if (request.getListTagKPI().size() >=1){
+                    for (SAppTagsUserPortalDto sAppTagsUserPortalDto :request.getListTagKPI()){
+                        SAppTagsUserPortal appTagsUserPortal = new SAppTagsUserPortal();
 
+                        appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
+                        appTagsUserPortal.setUserPortalId(addedUser.getUserId());
+                        appTagsUserPortal.setCreateBy(user);
+                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_KPI);
+                        appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+
+                        sAppTagsUserPortalList.add(appTagsUserPortal);
+                    }
                 }
                 if (request.getListTagTool().size() >=1){
+                    for (SAppTagsUserPortalDto sAppTagsUserPortalDto :request.getListTagTool()){
+                        SAppTagsUserPortal appTagsUserPortal = new SAppTagsUserPortal();
 
+                        appTagsUserPortal.setTagId(sAppTagsUserPortalDto.getTagId());
+                        appTagsUserPortal.setUserPortalId(addedUser.getUserId());
+                        appTagsUserPortal.setCreateBy(user);
+                        appTagsUserPortal.setCreateDate(new Date());
+                        appTagsUserPortal.setTagType(UserPortalConstant.TAG_TYPE_TOOL);
+                        appTagsUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+
+                        sAppTagsUserPortalList.add(appTagsUserPortal);
+                    }
                 }
+                sAppTagsUserPortalRepository.deleteByUserId(addedUser.getUserId());
+                sAppTagsUserPortalRepository.saveAll(sAppTagsUserPortalList);
                 return Response.success("update successful");
             }
             else {
