@@ -13,9 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "AD_BRANCH_USER")
+@IdClass(AdBranchUserId.class)
 public class AdBranchUser implements Serializable {
-    
-    public static String MetaPropId = "id";
+
     public static String MetaPropBranchId = "branchId";
     public static String MetaPropUserId = "userId";
     public static String MetaPropCreatedBy = "createdBy";
@@ -24,14 +24,11 @@ public class AdBranchUser implements Serializable {
     public static String MetaPropModifiedDate = "modifiedDate";
 
     @Id
-    @Column(name = "ID")
-    // Mã PK
-    private String id;
-    
     @Column(name = "BRANCH_ID")
     // Mã PK Chi nhánh
     private String branchId;
-    
+
+    @Id
     @Column(name = "USER_ID")
     // Mã PK Người dùng
     private String userId;
