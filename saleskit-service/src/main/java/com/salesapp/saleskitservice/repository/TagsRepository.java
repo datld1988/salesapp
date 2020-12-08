@@ -36,9 +36,9 @@ public interface TagsRepository extends JpaRepository<Tags, Integer> {
     Tags getTagsByIdAndStatus(Integer id, Integer status);
 
     @Query("SELECT new com.salesapp.saleskitservice.dto.TagsUserPortalDto(" +
-                "t.id, t.value, t.keyTag, " +
-                "(SELECT tup.tagType FROM TagsUserPortal tup WHERE tup.idTag = t.id), " +
-                "(SELECT up.fullName FROM AdUserPortal up INNER JOIN TagsUserPortal tup ON tup.userPortalId = up.userId WHERE  tup.idTag = t.id AND up.status = 1 AND tup.status = 1) " +
+                "t.id, t.value, t.keyTag " +
+//                "(SELECT tup.tagType FROM TagsUserPortal tup WHERE tup.idTag = t.id), " +
+//                "(SELECT up.fullName FROM AdUserPortal up INNER JOIN TagsUserPortal tup ON tup.userPortalId = up.userId WHERE  tup.idTag = t.id AND up.status = 1 AND tup.status = 1) " +
             ")" +
             "FROM Tags t " +
             "WHERE t.status = com.salesapp.saleskitservice.constant.TagsConst.StatusActive"
@@ -46,4 +46,5 @@ public interface TagsRepository extends JpaRepository<Tags, Integer> {
     )
     List<TagsUserPortalDto> getAllTags();
 
+    Tags getTagsById(Integer tagId);
 }

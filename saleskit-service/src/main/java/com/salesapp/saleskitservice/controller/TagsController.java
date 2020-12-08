@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping(value = "tags")
@@ -90,6 +92,15 @@ public class TagsController {
     @ResponseBody
     public Response getAllTags() {
         return tagsService.getAllTags();
+    }
+
+    @RequestMapping(path = "getInfoTag", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response getInfoTag( @RequestParam
+                                    @NotEmpty(message = "tag id not empty")
+                                    @NotNull(message = "tag id is not null")
+                                    @Valid       Integer tagId) {
+        return tagsService.getInfoTag(tagId);
     }
 
 }

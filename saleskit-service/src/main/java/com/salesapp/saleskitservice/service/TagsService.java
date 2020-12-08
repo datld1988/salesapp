@@ -44,4 +44,6 @@ public interface TagsService {
     Response getAllTagForTypeNew();
 
     Response getAllTags();
+
+    Response getInfoTag(Integer tagId);
 }

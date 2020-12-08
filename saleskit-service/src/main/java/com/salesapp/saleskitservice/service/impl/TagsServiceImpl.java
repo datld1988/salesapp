@@ -238,7 +238,24 @@ public class TagsServiceImpl implements TagsService {
         try {
             List<TagsUserPortalDto> lst = tagsRepository.getAllTags();
 
-            return Response.success("ok");
+            return Response.success(lst);
+        } catch (Exception e) {
+            log.error("getAllTag Exception : " + e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
+    }
+
+    @Override
+    public Response getInfoTag(Integer tagId) {
+        try {
+            Tags tags = tagsRepository.getTagsById(tagId);
+            TagsUserPortalDto dto = new TagsUserPortalDto();
+            dto.setTagId(tags.getId());
+            dto.setTagValue(tags.getValue());
+            dto.setTagKey(tags.getKeyTag());
+            dto.setTagType(tagsUserPortalRepository.getAllTypeOfTag(tagId));
+            dto.setAssignee(tagsUserPortalRepository.getAllUserAssignTags(tagId));
+            return Response.success(dto);
         } catch (Exception e) {
             log.error("getAllTag Exception : " + e.toString(), e);
             return Response.error(ErrorCode.ERROR_STATUS, e.toString());
