@@ -48,7 +48,7 @@ public class NewsController {
      * @param file
      * @return
      */
-    @RequestMapping(path = "uploadFile", method = RequestMethod.GET)
+    @RequestMapping(path = "uploadFile", method = RequestMethod.POST)
     @ResponseBody
     public Response<PromotionDto> uploadFile(@RequestParam("file") MultipartFile file) {
         return uploadFileService.uploadFile(file);
