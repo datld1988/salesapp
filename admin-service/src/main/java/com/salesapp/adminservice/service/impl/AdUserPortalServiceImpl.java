@@ -2,15 +2,12 @@ package com.salesapp.adminservice.service.impl;
 
 import com.salesapp.adminservice.constant.UserPortalConstant;
 import com.salesapp.adminservice.domain.AdBranchUser;
-import com.salesapp.adminservice.domain.AdRole;
-import com.salesapp.adminservice.domain.AdRoleMenu;
 import com.salesapp.adminservice.domain.AdUserPortal;
 import com.salesapp.adminservice.dto.AdBranchUserDto;
 import com.salesapp.adminservice.dto.AdUserPortalDto;
 import com.salesapp.adminservice.models.CreateAdUserPortalRequest;
-import com.salesapp.adminservice.models.GetAllUserRequest;
+import com.salesapp.adminservice.models.FilterUserRequest;
 import com.salesapp.adminservice.models.GetAllUserResponse;
-import com.salesapp.adminservice.repository.AdBranchRepository;
 import com.salesapp.adminservice.repository.AdBranchUserRepository;
 import com.salesapp.adminservice.repository.AdUserPortalRepository;
 import com.salesapp.adminservice.service.AdUserPortalService;
@@ -19,16 +16,14 @@ import com.salesapp.common.utils.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.util.*;
 
 @Service
 public class AdUserPortalServiceImpl implements AdUserPortalService {
@@ -45,14 +40,23 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
      * @return: kết quả của việc thêm mới
      */
     @Override
-    public Response createUserPortal(CreateAdUserPortalRequest request) {
+    public Response createAdUserPortal(CreateAdUserPortalRequest request) {
         AdUserPortal adUserPortal = new AdUserPortal();
+
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
             Optional<AdUserPortal> checkUser = adUserPortalRepository.findById(request.getUserPortal().getUserId());
             if (!checkUser.isPresent()){
                 adUserPortal.setUserId(request.getUserPortal().getUserId());
-                adUserPortal.setPassword(request.getUserPortal().getPassword());
+                //encrypt password with md5
+                byte[] messageDigest  = md.digest(request.getUserPortal().getPassword().getBytes());
+                BigInteger bigInt  = new BigInteger(1, messageDigest);
+                String hashtext = bigInt.toString(16);
+                while (hashtext.length() < 32) {
+                    hashtext = "0" + hashtext;
+                }
+                adUserPortal.setPassword(hashtext);
                 adUserPortal.setFullNamel(request.getUserPortal().getFullName());
                 adUserPortal.setPhone(request.getUserPortal().getPhone());
                 adUserPortal.setEmail(request.getUserPortal().getEmail());
@@ -61,6 +65,7 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
                 adUserPortal.setPosition(request.getUserPortal().getPosition());
                 adUserPortal.setCreateBy(user);
                 adUserPortal.setCreateDate(new Date());
+
                 AdUserPortal addedUser = adUserPortalRepository.save(adUserPortal);
                 if (request.getUserBranchList().size() >=1){
                     List<AdBranchUser> adBranchUserList = new ArrayList<>();
@@ -73,6 +78,18 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
                         adBranchUserList.add(adBranchUser);
                     }
                     adBranchUserRepository.saveAll(adBranchUserList);
+                }
+                if (request.getListTagQnA().size() >=1){
+
+                }
+                if (request.getListTagNews().size() >=1){
+
+                }
+                if (request.getListTagKPI().size() >=1){
+
+                }
+                if (request.getListTagTool().size() >=1){
+
                 }
                 return Response.success("Add successful");
             }
@@ -92,12 +109,11 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
      * @return: danh sách các user portal
      */
     @Override
-    public Response getAllUserPortal(GetAllUserRequest request) {
+    public Response getAllUserPortal() {
         try{
-            Page<AdUserPortalDto> adUserPortalDtoList = adUserPortalRepository.getAllUser(
-                    PageRequest.of(request.getPage(), request.getPerPage()));
+            List<AdUserPortalDto> adUserPortalDtoList = adUserPortalRepository.getAllUser();
             List<GetAllUserResponse> allUserResponseList = new ArrayList<>();
-            if (adUserPortalDtoList.getSize() >=1){
+            if (adUserPortalDtoList.size() >=1){
                 for (AdUserPortalDto adUserPortalDto : adUserPortalDtoList){
                     GetAllUserResponse getAllUserResponse = new GetAllUserResponse();
                     List<AdBranchUserDto> branchUserDtoList =
@@ -118,4 +134,102 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
             return Response.error(ErrorCode.ERROR_STATUS, e.toString());
         }
     }
+    /**
+     * author: anhld
+     * date: 8/12/2020
+     * lấy danh sách các user portal
+     * @return: danh sách các user portal
+     */
+    @Transactional
+    @Override
+    public Response deleteUserPortal(String userId) {
+        try {
+            Optional<AdUserPortal> checkUser= adUserPortalRepository.findById(userId);
+            if (checkUser.isPresent()){
+                adUserPortalRepository.deactiveUserPortal(userId, UserPortalConstant.STATUS_INACTIVE);
+                return Response.success("Delete successful");
+            }
+            else {
+                return Response.error(ErrorCode.NOT_FOUND_RECORDS,"record not existed");
+            }
+        }
+        catch (Exception e){
+            log.error("deleteUserPortal Exception : " + e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
+    }
+    /**
+     * author: anhld
+     * date: 8/12/2020
+     * update user portal
+     * @return: kết quả việc update user portal
+     */
+    @Transactional
+    @Override
+    public Response updateUserPortal(CreateAdUserPortalRequest request) {
+        AdUserPortal adUserPortal = new AdUserPortal();
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            Optional<AdUserPortal> checkUser = adUserPortalRepository.findById(request.getUserPortal().getUserId());
+            if (checkUser.isPresent()){
+                adUserPortal.setUserId(request.getUserPortal().getUserId());
+                adUserPortal.setPassword(checkUser.get().getPassword());
+                if (!request.getUserPortal().getPassword().isEmpty()){
+                    //encrypt password with md5
+                    byte[] messageDigest  = md.digest(request.getUserPortal().getPassword().getBytes());
+                    BigInteger bigInt  = new BigInteger(1, messageDigest);
+                    String hashtext = bigInt.toString(16);
+                    while (hashtext.length() < 32) {
+                        hashtext = "0" + hashtext;
+                    }
+                    adUserPortal.setPassword(hashtext);
+                }
+                adUserPortal.setFullNamel(request.getUserPortal().getFullName());
+                adUserPortal.setPhone(request.getUserPortal().getPhone());
+                adUserPortal.setEmail(request.getUserPortal().getEmail());
+                adUserPortal.setRole(request.getUserPortal().getRole());
+                adUserPortal.setStatus(UserPortalConstant.STATUS_ACTIVE);
+                adUserPortal.setPosition(request.getUserPortal().getPosition());
+                adUserPortal.setModifyBy(user);
+                adUserPortal.setModifyDate(new Date());
+
+                AdUserPortal addedUser = adUserPortalRepository.save(adUserPortal);
+                if (request.getUserBranchList().size() >=1){
+                    List<AdBranchUser> adBranchUserList = new ArrayList<>();
+                    for (AdBranchUserDto adBranchUserDto : request.getUserBranchList()){
+                        AdBranchUser adBranchUser = new AdBranchUser();
+                        adBranchUser.setBranchId(adBranchUserDto.getBranchId());
+                        adBranchUser.setUserId(addedUser.getUserId());
+                        adBranchUser.setModifiedDate(new Date());
+                        adBranchUser.setCreatedBy(user);
+                        adBranchUserList.add(adBranchUser);
+                    }
+                    adBranchUserRepository.deleteByUserId(request.getUserPortal().getUserId());
+                    adBranchUserRepository.saveAll(adBranchUserList);
+                }
+                if (request.getListTagQnA().size() >=1){
+
+                }
+                if (request.getListTagNews().size() >=1){
+
+                }
+                if (request.getListTagKPI().size() >=1){
+
+                }
+                if (request.getListTagTool().size() >=1){
+
+                }
+                return Response.success("update successful");
+            }
+            else {
+                return Response.error(ErrorCode.NOT_FOUND_RECORDS,"user portal is not existed");
+            }
+        }
+        catch (Exception e){
+            log.error("updateUserPortal Exception : " + e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
+    }
+
 }

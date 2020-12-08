@@ -2,8 +2,8 @@ package com.salesapp.adminservice.models;
 
 import com.salesapp.adminservice.dto.AdBranchUserDto;
 import com.salesapp.adminservice.dto.AdUserPortalDto;
+import com.salesapp.adminservice.dto.TagsDto;
 import lombok.*;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 
@@ -15,4 +15,8 @@ import java.util.List;
 public class CreateAdUserPortalRequest {
     private AdUserPortalDto userPortal;
     private List<AdBranchUserDto> userBranchList;
+    private List<TagsDto> listTagQnA;
+    private List<TagsDto> listTagNews;
+    private List<TagsDto> listTagKPI;
+    private List<TagsDto> listTagTool;
 }
