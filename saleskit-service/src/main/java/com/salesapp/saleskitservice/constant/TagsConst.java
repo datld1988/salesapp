@@ -13,4 +13,8 @@ public class TagsConst {
 
     public static final int StatusActive = 1;
     public static final int StatusInactive = 0;
+
+    public static final String ACTION_TAGS_INSERT = "INSERT";
+    public static final String ACTION_TAGS_UPDATE = "UPDATE";
+
 }

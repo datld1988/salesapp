@@ -18,8 +18,7 @@ public class AdUser implements Serializable {
     private String id;
     @Column(name = "USER_NAME")
     private String userName;
-    @Column(name = "PASSWORD")
-    private String password;
+
     @Column(name = "EMAIL")
     private String email;
     @Column(name = "PHONE")
