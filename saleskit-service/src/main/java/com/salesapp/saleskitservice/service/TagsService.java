@@ -41,5 +41,7 @@ public interface TagsService {
      */
     Response findAnyTagsByType(String type);
 
-    Response getAllTag();
+    Response getAllTagForTypeNew();
+
+    Response getAllTags();
 }

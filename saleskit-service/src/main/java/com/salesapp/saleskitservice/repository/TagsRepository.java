@@ -2,8 +2,10 @@ package com.salesapp.saleskitservice.repository;
 
 import com.salesapp.saleskitservice.domain.QuestionAndAnswer;
 import com.salesapp.saleskitservice.domain.Tags;
+import com.salesapp.saleskitservice.domain.TagsUserPortal;
 import com.salesapp.saleskitservice.dto.PromotionDto;
 import com.salesapp.saleskitservice.dto.TagsDto;
+import com.salesapp.saleskitservice.dto.TagsUserPortalDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,8 +23,27 @@ public interface TagsRepository extends JpaRepository<Tags, Integer> {
     TagsDto checkTags(
             @Param("value") String value
     );
-    @Query("SELECT new com.salesapp.saleskitservice.dto.TagsDto( " +
-            " t.id, t.value) FROM Tags t" )
-    List<TagsDto> getAllTag(
+    @Query("SELECT DISTINCT new com.salesapp.saleskitservice.dto.TagsDto( " +
+            " t.id, t.value) " +
+            "FROM Tags t "   +
+            "INNER JOIN TagsUserPortal tup ON t.id = tup.idTag "+
+            "WHERE t.status = com.salesapp.saleskitservice.constant.TagsConst.StatusActive "+
+            "AND tup.tagType = com.salesapp.saleskitservice.constant.TagsConst.TagsNews"
+    )
+    List<TagsDto> getAllTagForTypeNew(
     );
+
+    Tags getTagsByIdAndStatus(Integer id, Integer status);
+
+    @Query("SELECT new com.salesapp.saleskitservice.dto.TagsUserPortalDto(" +
+                "t.id, t.value, t.keyTag, " +
+                "(SELECT tup.tagType FROM TagsUserPortal tup WHERE tup.idTag = t.id), " +
+                "(SELECT up.fullName FROM AdUserPortal up INNER JOIN TagsUserPortal tup ON tup.userPortalId = up.userId WHERE  tup.idTag = t.id AND up.status = 1 AND tup.status = 1) " +
+            ")" +
+            "FROM Tags t " +
+            "WHERE t.status = com.salesapp.saleskitservice.constant.TagsConst.StatusActive"
+
+    )
+    List<TagsUserPortalDto> getAllTags();
+
 }

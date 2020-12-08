@@ -6,6 +6,7 @@ import com.salesapp.saleskitservice.constant.TagsConst;
 import com.salesapp.saleskitservice.domain.*;
 import com.salesapp.saleskitservice.dto.TagsAnyDto;
 import com.salesapp.saleskitservice.dto.TagsDto;
+import com.salesapp.saleskitservice.dto.TagsUserPortalDto;
 import com.salesapp.saleskitservice.model.InsertTagRequest;
 import com.salesapp.saleskitservice.model.UpdateTagRequest;
 import com.salesapp.saleskitservice.repository.TagsAnyRepository;
@@ -97,13 +98,14 @@ public class TagsServiceImpl implements TagsService {
     public Response updateTags(UpdateTagRequest request, String user) {
 
         try {
-
-                // update table SAPP_TAGS
-                Tags tag = new Tags();
+            // check tag existed
+            if(tagsRepository.findById(request.getTagId()).isPresent()) {
+                Tags tag = tagsRepository.getTagsByIdAndStatus(request.getTagId(), TagsConst.StatusActive);
                 tag.setId(request.getTagId());
                 tag.setValue(request.getTagValue());
                 tag.setModifyDate(new Date());
                 tag.setModifyBy(user);
+                // update table SAPP_TAGS
                 Tags tags_new = tagsRepository.save(tag);
 
 
@@ -120,18 +122,16 @@ public class TagsServiceImpl implements TagsService {
                         lstTUP.add(item);
 
                         // delete old records
-//                        TagsUserPortalId item_id = new TagsUserPortalId();
-//                        item_id.setIdTag(item.getIdTag());
-//                        item_id.setUserPortalId(item.getUserPortalId());
-//                        item_id.setTagType(item.getTagType());
-//                        if(tagsUserPortalRepository.findById())
-                            tagsUserPortalRepository.deleteTagsUserPortalByIdTag(item.getIdTag());
+                        tagsUserPortalRepository.deleteTagsUserPortalByIdTag(item.getIdTag());
 
                     }
                 }
-            // insert new records in table tagsUserPortal
+                // insert new records in table tagsUserPortal
                 tagsUserPortalRepository.saveAll(lstTUP);
                 return Response.success("update tag successful");
+            } else
+                return Response.error(ErrorCode.NOT_FOUND_RECORDS, "Không tìm thấy tag id");
+
         }
         catch (Exception e){
             log.error("update tags Exception : " + e.toString(), e);
@@ -217,9 +217,9 @@ public class TagsServiceImpl implements TagsService {
      * @return danh sách các tag
      */
     @Override
-    public Response getAllTag() {
+    public Response getAllTagForTypeNew() {
         try{
-            List<TagsDto> tagsDtoList = tagsRepository.getAllTag();
+            List<TagsDto> tagsDtoList = tagsRepository.getAllTagForTypeNew();
                 if (tagsDtoList.size() >=1){
                     return Response.success(tagsDtoList);
                 }
@@ -228,6 +228,18 @@ public class TagsServiceImpl implements TagsService {
                 }
         }
         catch (Exception e){
+            log.error("getAllTag Exception : " + e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
+    }
+
+    @Override
+    public Response getAllTags() {
+        try {
+            List<TagsUserPortalDto> lst = tagsRepository.getAllTags();
+
+            return Response.success("ok");
+        } catch (Exception e) {
             log.error("getAllTag Exception : " + e.toString(), e);
             return Response.error(ErrorCode.ERROR_STATUS, e.toString());
         }

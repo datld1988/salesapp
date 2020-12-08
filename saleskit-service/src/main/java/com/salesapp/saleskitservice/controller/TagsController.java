@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value = "tags")
 public class TagsController {
@@ -28,7 +30,7 @@ public class TagsController {
      */
     @RequestMapping(path = "insert", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response insertTag(@RequestBody InsertTagRequest request) {
+    public Response insertTag(@RequestBody @Valid InsertTagRequest request) {
         return tagsService.insertTags(request);
     }
 
@@ -39,7 +41,7 @@ public class TagsController {
      */
     @RequestMapping(path = "update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response upadteTag(@RequestBody UpdateTagRequest request) {
+    public Response upadteTag(@RequestBody @Valid UpdateTagRequest request) {
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
         return tagsService.updateTags(request, user);
     }
@@ -70,10 +72,24 @@ public class TagsController {
         return tagsService.findAnyTagsByType(typeKey);
     }
 
-
+    /**
+     * dungtq - search tag with type
+     * @return
+     */
     @RequestMapping(path = "all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response getAllTag() {
-        return tagsService.getAllTag();
+    public Response getAllTagForTypeNew() {
+        return tagsService.getAllTagForTypeNew();
     }
+
+    /**
+     * dungtq - getAllTag for portal
+     * @return
+     */
+    @RequestMapping(path = "getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response getAllTags() {
+        return tagsService.getAllTags();
+    }
+
 }
