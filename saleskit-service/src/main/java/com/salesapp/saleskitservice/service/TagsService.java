@@ -3,6 +3,7 @@ package com.salesapp.saleskitservice.service;
 import com.salesapp.common.dto.Response;
 import com.salesapp.saleskitservice.dto.TagsDto;
 import com.salesapp.saleskitservice.model.InsertTagRequest;
+import com.salesapp.saleskitservice.model.SearchTagRequest;
 import com.salesapp.saleskitservice.model.UpdateTagRequest;
 
 public interface TagsService {
@@ -23,14 +24,7 @@ public interface TagsService {
      */
     Response updateTags(UpdateTagRequest request, String user);
 
-    /**
-     * author: anhld
-     * date : 4/12/2020
-     * gắn tag vào bất kỳ thứ gì
-     * @param
-     * @return kết quả của việc gắn tag
-     */
-   // Response insertTagsAny(AssignTagRequest request);
+
 
     /**
      * author: anhld
@@ -41,5 +35,13 @@ public interface TagsService {
      */
     Response findAnyTagsByType(String type);
 
-    Response getAllTag();
+    Response getAllTagForTypeNew();
+
+    Response getAllTags();
+
+    Response getInfoTag(Integer tagId);
+
+    Response searchTags(SearchTagRequest request);
+
+    Response deleteTag(Integer tagId, String user);
 }
