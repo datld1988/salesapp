@@ -55,6 +55,7 @@ public class TagsServiceImpl implements TagsService {
         try {
             // check existed tag
             TagsDto tagExisted = tagsRepository.checkTags(request.getTagValue().trim());
+
             if (tagExisted == null){
                 // insert table SAPP_TAGS
                 String user = SecurityContextHolder.getContext().getAuthentication().getName();

@@ -19,7 +19,8 @@ import java.util.List;
 public interface TagsRepository extends JpaRepository<Tags, Integer> {
     @Query("SELECT new com.salesapp.saleskitservice.dto.TagsDto( " +
             " t.id, t.value) FROM Tags t" +
-            " WHERE lower(t.value)  LIKE lower(CONCAT('%',:value,'%'))")
+            " WHERE lower(t.value)  LIKE lower(CONCAT('%',:value,'%'))" +
+            " AND t.status = com.salesapp.saleskitservice.constant.TagsConst.StatusActive")
     TagsDto checkTags(
             @Param("value") String value
     );
