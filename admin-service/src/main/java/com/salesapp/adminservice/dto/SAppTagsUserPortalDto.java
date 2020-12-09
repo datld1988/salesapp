@@ -10,4 +10,5 @@ import lombok.*;
 public class SAppTagsUserPortalDto {
     private Integer tagId;
     private String tagValue;
+    private String tagType;
 }

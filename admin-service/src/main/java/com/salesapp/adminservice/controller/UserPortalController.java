@@ -1,6 +1,7 @@
 package com.salesapp.adminservice.controller;
 
-import com.salesapp.adminservice.models.SavevUserPortalRequest;
+import com.salesapp.adminservice.models.CreateUserPortalRequest;
+import com.salesapp.adminservice.models.UpdateUserPortalRequest;
 import com.salesapp.adminservice.service.AdUserPortalService;
 import com.salesapp.common.dto.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +37,12 @@ public class UserPortalController {
      */
     @RequestMapping(path = "add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response insertUserPortal(@Valid @RequestBody SavevUserPortalRequest request) {
+    public Response insertUserPortal(@Valid @RequestBody CreateUserPortalRequest request) {
         return adUserPortalService.createAdUserPortal(request);
     }
     /**
      * author: anhld
-     * date: 8/12/2020
+     * date: 9/12/2020
      * xóa user portal
      * @param
      * @return: kết quả của việc xóa
@@ -62,7 +63,20 @@ public class UserPortalController {
 
     @RequestMapping(path = "update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response updateUserPortal(@Valid @RequestBody SavevUserPortalRequest request) {
+    public Response updateUserPortal(@Valid @RequestBody UpdateUserPortalRequest request) {
         return adUserPortalService.updateUserPortal(request);
+    }
+
+    /**
+     * author: anhld
+     * date: 9/12/2020
+     * lấy chi tiết của user portal
+     * @param userPortalId: id của user portal
+     * @return: thông tin chi tiết của user
+     */
+    @RequestMapping(path = "detail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response getUserPortalDetail(@RequestParam("userPortalId") String userPortalId) {
+        return adUserPortalService.getUserPortalDetail(userPortalId);
     }
 }

@@ -17,9 +17,6 @@ public class AdUserPortalDto implements Serializable {
     @NotEmpty(message = "userId is not empty")
     @NotBlank(message = "userId is not blank")
     private String userId;
-    @NotNull(message = "password is not null")
-    @NotEmpty(message = "password is not empty")
-    @NotBlank(message = "password is not blank")
     private String password;
     @NotNull(message = "fullName {not.empty}")
     @NotEmpty(message = "fullName is not empty")

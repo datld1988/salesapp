@@ -5,19 +5,14 @@ import com.salesapp.adminservice.dto.AdUserPortalDto;
 import com.salesapp.adminservice.dto.SAppTagsUserPortalDto;
 import lombok.*;
 
-import javax.validation.Valid;
-import java.io.Serializable;
 import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SavevUserPortalRequest implements Serializable {
-    @Valid
+public class GetUserPortalDetailResponse {
     private AdUserPortalDto userPortal;
-    @Valid
     private List<AdBranchUserDto> userBranchList;
     private List<SAppTagsUserPortalDto> listTagQnA;
     private List<SAppTagsUserPortalDto> listTagNews;
