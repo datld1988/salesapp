@@ -269,6 +269,18 @@ public class TagsServiceImpl implements TagsService {
 
     }
 
+    @Override
+    public Response searchTagsNoFk(SearchTagRequest request) {
+        SearchTagResponse response = new SearchTagResponse();
+        Page<TagsUserPortalDto> tagsPage = tagsRepository.searchTags(
+                PageRequest.of(request.getPage(), request.getPageSize(), constructSort(request.getSortBy(), request.getSortOrder())),
+                request.getSearchValue(), request.getTagType()
+        );
+        response.setTagsList(tagsPage.getContent());
+        response.setTotalItem(tagsPage.getTotalElements());
+        return Response.success(response);
+    }
+
     private final Sort constructSort(final String sortBy, final String sortOrder) {
         Sort sortInfo = Sort.unsorted();
         if (sortBy != null) {
