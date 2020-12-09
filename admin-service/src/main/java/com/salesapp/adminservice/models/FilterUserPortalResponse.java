@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class GetAllUserResponse {
+public class FilterUserPortalResponse {
     private AdUserPortalDto userPortal;
     private List<AdBranchUserDto> listBranch;
 }

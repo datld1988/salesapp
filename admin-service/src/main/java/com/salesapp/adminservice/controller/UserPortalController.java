@@ -1,6 +1,7 @@
 package com.salesapp.adminservice.controller;
 
 import com.salesapp.adminservice.models.CreateUserPortalRequest;
+import com.salesapp.adminservice.models.FilterUserPortalRequest;
 import com.salesapp.adminservice.models.UpdateUserPortalRequest;
 import com.salesapp.adminservice.service.AdUserPortalService;
 import com.salesapp.common.dto.Response;
@@ -23,10 +24,10 @@ public class UserPortalController {
      * @param
      * @return: danh sách các user portal
      */
-    @RequestMapping(path = "list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "filter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Response getAllUserPortal() {
-        return adUserPortalService.getAllUserPortal();
+    public Response filterUserPortal(@RequestBody FilterUserPortalRequest request) {
+        return adUserPortalService.filterUserPortal(request);
     }
     /**
      * author: anhld
