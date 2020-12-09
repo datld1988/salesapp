@@ -6,7 +6,10 @@ import com.salesapp.saleskitservice.constant.TagsConst;
 import com.salesapp.saleskitservice.domain.*;
 import com.salesapp.saleskitservice.dto.TagsAnyDto;
 import com.salesapp.saleskitservice.dto.TagsDto;
+import com.salesapp.saleskitservice.dto.TagsUserPortalDto;
 import com.salesapp.saleskitservice.model.InsertTagRequest;
+import com.salesapp.saleskitservice.model.SearchTagRequest;
+import com.salesapp.saleskitservice.model.SearchTagResponse;
 import com.salesapp.saleskitservice.model.UpdateTagRequest;
 import com.salesapp.saleskitservice.repository.TagsAnyRepository;
 import com.salesapp.saleskitservice.repository.TagsRepository;
@@ -15,6 +18,9 @@ import com.salesapp.saleskitservice.service.TagsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TagsServiceImpl implements TagsService {
@@ -48,6 +55,7 @@ public class TagsServiceImpl implements TagsService {
         try {
             // check existed tag
             TagsDto tagExisted = tagsRepository.checkTags(request.getTagValue().trim());
+
             if (tagExisted == null){
                 // insert table SAPP_TAGS
                 String user = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -97,13 +105,14 @@ public class TagsServiceImpl implements TagsService {
     public Response updateTags(UpdateTagRequest request, String user) {
 
         try {
-
-                // update table SAPP_TAGS
-                Tags tag = new Tags();
+            // check tag existed
+            if(tagsRepository.findById(request.getTagId()).isPresent()) {
+                Tags tag = tagsRepository.getTagsByIdAndStatus(request.getTagId(), TagsConst.StatusActive);
                 tag.setId(request.getTagId());
-                tag.setValue(request.getTagValue());
+              //  tag.setValue(request.getTagValue());
                 tag.setModifyDate(new Date());
                 tag.setModifyBy(user);
+                // update table SAPP_TAGS
                 Tags tags_new = tagsRepository.save(tag);
 
 
@@ -120,18 +129,16 @@ public class TagsServiceImpl implements TagsService {
                         lstTUP.add(item);
 
                         // delete old records
-//                        TagsUserPortalId item_id = new TagsUserPortalId();
-//                        item_id.setIdTag(item.getIdTag());
-//                        item_id.setUserPortalId(item.getUserPortalId());
-//                        item_id.setTagType(item.getTagType());
-//                        if(tagsUserPortalRepository.findById())
-                            tagsUserPortalRepository.deleteTagsUserPortalByIdTag(item.getIdTag());
+                        tagsUserPortalRepository.deleteTagsUserPortalByIdTag(item.getIdTag());
 
                     }
                 }
-            // insert new records in table tagsUserPortal
+                // insert new records in table tagsUserPortal
                 tagsUserPortalRepository.saveAll(lstTUP);
                 return Response.success("update tag successful");
+            } else
+                return Response.error(ErrorCode.NOT_FOUND_RECORDS, "Không tìm thấy tag id");
+
         }
         catch (Exception e){
             log.error("update tags Exception : " + e.toString(), e);
@@ -139,54 +146,6 @@ public class TagsServiceImpl implements TagsService {
         }
     }
 
-    /**
-     * author: anhld
-     * date : 4/12/2020
-     * @param
-     * @return kết quả việc gắn tag
-     */
-//    @Override
-//    public Response insertTagsAny(AssignTagRequest request) {
-//        List<TagsAny> tagsAnyList = new ArrayList<>();
-//        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-//        try{
-//            boolean ableToAdd = true;
-//            if (request.getTagsAnyId().size() >=1){
-//                for (TagsAnyId tagsAnyId: request.getTagsAnyId()){
-////                    TagsAnyDto tagExisted = tagsAnyRepository.checkTags(tagsAnyId.getIdTag(), tagsAnyId.getIdAny(), tagsAnyId.getTypeAny());
-//
-//                    if (/*tagExisted == null &&*/ ableToAdd){
-//                        TagsAny tagsAny = new TagsAny();
-//                        tagsAny.setIdAny(tagsAnyId.getIdAny());
-//                        tagsAny.setIdTag(tagsAnyId.getIdTag());
-//                        tagsAny.setTypeAny(tagsAnyId.getTypeAny());
-//                        tagsAny.setStatus(1);
-//                        tagsAny.setCreateBy(user);
-//                        tagsAny.setCreateDate(new Date());
-//                        tagsAnyList.add(tagsAny);
-//                        ableToAdd = true;
-//                    }
-//                    else {
-//                        ableToAdd = false;
-//                    }
-//                }
-//            }
-//            else {
-//                ableToAdd = false;
-//            }
-//            if (ableToAdd){
-//                tagsAnyRepository.saveAll(tagsAnyList);
-//                return Response.success("tag successful");
-//            }
-//            else {
-//                return Response.error("408","tag failed");
-//            }
-//        }
-//        catch (Exception e){
-//            log.error("insertTagsAny Exception : " + e.toString(), e);
-//            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
-//        }
-//    }
 
     /**
      * author: anhld
@@ -217,9 +176,9 @@ public class TagsServiceImpl implements TagsService {
      * @return danh sách các tag
      */
     @Override
-    public Response getAllTag() {
+    public Response getAllTagForTypeNew() {
         try{
-            List<TagsDto> tagsDtoList = tagsRepository.getAllTag();
+            List<TagsDto> tagsDtoList = tagsRepository.getAllTagForTypeNew();
                 if (tagsDtoList.size() >=1){
                     return Response.success(tagsDtoList);
                 }
@@ -231,6 +190,91 @@ public class TagsServiceImpl implements TagsService {
             log.error("getAllTag Exception : " + e.toString(), e);
             return Response.error(ErrorCode.ERROR_STATUS, e.toString());
         }
+    }
+
+    @Override
+    public Response getAllTags() {
+        try {
+            List<TagsUserPortalDto> lst = tagsRepository.getAllTags();
+
+            return Response.success(lst);
+        } catch (Exception e) {
+            log.error("getAllTag Exception : " + e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
+    }
+
+    @Override
+    public Response getInfoTag(Integer tagId) {
+        try {
+            Optional<Tags> optional = tagsRepository.findById(tagId);
+            if(optional.isPresent() && optional.get().getStatus() == TagsConst.StatusActive) {
+                Tags tags = optional.get();
+                TagsUserPortalDto dto = new TagsUserPortalDto();
+                dto.setTagId(tags.getId());
+                dto.setTagValue(tags.getValue());
+                dto.setTagKey(tags.getKeyTag());
+                dto.setTagType(tagsUserPortalRepository.getAllTypeOfTag(tagId));
+                dto.setAssignee(tagsUserPortalRepository.getUserByTags(tagId));
+                return Response.success(dto);
+            }
+           return Response.error(ErrorCode.NOT_FOUND_RECORDS,"Not found tagId");
+
+        } catch (Exception e) {
+            log.error("getAllTag Exception : " + e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
+    }
+
+    @Override
+    public Response searchTags(SearchTagRequest request) {
+        SearchTagResponse response = new SearchTagResponse();
+        Page<TagsUserPortalDto> tagsPage = tagsRepository.searchTags(
+                PageRequest.of(request.getPage(), request.getPageSize(), constructSort(request.getSortBy(), request.getSortOrder())),
+                request.getSearchValue(), request.getTagType()
+        );
+        List<TagsUserPortalDto> tagsList = tagsPage.getContent().stream().map(tags -> {
+            TagsUserPortalDto data = tags;
+            data.setAssignee(tagsUserPortalRepository.getUserByTags(tags.getTagId()));
+            data.setTagType(tagsUserPortalRepository.getTypeByTags(tags.getTagId()));
+            return data;
+        }).collect(Collectors.toList());
+        response.setTagsList(tagsList);
+        response.setTotalItem(tagsPage.getTotalElements());
+        return Response.success(response);
+    }
+
+    /**
+     * dungtq - delete tag by id
+     * @param tagId
+     * @return
+     */
+    @Override
+    public Response deleteTag(Integer tagId, String user) {
+        try {
+            Optional<Tags> optionalTags = tagsRepository.findById(tagId);
+            if(optionalTags.isPresent()) {
+                Tags t = optionalTags.get();
+                t.setStatus(TagsConst.StatusInactive);
+                t.setModifyDate(new Date());
+                t.setModifyBy(user);
+                tagsRepository.save(t);
+                return Response.success("Delete tags success");
+            }
+            return Response.error(ErrorCode.NOT_FOUND_RECORDS, "Not found tagId");
+        } catch (Exception e) {
+            log.error("deleteTag Exception : " + e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
+
+    }
+
+    private final Sort constructSort(final String sortBy, final String sortOrder) {
+        Sort sortInfo = Sort.unsorted();
+        if (sortBy != null) {
+            sortInfo = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+        }
+        return sortInfo;
     }
 
 
