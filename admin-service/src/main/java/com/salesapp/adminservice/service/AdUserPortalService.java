@@ -1,7 +1,7 @@
 package com.salesapp.adminservice.service;
 
-import com.salesapp.adminservice.models.CreateAdUserPortalRequest;
-import com.salesapp.adminservice.models.FilterUserRequest;
+import com.salesapp.adminservice.models.CreateUserPortalRequest;
+import com.salesapp.adminservice.models.UpdateUserPortalRequest;
 import com.salesapp.common.dto.Response;
 
 public interface AdUserPortalService {
@@ -12,7 +12,7 @@ public interface AdUserPortalService {
      * @param
      * @return: kết quả của việc thêm mới
      */
-    Response createAdUserPortal(CreateAdUserPortalRequest request);
+    Response createAdUserPortal(CreateUserPortalRequest request);
     /**
      * author: anhld
      * date: 8/12/2020
@@ -36,5 +36,13 @@ public interface AdUserPortalService {
      * @param
      * @return: kết quả của việc cập nhật
      */
-    Response updateUserPortal(CreateAdUserPortalRequest request);
+    Response updateUserPortal(UpdateUserPortalRequest request);
+    /**
+     * author: anhld
+     * date: 9/12/2020
+     * lấy chi tiết của user portal
+     * @param id: id của user portal
+     * @return: chi tiết của user portal
+     */
+    Response getUserPortalDetail(String id);
 }

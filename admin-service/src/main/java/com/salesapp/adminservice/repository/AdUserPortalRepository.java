@@ -19,7 +19,7 @@ public interface AdUserPortalRepository extends JpaRepository<AdUserPortal, Stri
     @Query("SELECT new com.salesapp.adminservice.dto.AdUserPortalDto(" +
             " aup.userId,'', aup.fullNamel,'','', aup.role, aup.status, aup.position) " +
             " FROM AdUserPortal aup" +
-            " ORDER BY aup.userId ASC")
+            " ORDER BY aup.fullNamel ASC")
     List<AdUserPortalDto> getAllUser(
     );
     @Modifying
