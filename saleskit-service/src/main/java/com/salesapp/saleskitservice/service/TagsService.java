@@ -24,14 +24,7 @@ public interface TagsService {
      */
     Response updateTags(UpdateTagRequest request, String user);
 
-    /**
-     * author: anhld
-     * date : 4/12/2020
-     * gắn tag vào bất kỳ thứ gì
-     * @param
-     * @return kết quả của việc gắn tag
-     */
-   // Response insertTagsAny(AssignTagRequest request);
+
 
     /**
      * author: anhld
@@ -49,4 +42,6 @@ public interface TagsService {
     Response getInfoTag(Integer tagId);
 
     Response searchTags(SearchTagRequest request);
+
+    Response deleteTag(Integer tagId, String user);
 }

@@ -108,7 +108,7 @@ public class TagsServiceImpl implements TagsService {
             if(tagsRepository.findById(request.getTagId()).isPresent()) {
                 Tags tag = tagsRepository.getTagsByIdAndStatus(request.getTagId(), TagsConst.StatusActive);
                 tag.setId(request.getTagId());
-                tag.setValue(request.getTagValue());
+              //  tag.setValue(request.getTagValue());
                 tag.setModifyDate(new Date());
                 tag.setModifyBy(user);
                 // update table SAPP_TAGS
@@ -145,54 +145,6 @@ public class TagsServiceImpl implements TagsService {
         }
     }
 
-    /**
-     * author: anhld
-     * date : 4/12/2020
-     * @param
-     * @return kết quả việc gắn tag
-     */
-//    @Override
-//    public Response insertTagsAny(AssignTagRequest request) {
-//        List<TagsAny> tagsAnyList = new ArrayList<>();
-//        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-//        try{
-//            boolean ableToAdd = true;
-//            if (request.getTagsAnyId().size() >=1){
-//                for (TagsAnyId tagsAnyId: request.getTagsAnyId()){
-////                    TagsAnyDto tagExisted = tagsAnyRepository.checkTags(tagsAnyId.getIdTag(), tagsAnyId.getIdAny(), tagsAnyId.getTypeAny());
-//
-//                    if (/*tagExisted == null &&*/ ableToAdd){
-//                        TagsAny tagsAny = new TagsAny();
-//                        tagsAny.setIdAny(tagsAnyId.getIdAny());
-//                        tagsAny.setIdTag(tagsAnyId.getIdTag());
-//                        tagsAny.setTypeAny(tagsAnyId.getTypeAny());
-//                        tagsAny.setStatus(1);
-//                        tagsAny.setCreateBy(user);
-//                        tagsAny.setCreateDate(new Date());
-//                        tagsAnyList.add(tagsAny);
-//                        ableToAdd = true;
-//                    }
-//                    else {
-//                        ableToAdd = false;
-//                    }
-//                }
-//            }
-//            else {
-//                ableToAdd = false;
-//            }
-//            if (ableToAdd){
-//                tagsAnyRepository.saveAll(tagsAnyList);
-//                return Response.success("tag successful");
-//            }
-//            else {
-//                return Response.error("408","tag failed");
-//            }
-//        }
-//        catch (Exception e){
-//            log.error("insertTagsAny Exception : " + e.toString(), e);
-//            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
-//        }
-//    }
 
     /**
      * author: anhld
@@ -284,6 +236,31 @@ public class TagsServiceImpl implements TagsService {
         response.setTagsList(tagsList);
         response.setTotalItem(tagsPage.getTotalElements());
         return Response.success(response);
+    }
+
+    /**
+     * dungtq - delete tag by id
+     * @param tagId
+     * @return
+     */
+    @Override
+    public Response deleteTag(Integer tagId, String user) {
+        try {
+            Optional<Tags> optionalTags = tagsRepository.findById(tagId);
+            if(optionalTags.isPresent()) {
+                Tags t = optionalTags.get();
+                t.setStatus(TagsConst.StatusInactive);
+                t.setModifyDate(new Date());
+                t.setModifyBy(user);
+                tagsRepository.save(t);
+                return Response.success("Delete tags success");
+            }
+            return Response.error(ErrorCode.NOT_FOUND_RECORDS, "Not found tagId");
+        } catch (Exception e) {
+            log.error("deleteTag Exception : " + e.toString(), e);
+            return Response.error(ErrorCode.ERROR_STATUS, e.toString());
+        }
+
     }
 
     private final Sort constructSort(final String sortBy, final String sortOrder) {

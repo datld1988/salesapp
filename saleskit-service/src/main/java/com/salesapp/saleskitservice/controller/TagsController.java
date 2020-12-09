@@ -52,19 +52,6 @@ public class TagsController {
     /**
      * author: anhld
      * date : 4/12/2020
-     * thêm tag vào bất kỳ thứ gì
-     * @param :
-     * @return : kết quả insert tag vào bất kỳ thứ gì
-     */
-//    @RequestMapping(path = "tagAny", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseBody
-//    public Response insertTagsAny(@RequestBody In assignTagRequest) {
-//        return tagsService.insertTagsAny(assignTagRequest);
-//    }
-
-    /**
-     * author: anhld
-     * date : 4/12/2020
      * tìm kiếm tất cả kết quả có type
      * @param typeKey: từ khóa để tìm kiếm type
      * @return : danh sách có chứa type đã nhập
@@ -95,6 +82,11 @@ public class TagsController {
         return tagsService.getAllTags();
     }
 
+    /**
+     * dungtq- get info tags for portal
+     * @param tagId
+     * @return
+     */
     @RequestMapping(path = "getInfoTag", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response getInfoTag( @RequestParam
@@ -104,10 +96,22 @@ public class TagsController {
         return tagsService.getInfoTag(tagId);
     }
 
+    /**
+     * truongnh - search tags for portal
+     * @param request
+     * @return
+     */
     @RequestMapping(path = "search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Response searchTag(@RequestBody SearchTagRequest request) {
         return tagsService.searchTags(request);
+    }
+
+    @RequestMapping(path = "delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response deleteTag(@RequestParam @Valid @NotNull Integer tagId) {
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        return tagsService.deleteTag(tagId, user);
     }
 
 }
