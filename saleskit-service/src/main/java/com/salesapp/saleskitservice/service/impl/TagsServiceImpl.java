@@ -207,14 +207,19 @@ public class TagsServiceImpl implements TagsService {
     @Override
     public Response getInfoTag(Integer tagId) {
         try {
-            Tags tags = tagsRepository.getTagsById(tagId);
-            TagsUserPortalDto dto = new TagsUserPortalDto();
-            dto.setTagId(tags.getId());
-            dto.setTagValue(tags.getValue());
-            dto.setTagKey(tags.getKeyTag());
-            dto.setTagType(tagsUserPortalRepository.getAllTypeOfTag(tagId));
-            dto.setAssignee(tagsUserPortalRepository.getUserByTags(tagId));
-            return Response.success(dto);
+            Optional<Tags> optional = tagsRepository.findById(tagId);
+            if(optional.isPresent() && optional.get().getStatus() == TagsConst.StatusActive) {
+                Tags tags = optional.get();
+                TagsUserPortalDto dto = new TagsUserPortalDto();
+                dto.setTagId(tags.getId());
+                dto.setTagValue(tags.getValue());
+                dto.setTagKey(tags.getKeyTag());
+                dto.setTagType(tagsUserPortalRepository.getAllTypeOfTag(tagId));
+                dto.setAssignee(tagsUserPortalRepository.getUserByTags(tagId));
+                return Response.success(dto);
+            }
+           return Response.error(ErrorCode.NOT_FOUND_RECORDS,"Not found tagId");
+
         } catch (Exception e) {
             log.error("getAllTag Exception : " + e.toString(), e);
             return Response.error(ErrorCode.ERROR_STATUS, e.toString());
