@@ -52,7 +52,7 @@ public interface TagsRepository extends JpaRepository<Tags, Integer> {
             " t.id, t.value, t.keyTag)" +
             " FROM Tags t" +
             " WHERE t.status = com.salesapp.saleskitservice.constant.TagsConst.StatusActive" +
-            " AND (t.value LIKE CONCAT('%', :valueSearch, '%') OR :valueSearch IS NULL)")
+            " AND (LOWER(t.value) LIKE LOWER(CONCAT('%', :valueSearch, '%')) OR :valueSearch IS NULL)")
     Page<TagsUserPortalDto> searchTags(
             Pageable pageable,
             @Param("valueSearch") String valueSearch

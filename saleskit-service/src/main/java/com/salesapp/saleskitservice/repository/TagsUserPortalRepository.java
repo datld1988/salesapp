@@ -20,7 +20,7 @@ public interface TagsUserPortalRepository extends JpaRepository<TagsUserPortal, 
     @Query(" SELECT DISTINCT  tup.userPortalId FROM  TagsUserPortal  tup WHERE tup.idTag = :tagId AND tup.status = com.salesapp.saleskitservice.constant.TagsConst.StatusActive")
     List<String> getAllUserAssignTags(@Param("tagId") Integer tagId);
 
-    @Query("SELECT new com.salesapp.saleskitservice.dto.UserPortalDto(tup.userPortalId, aup.fullName)" +
+    @Query("SELECT DISTINCT new com.salesapp.saleskitservice.dto.UserPortalDto(tup.userPortalId, aup.fullName)" +
             " FROM TagsUserPortal tup" +
             " JOIN AdUserPortal aup ON tup.userPortalId = aup.userId" +
             " WHERE tup.idTag = :idTag" +
@@ -29,7 +29,7 @@ public interface TagsUserPortalRepository extends JpaRepository<TagsUserPortal, 
             @Param("idTag") Integer idTag
     );
 
-    @Query("SELECT tup.tagType" +
+    @Query("SELECT DISTINCT tup.tagType" +
             " FROM TagsUserPortal tup" +
             " WHERE tup.idTag = :idTag" +
             " AND tup.status = com.salesapp.saleskitservice.constant.TagsConst.StatusActive")
