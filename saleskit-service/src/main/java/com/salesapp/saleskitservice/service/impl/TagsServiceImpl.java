@@ -273,7 +273,7 @@ public class TagsServiceImpl implements TagsService {
         SearchTagResponse response = new SearchTagResponse();
         Page<TagsUserPortalDto> tagsPage = tagsRepository.searchTags(
                 PageRequest.of(request.getPage(), request.getPageSize(), constructSort(request.getSortBy(), request.getSortOrder())),
-                request.getSearchValue()
+                request.getSearchValue(), request.getTagType()
         );
         List<TagsUserPortalDto> tagsList = tagsPage.getContent().stream().map(tags -> {
             TagsUserPortalDto data = tags;

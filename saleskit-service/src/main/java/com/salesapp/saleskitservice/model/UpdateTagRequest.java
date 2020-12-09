@@ -14,7 +14,6 @@ import java.util.List;
 public class UpdateTagRequest {
 
     @NotNull(message = "Tag id is not null")
-    @NotEmpty(message = "Tag id is not empty")
     private Integer tagId;
 
     @NotNull(message = "Tag Value is not null")
@@ -22,10 +21,8 @@ public class UpdateTagRequest {
     private String tagValue;
 
     @NotNull(message = "Tag type is not null")
-    @NotEmpty(message = "Tag type is not empty")
     private List<String> tagType;
 
     @NotNull(message = "Tag type is not null")
-    @NotEmpty(message = "Tag type is not empty")
     private List<String> assignee;
 }

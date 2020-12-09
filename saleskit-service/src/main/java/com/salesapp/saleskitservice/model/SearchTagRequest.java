@@ -13,4 +13,5 @@ public class SearchTagRequest {
     private Integer pageSize;
     private String sortOrder;
     private String sortBy;
+    private String tagType;
 }
