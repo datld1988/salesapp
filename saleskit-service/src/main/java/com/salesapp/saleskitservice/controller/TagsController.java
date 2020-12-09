@@ -114,4 +114,10 @@ public class TagsController {
         return tagsService.deleteTag(tagId, user);
     }
 
+    @RequestMapping(path = "search-exp", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Response searchTagNoPk(@RequestBody SearchTagRequest request) {
+        return tagsService.searchTagsNoFk(request);
+    }
+
 }

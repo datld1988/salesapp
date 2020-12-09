@@ -44,4 +44,6 @@ public interface TagsService {
     Response searchTags(SearchTagRequest request);
 
     Response deleteTag(Integer tagId, String user);
+
+    Response searchTagsNoFk(SearchTagRequest request);
 }
