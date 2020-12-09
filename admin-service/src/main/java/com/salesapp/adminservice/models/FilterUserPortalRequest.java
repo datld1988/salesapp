@@ -7,10 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class FilterUserRequest {
+public class FilterUserPortalRequest {
     private String keyword;
     private String role;
     private Integer status;
-    private Integer page;
-    private Integer perPage;
 }

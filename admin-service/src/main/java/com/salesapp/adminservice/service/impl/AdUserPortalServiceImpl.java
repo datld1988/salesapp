@@ -7,10 +7,7 @@ import com.salesapp.adminservice.domain.SAppTagsUserPortal;
 import com.salesapp.adminservice.dto.AdBranchUserDto;
 import com.salesapp.adminservice.dto.AdUserPortalDto;
 import com.salesapp.adminservice.dto.SAppTagsUserPortalDto;
-import com.salesapp.adminservice.models.CreateUserPortalRequest;
-import com.salesapp.adminservice.models.GetAllUserResponse;
-import com.salesapp.adminservice.models.GetUserPortalDetailResponse;
-import com.salesapp.adminservice.models.UpdateUserPortalRequest;
+import com.salesapp.adminservice.models.*;
 import com.salesapp.adminservice.repository.AdBranchUserRepository;
 import com.salesapp.adminservice.repository.AdUserPortalRepository;
 import com.salesapp.adminservice.repository.SAppTagsUserPortalRepository;
@@ -173,18 +170,19 @@ public class AdUserPortalServiceImpl implements AdUserPortalService {
      * @return: danh sách các user portal
      */
     @Override
-    public Response getAllUserPortal() {
+    public Response filterUserPortal(FilterUserPortalRequest request) {
         try{
-            List<AdUserPortalDto> adUserPortalDtoList = adUserPortalRepository.getAllUser();
-            List<GetAllUserResponse> allUserResponseList = new ArrayList<>();
+            List<AdUserPortalDto> adUserPortalDtoList = adUserPortalRepository.filterUserPortal(
+                    request.getKeyword(), request.getRole(), request.getStatus());
+            List<FilterUserPortalResponse> allUserResponseList = new ArrayList<>();
             if (adUserPortalDtoList.size() >=1){
                 for (AdUserPortalDto adUserPortalDto : adUserPortalDtoList){
-                    GetAllUserResponse getAllUserResponse = new GetAllUserResponse();
+                    FilterUserPortalResponse filterUserPortalResponse = new FilterUserPortalResponse();
                     List<AdBranchUserDto> branchUserDtoList =
                             adBranchUserRepository.getBranchOfUser(adUserPortalDto.getUserId());
-                    getAllUserResponse.setListBranch(branchUserDtoList);
-                    getAllUserResponse.setUserPortal(adUserPortalDto);
-                    allUserResponseList.add(getAllUserResponse);
+                    filterUserPortalResponse.setListBranch(branchUserDtoList);
+                    filterUserPortalResponse.setUserPortal(adUserPortalDto);
+                    allUserResponseList.add(filterUserPortalResponse);
                 }
 
                 return Response.success(allUserResponseList);

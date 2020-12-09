@@ -1,6 +1,7 @@
 package com.salesapp.adminservice.service;
 
 import com.salesapp.adminservice.models.CreateUserPortalRequest;
+import com.salesapp.adminservice.models.FilterUserPortalRequest;
 import com.salesapp.adminservice.models.UpdateUserPortalRequest;
 import com.salesapp.common.dto.Response;
 
@@ -20,7 +21,7 @@ public interface AdUserPortalService {
      * @param
      * @return: danh sách các user portal
      */
-    Response getAllUserPortal();
+    Response filterUserPortal(FilterUserPortalRequest request);
     /**
      * author: anhld
      * date: 8/12/2020
